@@ -9,6 +9,7 @@ use sqlx::{Pool, Postgres};
 
 mod controller;
 mod models;
+mod util;
 
 #[derive(Clone)]
 pub struct AppState {

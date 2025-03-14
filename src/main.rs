@@ -2,10 +2,13 @@ use actix_cors::Cors;
 use actix_web::http::header;
 use actix_web::web::Data;
 use actix_web::{middleware, App, HttpServer};
+use bcrypt::{hash, DEFAULT_COST};
+use models::generic::UserRole;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::{Pool, Postgres};
 
 mod controller;
+mod models;
 
 #[derive(Clone)]
 pub struct AppState {
@@ -27,6 +30,10 @@ async fn main() -> std::io::Result<()> {
         .expect("Cannot connect to database");
 
     let _ = sqlx::migrate!().run(&db_pool).await;
+
+    create_admin_user(&db_pool)
+        .await
+        .expect("Cannot create admin user");
 
     let state = AppState { database: db_pool };
 
@@ -57,6 +64,19 @@ async fn main() -> std::io::Result<()> {
     .await
 }
 
-fn create_admin_user(pool: &Pool<Postgres>) {
-    let count = sqlx::query!("SELECT COUNT(*) FROM users WHERE username = 'admin'").fetch(pool);
+/// Creates the admin user if it does not exist yet.
+async fn create_admin_user(pool: &Pool<Postgres>) -> Result<(), sqlx::Error> {
+    let result = sqlx::query!("SELECT COUNT(*) as count FROM users WHERE username = 'admin'")
+        .fetch_one(pool)
+        .await?;
+    if result.count.unwrap_or(0) == 0 {
+        let password_hash = hash("admin", DEFAULT_COST).unwrap();
+        sqlx::query("INSERT INTO users (username, password, roles) VALUES ($1, $2, $3)")
+            .bind("admin")
+            .bind(password_hash)
+            .bind(vec![UserRole::Admin.to_string()])
+            .execute(pool)
+            .await?;
+    }
+    Ok(())
 }

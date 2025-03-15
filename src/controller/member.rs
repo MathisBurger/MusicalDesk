@@ -1,5 +1,5 @@
 use actix_web::{
-    get, patch, post,
+    delete, get, patch, post,
     web::{Data, Json, Path},
     HttpResponse,
 };
@@ -49,6 +49,15 @@ pub async fn list(state: Data<AppState>, user: User) -> Result<HttpResponse, Err
     Ok(HttpResponse::Ok().json(members))
 }
 
+#[get("/members_left")]
+pub async fn list_left(state: Data<AppState>, user: User) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::MemberAdmin) {
+        return Err(Error::Forbidden);
+    }
+    let members = Member::find_all_left(&state.database).await;
+    Ok(HttpResponse::Ok().json(members))
+}
+
 #[get("/members/{id}")]
 pub async fn get_member(
     state: Data<AppState>,
@@ -75,5 +84,18 @@ pub async fn update_member(
         return Err(Error::Forbidden);
     }
     let member = Member::update(path.0, &data, &state.database).await?;
+    Ok(HttpResponse::Ok().json(member))
+}
+
+#[delete("/members/{id}/leave")]
+pub async fn leave(
+    state: Data<AppState>,
+    user: User,
+    path: Path<(i32,)>,
+) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::MemberAdmin) {
+        return Err(Error::Forbidden);
+    }
+    let member = Member::leave(path.0, &state.database).await?;
     Ok(HttpResponse::Ok().json(member))
 }

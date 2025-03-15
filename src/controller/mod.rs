@@ -12,5 +12,7 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(member::create)
         .service(member::list)
         .service(member::get_member)
-        .service(member::update_member);
+        .service(member::update_member)
+        .service(member::list_left)
+        .service(member::leave);
 }

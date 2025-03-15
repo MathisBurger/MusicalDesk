@@ -44,7 +44,14 @@ impl Member {
     }
 
     pub async fn find_all(db: &Pool<Postgres>) -> Vec<Self> {
-        sqlx::query_as!(Member, "SELECT * FROM members")
+        sqlx::query_as!(Member, "SELECT * FROM members WHERE left_at IS NULL")
+            .fetch_all(db)
+            .await
+            .expect("Cannot load all members")
+    }
+
+    pub async fn find_all_left(db: &Pool<Postgres>) -> Vec<Self> {
+        sqlx::query_as!(Member, "SELECT * FROM members WHERE left_at IS NOT NULL")
             .fetch_all(db)
             .await
             .expect("Cannot load all members")
@@ -55,5 +62,16 @@ impl Member {
             .fetch_optional(db)
             .await
             .expect("Cannot load user")
+    }
+
+    pub async fn leave(id: i32, db: &Pool<Postgres>) -> Result<Self, Error> {
+        sqlx::query_as!(
+            Member,
+            "UPDATE members SET left_at = NOW() WHERE id = $1 RETURNING *",
+            id
+        )
+        .fetch_one(db)
+        .await
+        .map_err(|_x| Error::NotFound)
     }
 }

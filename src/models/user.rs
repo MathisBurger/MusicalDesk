@@ -1,10 +1,13 @@
+use serde::Serialize;
 use sqlx::{Pool, Postgres};
 
 use super::generic::UserRole;
 
+#[derive(Clone, Serialize)]
 pub struct User {
     pub id: i32,
     pub username: String,
+    #[serde(skip_serializing)]
     pub password: String,
     pub roles: Vec<String>,
 }
@@ -18,6 +21,13 @@ impl User {
         sqlx::query_as!(User, "SELECT * FROM users WHERE username = $1", username)
             .fetch_optional(pool)
             .await
-            .expect("Cannot load users")
+            .expect("Cannot load user")
+    }
+
+    pub async fn get_by_id(id: i32, pool: &Pool<Postgres>) -> Option<User> {
+        sqlx::query_as!(User, "SELECT * FROM users WHERE id = $1", id)
+            .fetch_optional(pool)
+            .await
+            .expect("Cannot load user")
     }
 }

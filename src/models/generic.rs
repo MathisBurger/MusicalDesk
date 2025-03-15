@@ -68,3 +68,9 @@ impl ResponseError for Error {
         }
     }
 }
+
+impl From<Box<dyn ErrorTrait>> for Error {
+    fn from(v: Box<dyn ErrorTrait>) -> Self {
+        Self::InternalServerError { source: v }
+    }
+}

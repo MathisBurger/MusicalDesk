@@ -9,6 +9,7 @@ use sqlx::{Pool, Postgres};
 
 mod controller;
 mod models;
+mod session;
 mod util;
 
 #[derive(Clone)]

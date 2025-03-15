@@ -10,5 +10,7 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(auth::login)
         .service(user::get_current_user)
         .service(member::create)
-        .service(member::list);
+        .service(member::list)
+        .service(member::get_member)
+        .service(member::update_member);
 }

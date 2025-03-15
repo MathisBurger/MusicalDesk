@@ -5,6 +5,7 @@ use thiserror::Error;
 
 pub enum UserRole {
     Admin,
+    MemberAdmin,
     Default,
 }
 
@@ -13,6 +14,7 @@ impl ToString for UserRole {
         match self {
             Self::Admin => "admin".to_string(),
             Self::Default => "default".to_string(),
+            Self::MemberAdmin => "member_admin".to_string(),
         }
     }
 }
@@ -21,6 +23,7 @@ impl From<String> for UserRole {
     fn from(value: String) -> Self {
         match value.as_str() {
             "admin" => Self::Admin,
+            "member_admin" => Self::MemberAdmin,
             _ => Self::Default,
         }
     }

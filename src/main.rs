@@ -31,7 +31,7 @@ async fn main() -> std::io::Result<()> {
         .await
         .expect("Cannot connect to database");
 
-    let _ = sqlx::migrate!().run(&db_pool).await;
+    let _ = sqlx::migrate!("./migrations/").run(&db_pool).await;
 
     create_admin_user(&db_pool)
         .await

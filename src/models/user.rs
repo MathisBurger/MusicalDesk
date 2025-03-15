@@ -13,8 +13,12 @@ pub struct User {
 }
 
 impl User {
-    fn has_role(&self, role: UserRole) -> bool {
+    pub fn has_role(&self, role: UserRole) -> bool {
         self.roles.contains(&role.to_string())
+    }
+
+    pub fn has_role_or_admin(&self, role: UserRole) -> bool {
+        self.has_role(UserRole::Admin) || self.has_role(role)
     }
 
     pub async fn get_by_username(username: &String, pool: &Pool<Postgres>) -> Option<User> {

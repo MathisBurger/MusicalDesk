@@ -3,6 +3,7 @@ use actix_web::web::ServiceConfig;
 mod auth;
 mod default;
 pub mod member;
+pub mod membership;
 mod user;
 
 pub fn init_controllers(cfg: &mut ServiceConfig) {
@@ -14,5 +15,9 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(member::get_member)
         .service(member::update_member)
         .service(member::list_left)
-        .service(member::leave);
+        .service(member::leave)
+        .service(membership::create_membership_payment)
+        .service(membership::get_paid_memberships)
+        .service(membership::get_open_membership_fees)
+        .service(membership::get_paid_memberships_for_user);
 }

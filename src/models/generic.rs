@@ -1,5 +1,4 @@
 use actix_web::{http::StatusCode, HttpResponse, ResponseError};
-use log::kv::ToValue;
 use serde::Serialize;
 use std::error::Error as ErrorTrait;
 use thiserror::Error;

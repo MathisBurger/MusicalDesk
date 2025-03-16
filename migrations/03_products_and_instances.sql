@@ -26,5 +26,6 @@ CREATE TABLE IF NOT EXISTS tickets (
     valid_until TIMESTAMP
     WITH
         TIME ZONE NOT NULL,
-        invalidated BOOLEAN NOT NULL
+        invalidated BOOLEAN NOT NULL,
+        invalidated_at TIMESTAMP WITH TIME ZONE
 );

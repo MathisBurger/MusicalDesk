@@ -6,6 +6,7 @@ pub mod event;
 mod image;
 pub mod member;
 pub mod membership;
+mod shop;
 mod ticket;
 mod user;
 
@@ -31,4 +32,6 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(event::update_event)
         .service(ticket::create_tickets_for_event)
         .service(ticket::get_tickets_for_event);
+
+    shop::init_controllers(cfg);
 }

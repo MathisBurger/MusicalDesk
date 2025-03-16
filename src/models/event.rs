@@ -50,4 +50,25 @@ impl Event {
             .await
             .map_err(|_x| Error::BadRequest)
     }
+
+    pub async fn get_active_events(db: &Pool<Postgres>) -> Vec<Event> {
+        sqlx::query_as!(
+            Event,
+            "SELECT * FROM events WHERE NOW() BETWEEN active_from AND active_until"
+        )
+        .fetch_all(db)
+        .await
+        .expect("Cannot load active events")
+    }
+
+    pub async fn get_active_event_by_id(id: i32, db: &Pool<Postgres>) -> Option<Event> {
+        sqlx::query_as!(
+            Event,
+            "SELECT * FROM events WHERE NOW() BETWEEN active_from AND active_until AND id = $1",
+            id
+        )
+        .fetch_optional(db)
+        .await
+        .expect("Cannot load active events")
+    }
 }

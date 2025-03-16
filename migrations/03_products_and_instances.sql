@@ -6,9 +6,9 @@ CREATE TABLE IF NOT EXISTS images (
     required_roles TEXT[]
 );
 
-CREATE TABLE IF NOT EXISTS products (
+CREATE TABLE IF NOT EXISTS events (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
+    name VARCHAR(255) NOT NULL,
     price REAL NOT NULL,
     tax_percentage REAL NOT NULL,
     image_id INTEGER REFERENCES images (id),
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS products (
 
 CREATE TABLE IF NOT EXISTS tickets (
     id SERIAL PRIMARY KEY,
-    product_id INTEGER NOT NULL REFERENCES products (id),
+    event_id INTEGER NOT NULL REFERENCES events (id),
     valid_until TIMESTAMP
     WITH
         TIME ZONE NOT NULL,

@@ -2,6 +2,7 @@ use actix_web::web::ServiceConfig;
 
 mod auth;
 mod default;
+pub mod event;
 mod image;
 pub mod member;
 pub mod membership;
@@ -22,5 +23,9 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(membership::get_open_membership_fees)
         .service(membership::get_paid_memberships_for_user)
         .service(image::get_image)
-        .service(image::upload_image);
+        .service(image::upload_image)
+        .service(event::create_event)
+        .service(event::get_events)
+        .service(event::get_event)
+        .service(event::update_event);
 }

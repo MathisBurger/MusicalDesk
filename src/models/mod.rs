@@ -1,3 +1,4 @@
+pub mod event;
 pub mod generic;
 pub mod image;
 pub mod member;

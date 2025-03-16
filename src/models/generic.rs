@@ -6,6 +6,8 @@ use thiserror::Error;
 pub enum UserRole {
     Admin,
     MemberAdmin,
+    EventAdmin,
+    // Default role for backend users (not for shop users)
     Default,
 }
 
@@ -15,6 +17,7 @@ impl ToString for UserRole {
             Self::Admin => "admin".to_string(),
             Self::Default => "default".to_string(),
             Self::MemberAdmin => "member_admin".to_string(),
+            Self::EventAdmin => "event_admin".to_string(),
         }
     }
 }
@@ -24,6 +27,7 @@ impl From<String> for UserRole {
         match value.as_str() {
             "admin" => Self::Admin,
             "member_admin" => Self::MemberAdmin,
+            "event_admin" => Self::EventAdmin,
             _ => Self::Default,
         }
     }

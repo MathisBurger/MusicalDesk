@@ -3,7 +3,9 @@
 Features:
 
 - [x] Simple membership management
-- [ ] Card shop feature
+- [ ] Create backend users
+- [ ] Card shop feature (with user interface )
+- [ ] Backend code documentation
 - [ ] Expense management (With categories, Images of bills, etc.)
 - [ ] Annual finance reports
 

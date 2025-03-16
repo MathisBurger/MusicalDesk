@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS events (
     price REAL NOT NULL,
     tax_percentage REAL NOT NULL,
     image_id INTEGER REFERENCES images (id),
+    event_date TIMESTAMP WITH TIME ZONE NOT NULL,
     active_from TIMESTAMP
     WITH
         TIME ZONE,

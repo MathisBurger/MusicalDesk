@@ -1,7 +1,10 @@
+use bcrypt::{hash, DEFAULT_COST};
 use serde::Serialize;
 use sqlx::{Pool, Postgres};
 
-use super::generic::UserRole;
+use crate::controller::auth::RegisterRequest;
+
+use super::generic::{Error, UserRole};
 
 #[derive(Clone, Serialize)]
 pub struct User {
@@ -10,6 +13,7 @@ pub struct User {
     #[serde(skip_serializing)]
     pub password: String,
     pub roles: Vec<String>,
+    pub email: Option<String>,
 }
 
 impl User {
@@ -33,5 +37,17 @@ impl User {
             .fetch_optional(pool)
             .await
             .expect("Cannot load user")
+    }
+
+    pub async fn create_customer_account(
+        req: &RegisterRequest,
+        db: &Pool<Postgres>,
+    ) -> Result<User, Error> {
+        let hash = hash(req.password.clone(), DEFAULT_COST).unwrap();
+        let roles: [String; 1] = [UserRole::ShopCustomer.to_string()];
+        sqlx::query_as!(User, "INSERT INTO users (username, password, roles, email) VALUES ($1, $2, $3, $1) RETURNING *", req.email, hash, &roles)
+            .fetch_one(db)
+            .await
+            .map_err(|_x| Error::AlreadyExists)
     }
 }

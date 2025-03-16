@@ -1,4 +1,5 @@
 use actix_web::{http::StatusCode, HttpResponse, ResponseError};
+use log::kv::ToValue;
 use serde::Serialize;
 use std::error::Error as ErrorTrait;
 use thiserror::Error;
@@ -9,6 +10,7 @@ pub enum UserRole {
     EventAdmin,
     // Default role for backend users (not for shop users)
     Default,
+    ShopCustomer,
 }
 
 impl ToString for UserRole {
@@ -18,6 +20,7 @@ impl ToString for UserRole {
             Self::Default => "default".to_string(),
             Self::MemberAdmin => "member_admin".to_string(),
             Self::EventAdmin => "event_admin".to_string(),
+            Self::ShopCustomer => "shop_customer".to_string(),
         }
     }
 }
@@ -28,6 +31,7 @@ impl From<String> for UserRole {
             "admin" => Self::Admin,
             "member_admin" => Self::MemberAdmin,
             "event_admin" => Self::EventAdmin,
+            "shop_customer" => Self::ShopCustomer,
             _ => Self::Default,
         }
     }

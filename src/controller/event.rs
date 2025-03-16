@@ -21,6 +21,7 @@ pub struct EventRequest {
     pub price: f32,
     pub tax_percentage: f32,
     pub image_id: Option<i32>,
+    pub event_date: DateTime<Utc>,
     pub active_from: Option<DateTime<Utc>>,
     pub active_until: Option<DateTime<Utc>>,
 }

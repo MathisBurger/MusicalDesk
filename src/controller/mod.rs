@@ -1,6 +1,6 @@
 use actix_web::web::ServiceConfig;
 
-mod auth;
+pub mod auth;
 mod default;
 pub mod event;
 mod image;
@@ -13,6 +13,7 @@ mod user;
 pub fn init_controllers(cfg: &mut ServiceConfig) {
     cfg.service(default::default)
         .service(auth::login)
+        .service(auth::register_as_customer)
         .service(user::get_current_user)
         .service(member::create)
         .service(member::list)

@@ -49,6 +49,6 @@ impl MembershipPaid {
         sqlx::query_as!(MembershipPaid, "INSERT INTO membership_paid (year, member_id, paid_at) VALUES ($1, $2, $3) RETURNING *", req.year, req.member_id, req.paid_at)
             .fetch_one(db)
             .await
-            .map_err(|_x|Error::BadRequest)
+            .map_err(|_x|Error::AlreadyExists)
     }
 }

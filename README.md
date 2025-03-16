@@ -1,5 +1,12 @@
 # MusicalDesk
 
+Features:
+
+- [x] Simple membership management
+- [ ] Card shop feature
+- [ ] Expense management (With categories, Images of bills, etc.)
+- [ ] Annual finance reports
+
 
 ## Application architecture decisions
 

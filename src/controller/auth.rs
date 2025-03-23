@@ -37,9 +37,9 @@ pub async fn login(
             let jwt_str = generate_jwt(&user);
             let mut cookie = Cookie::new("session", jwt_str);
             cookie.set_path("/");
-            cookie.set_max_age(Duration::days(3));
-            cookie.set_http_only(false);
-            cookie.set_secure(true);
+            cookie.set_max_age(Duration::days(1));
+            cookie.set_http_only(true);
+            cookie.set_secure(false);
             cookie.set_same_site(SameSite::Strict);
             let mut resp = HttpResponse::Ok().finish();
             resp.add_cookie(&cookie).unwrap();

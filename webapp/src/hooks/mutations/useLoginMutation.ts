@@ -6,6 +6,8 @@ const loginFunction = async (credentials: {
 }): Promise<boolean> => {
   const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
     method: "POST",
+    mode: "cors",
+    credentials: "include",
     body: JSON.stringify({ ...credentials }),
     headers: {
       Accept: "*/*",

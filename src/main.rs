@@ -49,7 +49,6 @@ async fn main() -> std::io::Result<()> {
                 header::SET_COOKIE,
                 header::ACCEPT,
                 header::CONTENT_TYPE,
-                header::AUTHORIZATION,
             ])
             .send_wildcard()
             .supports_credentials()

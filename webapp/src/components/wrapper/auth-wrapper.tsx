@@ -3,7 +3,7 @@ import { Box, CssBaseline, CssVarsProvider } from "@mui/joy";
 import { PropsWithChildren, useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import { usePathname, useRouter } from "next/navigation";
-import { User } from "@/hooks/useCurrentUser";
+import { CurrentUserContext, User } from "@/hooks/useCurrentUser";
 import useUserSelfQuery from "@/hooks/queries/useUserSelfQuery";
 import LoadingComponent from "../loading";
 import Header from "../header";
@@ -33,11 +33,13 @@ const AuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
       return (
         <CssVarsProvider disableTransitionOnChange>
           <CssBaseline />
-          <Box sx={{ display: "flex", minHeight: "100dvh" }}>
-            <Sidebar />
-            <Header />
-            {children}
-          </Box>
+          <CurrentUserContext.Provider value={currentUser}>
+            <Box sx={{ display: "flex", minHeight: "100dvh" }}>
+              <Sidebar />
+              <Header />
+              {children}
+            </Box>
+          </CurrentUserContext.Provider>
         </CssVarsProvider>
       );
     }

@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { User } from "@/hooks/useCurrentUser";
 import useUserSelfQuery from "@/hooks/queries/useUserSelfQuery";
 import LoadingComponent from "../loading";
+import Header from "../header";
 
 const AuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
   const pathname = usePathname();
@@ -34,6 +35,7 @@ const AuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
           <CssBaseline />
           <Box sx={{ display: "flex", minHeight: "100dvh" }}>
             <Sidebar />
+            <Header />
             {children}
           </Box>
         </CssVarsProvider>

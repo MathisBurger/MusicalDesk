@@ -18,8 +18,38 @@ import QuestionAnswerRoundedIcon from "@mui/icons-material/QuestionAnswerRounded
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BusinessIcon from "@mui/icons-material/Business";
 import ColorSchemeToggle from "./color-scheme-toggle";
+import useCurrentUser from "@/hooks/useCurrentUser";
+
+function openSidebar() {
+  if (typeof window !== "undefined") {
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.setProperty("--SideNavigation-slideIn", "1");
+  }
+}
+
+function closeSidebar() {
+  if (typeof window !== "undefined") {
+    document.documentElement.style.removeProperty("--SideNavigation-slideIn");
+    document.body.style.removeProperty("overflow");
+  }
+}
+
+export function toggleSidebar() {
+  if (typeof window !== "undefined" && typeof document !== "undefined") {
+    const slideIn = window
+      .getComputedStyle(document.documentElement)
+      .getPropertyValue("--SideNavigation-slideIn");
+    if (slideIn) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  }
+}
 
 export default function Sidebar() {
+  const currentUser = useCurrentUser();
+
   return (
     <Sheet
       className="Sidebar"
@@ -70,6 +100,7 @@ export default function Sidebar() {
             lg: "translateX(-100%)",
           },
         }}
+        onClick={() => closeSidebar()}
       />
       <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
         <IconButton variant="soft" color="primary" size="sm">
@@ -144,8 +175,7 @@ export default function Sidebar() {
           src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
         />
         <Box sx={{ minWidth: 0, flex: 1 }}>
-          <Typography level="title-sm">Siriwat K.</Typography>
-          <Typography level="body-xs">siriwatk@test.com</Typography>
+          <Typography level="title-sm">{currentUser?.username}</Typography>
         </Box>
         <IconButton size="sm" variant="plain" color="neutral">
           <LogoutRoundedIcon />

@@ -7,6 +7,7 @@ import { CurrentUserContext, User } from "@/hooks/useCurrentUser";
 import useUserSelfQuery from "@/hooks/queries/useUserSelfQuery";
 import LoadingComponent from "../loading";
 import Header from "../header";
+import ContentWrapper from "./content-wrapper";
 
 const AuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
   const pathname = usePathname();
@@ -37,7 +38,7 @@ const AuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
             <Box sx={{ display: "flex", minHeight: "100dvh" }}>
               <Sidebar />
               <Header />
-              {children}
+              <ContentWrapper>{children}</ContentWrapper>
             </Box>
           </CurrentUserContext.Provider>
         </CssVarsProvider>

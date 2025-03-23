@@ -19,6 +19,8 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BusinessIcon from "@mui/icons-material/Business";
 import ColorSchemeToggle from "./color-scheme-toggle";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { SupervisedUserCircle } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 
 function openSidebar() {
   if (typeof window !== "undefined") {
@@ -49,6 +51,7 @@ export function toggleSidebar() {
 
 export default function Sidebar() {
   const currentUser = useCurrentUser();
+  const router = useRouter();
 
   return (
     <Sheet
@@ -130,7 +133,7 @@ export default function Sidebar() {
           }}
         >
           <ListItem>
-            <ListItemButton>
+            <ListItemButton onClick={() => router.push("/backend/dashboard")}>
               <DashboardRoundedIcon />
               <ListItemContent>
                 <Typography level="title-sm">Dashboard</Typography>
@@ -139,30 +142,11 @@ export default function Sidebar() {
           </ListItem>
 
           <ListItem>
-            <ListItemButton
-              role="menuitem"
-              component="a"
-              href="/joy-ui/getting-started/templates/order-dashboard/"
-            >
-              <ShoppingCartRoundedIcon />
+            <ListItemButton onClick={() => router.push("/backend/members")}>
+              <SupervisedUserCircle />
               <ListItemContent>
-                <Typography level="title-sm">Orders</Typography>
+                <Typography level="title-sm">Members</Typography>
               </ListItemContent>
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton
-              role="menuitem"
-              component="a"
-              href="/joy-ui/getting-started/templates/messages/"
-            >
-              <QuestionAnswerRoundedIcon />
-              <ListItemContent>
-                <Typography level="title-sm">Messages</Typography>
-              </ListItemContent>
-              <Chip size="sm" color="primary" variant="solid">
-                4
-              </Chip>
             </ListItemButton>
           </ListItem>
         </List>

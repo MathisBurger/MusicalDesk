@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Button, Grid, Stack, Typography } from "@mui/joy";
+import { Button, Grid, Stack, TabPanel, Typography } from "@mui/joy";
 import { Add } from "@mui/icons-material";
 import TabLayout from "@/components/wrapper/tab-layout";
+import MemberList from "@/components/members/member-list";
 
 const MembersPage = () => {
   return (
@@ -19,7 +20,11 @@ const MembersPage = () => {
           </Button>
         </Grid>
       </Grid>
-      <TabLayout tabs={["Members", "Memberships"]}></TabLayout>
+      <TabLayout tabs={["Members", "Memberships"]}>
+        <TabPanel value={0}>
+          <MemberList />
+        </TabPanel>
+      </TabLayout>
     </Stack>
   );
 };

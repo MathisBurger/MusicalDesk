@@ -1,3 +1,5 @@
+import AuthWrapper from "@/components/wrapper/auth-wrapper";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -5,7 +7,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de">
-      <body>{children}</body>
+      <body>
+        <AuthWrapper>{children}</AuthWrapper>
+      </body>
     </html>
   );
 }

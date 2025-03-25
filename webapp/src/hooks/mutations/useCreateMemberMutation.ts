@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { Member } from "../queries/useMembersQuery";
+import { FormType } from "@/form/types";
 
-export interface CreateMemberRequest extends Record<string, unknown> {
+export interface CreateMemberRequest extends FormType {
   first_name: string;
   last_name: string;
   email: string | null;

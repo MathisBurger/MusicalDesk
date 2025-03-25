@@ -1,4 +1,7 @@
 "use client";
+import FormInput from "@/form/form-input";
+import { FormValue } from "@/form/types";
+import useForm from "@/form/useForm";
 import useCreateMemberMutation, {
   CreateMemberRequest,
 } from "@/hooks/mutations/useCreateMemberMutation";
@@ -8,38 +11,61 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
-  FormLabel,
   Grid,
-  Input,
   Modal,
   ModalClose,
   ModalDialog,
   Stack,
 } from "@mui/joy";
 import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
 
 interface CreateMemberModalProps {
   onClose: () => void;
-}
-
-type FormElements = HTMLFormControlsCollection & CreateMemberRequest;
-
-interface CreateMemberForm extends HTMLFormElement {
-  readonly elements: FormElements;
 }
 
 const CreateMemberModal = ({ onClose }: CreateMemberModalProps) => {
   const { mutateAsync, isPending } = useCreateMemberMutation();
   const { showAlert, displayAlert } = useAlert();
   const router = useRouter();
+  const form = useForm<CreateMemberRequest>({
+    defaultValues: {
+      first_name: "",
+      last_name: "",
+      email: "",
+      street: "",
+      house_nr: "",
+      zip: "",
+      city: "",
+      iban: "",
+      membership_fee: 0,
+    },
+    labels: {
+      first_name: "First Name",
+      last_name: "Last Name",
+      email: "Email",
+      street: "Street",
+      house_nr: "House nr.",
+      zip: "Zip",
+      city: "City",
+      iban: "IBAN",
+      membership_fee: "Membership fee",
+    },
+    validation: {
+      iban: (v: FormValue) =>
+        v === null
+          ? null
+          : /^[A-Z]{2}\d{2}[A-Z0-9]{1,30}$/.test(
+                (v as string).replace(/\s+/g, "").toUpperCase(),
+              )
+            ? null
+            : "Invalid IBAN format",
+    },
+    required: ["first_name", "last_name"],
+  });
 
-  const onSubmit = async (e: FormEvent<CreateMemberForm>) => {
+  const onSubmit = async (values: CreateMemberRequest) => {
     "use client";
-    e.preventDefault();
-    const data: CreateMemberRequest = { ...e.currentTarget.elements };
-    const result = await mutateAsync(data);
+    const result = await mutateAsync(values);
     if (result !== null) {
       router.push(`/backend/members/${result?.id}`);
     } else {
@@ -58,55 +84,28 @@ const CreateMemberModal = ({ onClose }: CreateMemberModalProps) => {
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
             {displayAlert()}
-            <form onSubmit={onSubmit}>
-              <FormControl required>
-                <FormLabel>First name</FormLabel>
-                <Input type="text" name="first_name" />
-              </FormControl>
-              <FormControl required>
-                <FormLabel>Last name</FormLabel>
-                <Input type="text" name="last_name" />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Email</FormLabel>
-                <Input type="email" name="email" />
-              </FormControl>
+            <form onSubmit={form.onSubmit(onSubmit)}>
+              <FormInput {...form.getInputProps("first_name")} />
+              <FormInput {...form.getInputProps("last_name")} />
+              <FormInput {...form.getInputProps("email")} />
               <Grid container direction="row" spacing={2}>
                 <Grid xs={9}>
-                  <FormControl>
-                    <FormLabel>Street</FormLabel>
-                    <Input type="text" name="street" fullWidth />
-                  </FormControl>
+                  <FormInput {...form.getInputProps("street")} />
                 </Grid>
                 <Grid xs={3}>
-                  <FormControl>
-                    <FormLabel>House nr</FormLabel>
-                    <Input type="text" name="house_nr" />
-                  </FormControl>
+                  <FormInput {...form.getInputProps("house_nr")} />
                 </Grid>
               </Grid>
               <Grid container direction="row" spacing={2}>
                 <Grid xs={4}>
-                  <FormControl>
-                    <FormLabel>Zip</FormLabel>
-                    <Input type="number" name="zip" />
-                  </FormControl>
+                  <FormInput {...form.getInputProps("zip")} />
                 </Grid>
                 <Grid xs={8}>
-                  <FormControl>
-                    <FormLabel>City</FormLabel>
-                    <Input type="text" name="city" />
-                  </FormControl>
+                  <FormInput {...form.getInputProps("city")} />
                 </Grid>
               </Grid>
-              <FormControl>
-                <FormLabel>IBAN</FormLabel>
-                <Input type="text" name="iban" />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Membership fee</FormLabel>
-                <Input type="number" name="membership_fee" />
-              </FormControl>
+              <FormInput {...form.getInputProps("iban")} />
+              <FormInput {...form.getInputProps("membership_fee")} />
               <DialogActions>
                 <Button type="submit" loading={isPending}>
                   Create

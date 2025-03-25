@@ -1,6 +1,7 @@
 import { InfoOutlined } from "@mui/icons-material";
 import { FormControl, FormHelperText, FormLabel, Input } from "@mui/joy";
 
+/** Input props of an form input field */
 export interface FormInputProps {
   name: string;
   label?: string;
@@ -9,6 +10,11 @@ export interface FormInputProps {
   type?: string;
 }
 
+/**
+ * Maps the data type to an html input type
+ * @param type The data type
+ * @returns The html input type
+ */
 const mapType = (type?: string): string => {
   switch (type) {
     case "string":
@@ -19,6 +25,9 @@ const mapType = (type?: string): string => {
   return "text";
 };
 
+/**
+ * The form input component that renders MUI form control with input and error
+ */
 const FormInput = ({ name, label, required, error, type }: FormInputProps) => {
   return (
     <FormControl required={required} error={error !== undefined}>

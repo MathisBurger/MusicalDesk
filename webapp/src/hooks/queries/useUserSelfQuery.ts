@@ -16,6 +16,6 @@ const userQuery = async (): Promise<User | null> => {
 };
 
 const useUserSelfQuery = (execute: boolean) =>
-  useQuery({ queryFn: userQuery, queryKey: [], enabled: execute });
+  useQuery({ queryFn: userQuery, queryKey: ["self"], enabled: execute });
 
 export default useUserSelfQuery;

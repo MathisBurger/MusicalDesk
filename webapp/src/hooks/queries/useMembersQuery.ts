@@ -29,6 +29,7 @@ const queryMembers = async (): Promise<Member[]> => {
   return [];
 };
 
-const useMembersQuery = () => useQuery({ queryFn: queryMembers, queryKey: [] });
+const useMembersQuery = () =>
+  useQuery({ queryFn: queryMembers, queryKey: ["members"] });
 
 export default useMembersQuery;

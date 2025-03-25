@@ -12,22 +12,20 @@ import ContentWrapper from "./content-wrapper";
 const AuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
   const pathname = usePathname();
   const router = useRouter();
-  const { data, isLoading, isSuccess } = useUserSelfQuery(
+  const { data, isLoading, isFetched } = useUserSelfQuery(
     pathname.startsWith("/backend"),
   );
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if (!isLoading && isSuccess) {
-      // Forward to login page on unauthorized access
-      if (data === null && pathname.startsWith("/backend")) {
+    if (!isLoading && isFetched) {
+      if (data) {
+        setCurrentUser(data);
+      } else if (pathname.startsWith("/backend")) {
         router.push("/login");
       }
-      if (data !== null) {
-        setCurrentUser(data ?? null);
-      }
     }
-  }, [data, isLoading, isSuccess, pathname, router]);
+  }, [data, isLoading, isFetched, pathname, router]);
 
   if (pathname.startsWith("/backend")) {
     if (currentUser !== null) {

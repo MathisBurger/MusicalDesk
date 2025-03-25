@@ -1,10 +1,15 @@
-import * as React from "react";
+"use client";
+import { useState } from "react";
 import { Button, Grid, Stack, TabPanel, Typography } from "@mui/joy";
 import { Add } from "@mui/icons-material";
 import TabLayout from "@/components/wrapper/tab-layout";
 import MemberList from "@/components/members/member-list";
+import CreateMemberModal from "@/components/members/modal/create-member";
 
 const MembersPage = () => {
+  const [createMemberModalOpen, setCreateMemberModalOpen] =
+    useState<boolean>(false);
+
   return (
     <Stack spacing={2}>
       <Grid container spacing={4}>
@@ -14,7 +19,7 @@ const MembersPage = () => {
           </Typography>
         </Grid>
         <Grid>
-          <Button>
+          <Button onClick={() => setCreateMemberModalOpen(true)}>
             <Add />
             &nbsp; Create
           </Button>
@@ -25,6 +30,9 @@ const MembersPage = () => {
           <MemberList />
         </TabPanel>
       </TabLayout>
+      {createMemberModalOpen && (
+        <CreateMemberModal onClose={() => setCreateMemberModalOpen(false)} />
+      )}
     </Stack>
   );
 };

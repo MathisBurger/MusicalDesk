@@ -1,5 +1,5 @@
 "use client";
-import { Box, CssBaseline, CssVarsProvider } from "@mui/joy";
+import { Box, CssBaseline, CssVarsProvider, extendTheme } from "@mui/joy";
 import { PropsWithChildren, useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import { usePathname, useRouter } from "next/navigation";
@@ -8,6 +8,18 @@ import useUserSelfQuery from "@/hooks/queries/useUserSelfQuery";
 import LoadingComponent from "../loading";
 import Header from "../header";
 import ContentWrapper from "./content-wrapper";
+
+const theme = extendTheme({
+  components: {
+    JoyModal: {
+      styleOverrides: {
+        root: {
+          zIndex: 9999,
+        },
+      },
+    },
+  },
+});
 
 const AuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
   const pathname = usePathname();
@@ -30,7 +42,7 @@ const AuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
   if (pathname.startsWith("/backend")) {
     if (currentUser !== null) {
       return (
-        <CssVarsProvider disableTransitionOnChange>
+        <CssVarsProvider disableTransitionOnChange theme={theme}>
           <CssBaseline />
           <CurrentUserContext.Provider value={currentUser}>
             <Box sx={{ display: "flex", minHeight: "100dvh" }}>

@@ -3,7 +3,6 @@ import * as React from "react";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
-import Chip from "@mui/joy/Chip";
 import Divider from "@mui/joy/Divider";
 import IconButton from "@mui/joy/IconButton";
 import List from "@mui/joy/List";
@@ -13,8 +12,6 @@ import ListItemContent from "@mui/joy/ListItemContent";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
-import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
-import QuestionAnswerRoundedIcon from "@mui/icons-material/QuestionAnswerRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BusinessIcon from "@mui/icons-material/Business";
 import ColorSchemeToggle from "./color-scheme-toggle";
@@ -63,7 +60,7 @@ export default function Sidebar() {
           md: "none",
         },
         transition: "transform 0.4s, width 0.4s",
-        zIndex: 10000,
+        zIndex: 9998,
         height: "100dvh",
         width: "var(--Sidebar-width)",
         top: 0,

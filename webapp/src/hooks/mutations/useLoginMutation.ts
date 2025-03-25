@@ -8,7 +8,7 @@ const loginFunction = async (credentials: {
     method: "POST",
     mode: "cors",
     credentials: "include",
-    body: JSON.stringify({ ...credentials }),
+    body: JSON.stringify(credentials),
     headers: {
       Accept: "*/*",
       "Content-Type": "application/json",

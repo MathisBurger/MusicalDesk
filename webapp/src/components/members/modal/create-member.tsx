@@ -52,7 +52,7 @@ const CreateMemberModal = ({ onClose }: CreateMemberModalProps) => {
     },
     validation: {
       iban: (v: FormValue) =>
-        v === null
+        v === null || v === ""
           ? null
           : /^[A-Z]{2}\d{2}[A-Z0-9]{1,30}$/.test(
                 (v as string).replace(/\s+/g, "").toUpperCase(),

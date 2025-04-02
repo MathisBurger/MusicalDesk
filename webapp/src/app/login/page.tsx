@@ -1,5 +1,6 @@
 "use client";
 import useLoginMutation from "@/hooks/mutations/useLoginMutation";
+import useUserSelfQuery from "@/hooks/queries/useUserSelfQuery";
 import useAlert from "@/hooks/useAlert";
 import {
   Box,
@@ -25,6 +26,8 @@ interface SignInFormElement extends HTMLFormElement {
 const LoginPage = () => {
   const { mutateAsync, isPending } = useLoginMutation();
   const { displayAlert, showAlert } = useAlert();
+  // Do not fetch on initial load
+  const { refetch } = useUserSelfQuery(false);
   const router = useRouter();
 
   const onSubmit = async (event: FormEvent<SignInFormElement>) => {
@@ -37,6 +40,7 @@ const LoginPage = () => {
     };
     const loginSuccessful = await mutateAsync(formData);
     if (loginSuccessful) {
+      await refetch();
       router.push("/backend/dashboard");
     } else {
       showAlert({

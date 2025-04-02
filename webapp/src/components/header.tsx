@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import IconButton from "@mui/joy/IconButton";

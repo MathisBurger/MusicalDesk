@@ -1,3 +1,4 @@
+"use client";
 import { Tab, TabList, Tabs } from "@mui/joy";
 import { PropsWithChildren } from "react";
 

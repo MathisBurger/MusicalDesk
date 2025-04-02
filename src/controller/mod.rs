@@ -25,6 +25,7 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(membership::get_paid_memberships)
         .service(membership::get_open_membership_fees)
         .service(membership::get_paid_memberships_for_user)
+        .service(membership::get_membership_years)
         .service(image::get_image)
         .service(image::upload_image)
         .service(event::create_event)

@@ -1,3 +1,5 @@
+"use client";
+
 const BackendDashboard = () => {
   return <>Hier kommt das Dashboard hin</>;
 };

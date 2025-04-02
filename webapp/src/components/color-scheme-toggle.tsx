@@ -1,3 +1,5 @@
+"use client";
+
 /** This file belongs to MUI.com and is copied from https://github.com/mui/material-ui/blob/master/docs/data/joy/getting-started/templates/profile-dashboard/components/ColorSchemeToggle.tsx */
 
 import * as React from "react";

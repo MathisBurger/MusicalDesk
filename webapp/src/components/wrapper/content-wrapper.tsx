@@ -1,3 +1,4 @@
+"use client";
 import { Box } from "@mui/joy";
 import { PropsWithChildren } from "react";
 

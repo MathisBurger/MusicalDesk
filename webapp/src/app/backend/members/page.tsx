@@ -5,6 +5,7 @@ import { Add } from "@mui/icons-material";
 import TabLayout from "@/components/wrapper/tab-layout";
 import MemberList from "@/components/members/member-list";
 import CreateMemberModal from "@/components/members/modal/create-member";
+import MembershipList from "@/components/members/membership-list";
 
 const MembersPage = () => {
   const [createMemberModalOpen, setCreateMemberModalOpen] =
@@ -28,6 +29,9 @@ const MembersPage = () => {
       <TabLayout tabs={["Members", "Memberships"]}>
         <TabPanel value={0}>
           <MemberList />
+        </TabPanel>
+        <TabPanel value={1}>
+          <MembershipList />
         </TabPanel>
       </TabLayout>
       {createMemberModalOpen && (

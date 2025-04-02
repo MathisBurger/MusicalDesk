@@ -14,6 +14,25 @@ pub struct MembershipPaid {
 }
 
 impl MembershipPaid {
+    pub async fn find_membership_years(db: &Pool<Postgres>) -> Vec<u32> {
+        let rows = sqlx::query!(
+                r#"
+                WITH min_year AS (
+                    SELECT EXTRACT(YEAR FROM MIN(joined_at)) AS start_year FROM members
+                )
+                SELECT generate_series(start_year::int, EXTRACT(YEAR FROM CURRENT_DATE)::int) AS year
+                FROM min_year
+                "#
+            )
+            .fetch_all(db)
+            .await
+            .expect("Cannot load years");
+
+        rows.into_iter()
+            .map(|row| row.year.unwrap() as u32)
+            .collect()
+    }
+
     pub async fn find_by_year(year: i32, db: &Pool<Postgres>) -> Vec<MembershipPaid> {
         sqlx::query_as!(
             MembershipPaid,

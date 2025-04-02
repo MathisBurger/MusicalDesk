@@ -22,6 +22,18 @@ pub struct CreateMembershipPaymentRequest {
     pub paid_at: DateTime<Utc>,
 }
 
+#[get("/memberships/years")]
+pub async fn get_membership_years(
+    user: User,
+    state: Data<AppState>,
+) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::MemberAdmin) {
+        return Err(Error::Forbidden);
+    }
+    let years = MembershipPaid::find_membership_years(&state.database).await;
+    Ok(HttpResponse::Ok().json(years))
+}
+
 #[get("/memberships/years/{year}/unpaid")]
 pub async fn get_open_membership_fees(
     user: User,

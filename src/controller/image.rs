@@ -4,7 +4,7 @@ use actix_files::NamedFile;
 use actix_multipart::form::{json::Json, tempfile::TempFile, MultipartForm};
 use actix_web::{
     get, post,
-    web::{self, Data, Path},
+    web::{Data, Path},
     HttpRequest, HttpResponse,
 };
 use serde::Deserialize;

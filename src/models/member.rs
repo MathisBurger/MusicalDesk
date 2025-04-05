@@ -64,6 +64,13 @@ impl Member {
             .expect("Cannot load user")
     }
 
+    pub async fn find_by_ids(ids: Vec<i32>, db: &Pool<Postgres>) -> Vec<Member> {
+        sqlx::query_as!(Member, "SELECT * FROM members WHERE id = ANY($1)", &ids)
+            .fetch_all(db)
+            .await
+            .expect("Cannot load user")
+    }
+
     pub async fn leave(id: i32, db: &Pool<Postgres>) -> Result<Self, Error> {
         sqlx::query_as!(
             Member,

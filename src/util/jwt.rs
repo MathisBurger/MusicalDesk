@@ -1,7 +1,7 @@
 use crate::models::user::User;
 use actix_web::cookie::Cookie;
 use hmac::{digest::KeyInit, Hmac};
-use jwt::{SignWithKey, Store, VerifyWithKey};
+use jwt::{SignWithKey, VerifyWithKey};
 use sha2::Sha256;
 use std::collections::BTreeMap;
 

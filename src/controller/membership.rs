@@ -9,6 +9,7 @@ use serde::Deserialize;
 use crate::{
     models::{
         generic::{Error, UserRole},
+        member::Member,
         membership_paid::MembershipPaid,
         user::User,
     },
@@ -57,7 +58,12 @@ pub async fn get_paid_memberships(
         return Err(Error::Forbidden);
     }
     let paid_memberships = MembershipPaid::find_by_year(query.0, &state.database).await;
-    Ok(HttpResponse::Ok().json(paid_memberships))
+    let member_ids: Vec<i32> = paid_memberships
+        .iter()
+        .map(|membership| membership.member_id)
+        .collect();
+    let members = Member::find_by_ids(member_ids, &state.database).await;
+    Ok(HttpResponse::Ok().json(members))
 }
 
 #[get("/memberships/members/{member_id}/paid")]

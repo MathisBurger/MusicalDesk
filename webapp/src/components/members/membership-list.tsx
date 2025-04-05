@@ -4,19 +4,30 @@ import LoadingComponent from "../loading";
 import { useState } from "react";
 import { Option, Select, Typography } from "@mui/joy";
 import useUnpaidMembershipsQuery from "@/hooks/queries/useUnpaidMembershipsQuery";
-import DisplayMembershipList from "./display-membership-list";
 import usePaidMembershipsQuery from "@/hooks/queries/usePaidMembershipsQuery";
+import DisplayMembershipList from "./display-membership-list";
 
 const MembershipList = () => {
   const { data: membershipYears, isLoading: yearsLoading } =
     useMembershipYearsQuery();
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
-  const { data: unpaidMemberships, isLoading: unpaidLoading } =
-    useUnpaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);
+  const {
+    data: unpaidMemberships,
+    isLoading: unpaidLoading,
+    refetch: refetchUnpaid,
+  } = useUnpaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);
 
-  const { data: paidMemberships, isLoading: paidLoading } =
-    usePaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);
+  const {
+    data: paidMemberships,
+    isLoading: paidLoading,
+    refetch: refetchPaid,
+  } = usePaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);
+
+  const refetchAll = () => {
+    refetchPaid();
+    refetchUnpaid();
+  };
 
   if (yearsLoading) {
     return <LoadingComponent />;
@@ -43,6 +54,9 @@ const MembershipList = () => {
       <DisplayMembershipList
         loading={unpaidLoading}
         members={unpaidMemberships ?? []}
+        selectedYear={selectedYear ?? 0}
+        refetch={refetchAll}
+        canPay
       />
       <Typography level="h2" sx={{ marginTop: "1.5em" }}>
         Paid memberships
@@ -50,6 +64,8 @@ const MembershipList = () => {
       <DisplayMembershipList
         loading={paidLoading}
         members={paidMemberships ?? []}
+        selectedYear={selectedYear ?? 0}
+        refetch={refetchAll}
       />
     </>
   );

@@ -1,6 +1,7 @@
 "use client";
 import EntityList from "@/components/entity-list";
 import MemberDetails from "@/components/members/member-details";
+import ConfirmLeaveModal from "@/components/members/modal/confirm-leave";
 import EditMemberModal from "@/components/members/modal/edit-member";
 import useMemberQuery from "@/hooks/queries/useMemberQuery";
 import useUserPaidMembershipsQuery from "@/hooks/queries/useUserPaidMemberships";
@@ -17,6 +18,7 @@ const MembersDetailsPage = () => {
     useUserPaidMembershipsQuery(parseInt(id, 10));
 
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [leaveModalOpen, setLeaveModalOpen] = useState<boolean>(false);
 
   const columns: GridColDef[] = [
     {
@@ -43,7 +45,9 @@ const MembersDetailsPage = () => {
               <Button color="primary" onClick={() => setEditModalOpen(true)}>
                 Edit
               </Button>
-              <Button color="danger">Leave</Button>
+              <Button color="danger" onClick={() => setLeaveModalOpen(true)}>
+                Leave
+              </Button>
             </Stack>
           </Card>
         </Grid>
@@ -66,6 +70,13 @@ const MembersDetailsPage = () => {
           memberId={parseInt(id, 10)}
           onClose={() => setEditModalOpen(false)}
           member={data}
+          refetch={refetch}
+        />
+      )}
+      {leaveModalOpen && (
+        <ConfirmLeaveModal
+          onClose={() => setLeaveModalOpen(false)}
+          memberId={parseInt(id, 10)}
           refetch={refetch}
         />
       )}

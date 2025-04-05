@@ -18,6 +18,13 @@ const theme = extendTheme({
         },
       },
     },
+    JoySelect: {
+      styleOverrides: {
+        listbox: {
+          zIndex: 9997,
+        },
+      },
+    },
   },
 });
 

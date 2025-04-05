@@ -1,24 +1,22 @@
 "use client";
 import useMembershipYearsQuery from "@/hooks/queries/useMembershipYearsQuery";
 import LoadingComponent from "../loading";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Option, Select, Typography } from "@mui/joy";
+import useUnpaidMembershipsQuery from "@/hooks/queries/useUnpaidMembershipsQuery";
+import DisplayMembershipList from "./display-membership-list";
+import usePaidMembershipsQuery from "@/hooks/queries/usePaidMembershipsQuery";
 
 const MembershipList = () => {
   const { data: membershipYears, isLoading: yearsLoading } =
     useMembershipYearsQuery();
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
-  useEffect(() => {
-    setSelectedYear(
-      membershipYears && membershipYears.length > 0
-        ? membershipYears.reverse()[0]
-        : null,
-    );
-  }, [membershipYears]);
+  const { data: unpaidMemberships, isLoading: unpaidLoading } =
+    useUnpaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);
 
-  /*const { data: unpaidMemberships, isLoading: unpaidLoading } =
-    useUnpaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);*/
+  const { data: paidMemberships, isLoading: paidLoading } =
+    usePaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);
 
   if (yearsLoading) {
     return <LoadingComponent />;
@@ -26,11 +24,33 @@ const MembershipList = () => {
 
   return (
     <>
-      <Select variant="soft" size="md" sx={{ marginBottom: "3em" }}>
-        <Option value={2024}>2024</Option>
-        <Option value={2025}>2025</Option>
+      <Select
+        variant="outlined"
+        size="md"
+        value={selectedYear}
+        defaultValue={new Date().getFullYear()}
+        onChange={(_e, newValue) => setSelectedYear(parseInt(`${newValue}`))}
+      >
+        {(membershipYears ?? []).map((year) => (
+          <Option key={year} value={year}>
+            {year}
+          </Option>
+        ))}
       </Select>
-      <Typography level="h2">Unpaid memberships</Typography>
+      <Typography level="h2" sx={{ marginTop: "1.5em" }}>
+        Unpaid memberships
+      </Typography>
+      <DisplayMembershipList
+        loading={unpaidLoading}
+        members={unpaidMemberships ?? []}
+      />
+      <Typography level="h2" sx={{ marginTop: "1.5em" }}>
+        Paid memberships
+      </Typography>
+      <DisplayMembershipList
+        loading={paidLoading}
+        members={paidMemberships ?? []}
+      />
     </>
   );
 };

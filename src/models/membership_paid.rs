@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde::Serialize;
-use sqlx::{Pool, Postgres};
+use sqlx::{types::BigDecimal, Pool, Postgres};
 
 use crate::controller::membership::CreateMembershipPaymentRequest;
 
@@ -56,7 +56,7 @@ impl MembershipPaid {
     }
 
     pub async fn find_open_by_year(year: i32, db: &Pool<Postgres>) -> Vec<Member> {
-        sqlx::query_as!(Member, "SELECT * FROM members WHERE left_at IS NULL AND membership_fee IS NOT NULL AND id NOT IN (SELECT member_id FROM membership_paid WHERE year = $1)", year)
+        sqlx::query_as!(Member, "SELECT * FROM members WHERE (left_at IS NULL OR EXTRACT(YEAR FROM joined_at) > $1) AND EXTRACT(YEAR FROM joined_at) <= $1 AND membership_fee IS NOT NULL AND id NOT IN (SELECT member_id FROM membership_paid WHERE year = $2)", BigDecimal::from(year), year)
             .fetch_all(db)
             .await.expect("Cannot load members that have not paid")
     }

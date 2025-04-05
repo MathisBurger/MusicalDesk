@@ -3,13 +3,19 @@ import { useState } from "react";
 import { Button, Grid, Stack, TabPanel, Typography } from "@mui/joy";
 import { Add } from "@mui/icons-material";
 import TabLayout from "@/components/wrapper/tab-layout";
-import MemberList from "@/components/members/member-list";
 import CreateMemberModal from "@/components/members/modal/create-member";
 import MembershipList from "@/components/members/membership-list";
+import useMembersQuery from "@/hooks/queries/useMembersQuery";
+import DisplayMemberList from "@/components/members/display-member-list";
+import useMembersLeftQuery from "@/hooks/queries/useMembersLeftQuery";
 
 const MembersPage = () => {
   const [createMemberModalOpen, setCreateMemberModalOpen] =
     useState<boolean>(false);
+
+  const { data: members, isLoading: membersLoading } = useMembersQuery();
+  const { data: leftMembers, isLoading: leftMembersLoading } =
+    useMembersLeftQuery();
 
   return (
     <Stack spacing={2}>
@@ -26,11 +32,20 @@ const MembersPage = () => {
           </Button>
         </Grid>
       </Grid>
-      <TabLayout tabs={["Members", "Memberships"]}>
+      <TabLayout tabs={["Members", "Left Members", "Memberships"]}>
         <TabPanel value={0}>
-          <MemberList />
+          <DisplayMemberList
+            members={members ?? []}
+            isLoading={membersLoading}
+          />
         </TabPanel>
         <TabPanel value={1}>
+          <DisplayMemberList
+            members={leftMembers ?? []}
+            isLoading={leftMembersLoading}
+          />
+        </TabPanel>
+        <TabPanel value={2}>
           <MembershipList />
         </TabPanel>
       </TabLayout>

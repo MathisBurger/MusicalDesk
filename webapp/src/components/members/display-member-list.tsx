@@ -1,11 +1,14 @@
-"use client";
+import { Member } from "@/hooks/queries/useMembersQuery";
 import { GridColDef } from "@mui/x-data-grid";
-import EntityList, { EntityListRowAction } from "../entity-list";
-import useMembersQuery from "@/hooks/queries/useMembersQuery";
 import { useRouter } from "next/navigation";
+import EntityList, { EntityListRowAction } from "../entity-list";
 
-const MemberList = () => {
-  const { data, isLoading } = useMembersQuery();
+interface DisplayMemberListProps {
+  members: Member[];
+  isLoading: boolean;
+}
+
+const DisplayMemberList = ({ members, isLoading }: DisplayMemberListProps) => {
   const router = useRouter();
 
   const cols: GridColDef[] = [
@@ -62,11 +65,11 @@ const MemberList = () => {
   return (
     <EntityList
       columns={cols}
-      rows={data ?? []}
+      rows={members}
       loading={isLoading}
       rowActions={rowActions}
     />
   );
 };
 
-export default MemberList;
+export default DisplayMemberList;

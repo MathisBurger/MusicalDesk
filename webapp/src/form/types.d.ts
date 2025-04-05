@@ -6,7 +6,7 @@ export interface FormDefinition extends HTMLFormElement {
 }
 
 /** All possible value types a form entry can have */
-export type FormValue = string | number | null;
+export type FormValue = string | number | null | undefined;
 
 /** The type a form data object must implement to be used and valid */
 export type FormType = Record<string, FormValue>;
@@ -23,5 +23,5 @@ export type FormLabels<T> = Record<keyof T, string>;
 /** All input props of an form input that are supported by the useForm hook */
 export type SupportedInputProps = Pick<
   FormInputProps,
-  "error" | "label" | "type" | "name" | "required"
+  "error" | "label" | "type" | "name" | "required" | "defaultValue"
 >;

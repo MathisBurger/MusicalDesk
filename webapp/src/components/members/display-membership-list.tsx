@@ -3,6 +3,7 @@ import { Member } from "@/hooks/queries/useMembersQuery";
 import EntityList, { EntityListRowAction } from "../entity-list";
 import { GridColDef } from "@mui/x-data-grid";
 import usePayMembershipMutation from "@/hooks/mutations/usePayMembershipMutation";
+import { useRouter } from "next/navigation";
 
 interface DisplayMembershipListProps {
   members: Member[];
@@ -20,6 +21,7 @@ const DisplayMembershipList = ({
   refetch,
 }: DisplayMembershipListProps) => {
   const { mutateAsync } = usePayMembershipMutation();
+  const router = useRouter();
 
   const cols: GridColDef[] = [
     {
@@ -37,18 +39,26 @@ const DisplayMembershipList = ({
     {
       field: "iban",
       headerName: "IBAN",
+      width: 300,
     },
     {
       field: "email",
       headerName: "Email",
+      width: 200,
     },
     {
       field: "telephone",
       headerName: "Telephone",
+      width: 150,
     },
   ];
 
   const possibleActions: EntityListRowAction[] = [
+    {
+      color: "primary",
+      name: "Details",
+      onClick: (row) => router.push(`/backend/members/${row.id}`),
+    },
     {
       color: "success",
       name: "Has paid",

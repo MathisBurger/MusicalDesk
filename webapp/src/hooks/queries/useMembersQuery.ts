@@ -12,7 +12,7 @@ export interface Member {
   iban: string | null;
   membership_fee: number | null;
   joined_at: string;
-  left_at: string | null;
+  left_at: number | null;
 }
 
 const queryMembers = async (): Promise<Member[]> => {

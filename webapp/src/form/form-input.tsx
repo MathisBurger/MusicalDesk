@@ -1,5 +1,6 @@
 import { InfoOutlined } from "@mui/icons-material";
 import { FormControl, FormHelperText, FormLabel, Input } from "@mui/joy";
+import { FormValue } from "./types";
 
 /** Input props of an form input field */
 export interface FormInputProps {
@@ -8,6 +9,7 @@ export interface FormInputProps {
   required?: boolean;
   error?: string;
   type?: string;
+  defaultValue?: FormValue;
 }
 
 /**
@@ -28,11 +30,22 @@ const mapType = (type?: string): string => {
 /**
  * The form input component that renders MUI form control with input and error
  */
-const FormInput = ({ name, label, required, error, type }: FormInputProps) => {
+const FormInput = ({
+  name,
+  label,
+  required,
+  error,
+  type,
+  defaultValue,
+}: FormInputProps) => {
   return (
     <FormControl required={required} error={error !== undefined}>
       {label && <FormLabel>{label}</FormLabel>}
-      <Input type={mapType(type)} name={name} />
+      <Input
+        type={mapType(type)}
+        name={name}
+        defaultValue={defaultValue ?? ""}
+      />
       {error && (
         <FormHelperText>
           <InfoOutlined />

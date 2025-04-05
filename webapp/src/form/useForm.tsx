@@ -62,6 +62,7 @@ const useForm = <T extends FormType>({
       required: required ? required.indexOf(key) > -1 : undefined,
       type: typeof defaultValues[key],
       error: errors ? errors[key] : undefined,
+      defaultValue: defaultValues[key],
     };
   };
 

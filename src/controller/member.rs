@@ -1,5 +1,5 @@
 use actix_web::{
-    delete, get, patch, post,
+    delete, get, post,
     web::{Data, Json, Path},
     HttpResponse,
 };
@@ -73,7 +73,7 @@ pub async fn get_member(
     Ok(HttpResponse::Ok().json(member))
 }
 
-#[patch("/members/{id}")]
+#[post("/members/{id}")]
 pub async fn update_member(
     state: Data<AppState>,
     user: User,

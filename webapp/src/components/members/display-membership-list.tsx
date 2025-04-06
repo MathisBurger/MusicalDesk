@@ -10,7 +10,6 @@ interface DisplayMembershipListProps {
   loading: boolean;
   canPay?: boolean;
   selectedYear?: number;
-  refetch?: () => void;
 }
 
 const DisplayMembershipList = ({
@@ -18,9 +17,8 @@ const DisplayMembershipList = ({
   loading,
   canPay = false,
   selectedYear,
-  refetch,
 }: DisplayMembershipListProps) => {
-  const { mutateAsync } = usePayMembershipMutation();
+  const { mutateAsync } = usePayMembershipMutation(selectedYear ?? -1);
   const router = useRouter();
 
   const cols: GridColDef[] = [
@@ -69,9 +67,6 @@ const DisplayMembershipList = ({
           member_id: row.id,
           paid_at: new Date().toISOString(),
         });
-        if (refetch) {
-          refetch();
-        }
       },
       authFunc: () => canPay,
     },

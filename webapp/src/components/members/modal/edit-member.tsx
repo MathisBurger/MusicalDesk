@@ -22,16 +22,14 @@ interface EditMemberModalProps {
   onClose: () => void;
   memberId: number;
   member: Member;
-  refetch: () => void;
 }
 
 const EditMemberModal = ({
   onClose,
   memberId,
   member,
-  refetch,
 }: EditMemberModalProps) => {
-  const { mutateAsync, isPending } = useEditMemberMutation();
+  const { mutateAsync, isPending } = useEditMemberMutation(memberId);
   const { showAlert, displayAlert } = useAlert();
   const form = useForm<EditMemberRequest>({
     defaultValues: { ...member, id: undefined },
@@ -64,7 +62,6 @@ const EditMemberModal = ({
     const result = await mutateAsync({ ...values, id: memberId });
     console.log(result);
     if (result !== null) {
-      refetch();
       onClose();
     } else {
       showAlert({

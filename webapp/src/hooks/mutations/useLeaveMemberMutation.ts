@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Member } from "../queries/useMembersQuery";
 
 const leaveMember = async (memberId: number): Promise<Member | null> => {
@@ -20,6 +20,15 @@ const leaveMember = async (memberId: number): Promise<Member | null> => {
   return (await result.json()) as Member;
 };
 
-const useLeaveMemberMutation = () => useMutation({ mutationFn: leaveMember });
+const useLeaveMemberMutation = (memberId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: leaveMember,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["member", memberId] });
+    },
+  });
+};
 
 export default useLeaveMemberMutation;

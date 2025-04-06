@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface CreateMemberPaymentRequest {
   year: number;
@@ -31,7 +31,16 @@ const payMembership = async (
   return (await result.json()) as MembershipPaid;
 };
 
-const usePayMembershipMutation = () =>
-  useMutation({ mutationFn: payMembership });
+const usePayMembershipMutation = (year: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: payMembership,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["unpaidMemberships", year] });
+      queryClient.invalidateQueries({ queryKey: ["paidMemberships", year] });
+    },
+  });
+};
 
 export default usePayMembershipMutation;

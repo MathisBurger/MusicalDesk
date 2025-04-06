@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Member } from "../queries/useMembersQuery";
 import { FormType } from "@/form/types";
 
@@ -33,6 +33,18 @@ const createMember = async (
   return (await result.json()) as Member;
 };
 
-const useCreateMemberMutation = () => useMutation({ mutationFn: createMember });
+const useCreateMemberMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createMember,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["membersLeft"] });
+      queryClient.invalidateQueries({ queryKey: ["members"] });
+      queryClient.invalidateQueries({ queryKey: ["paidMemberships"] });
+      queryClient.invalidateQueries({ queryKey: ["unpaidMemberships"] });
+    },
+  });
+};
 
 export default useCreateMemberMutation;

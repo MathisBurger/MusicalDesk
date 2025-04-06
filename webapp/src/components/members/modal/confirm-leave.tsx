@@ -14,15 +14,10 @@ import {
 interface ConfirmLeaveModalProps {
   onClose: () => void;
   memberId: number;
-  refetch: () => void;
 }
 
-const ConfirmLeaveModal = ({
-  onClose,
-  memberId,
-  refetch,
-}: ConfirmLeaveModalProps) => {
-  const { mutateAsync, isPending } = useLeaveMemberMutation();
+const ConfirmLeaveModal = ({ onClose, memberId }: ConfirmLeaveModalProps) => {
+  const { mutateAsync, isPending } = useLeaveMemberMutation(memberId);
   const { displayAlert, showAlert } = useAlert();
 
   const leave = async () => {
@@ -35,7 +30,6 @@ const ConfirmLeaveModal = ({
       });
       return;
     }
-    refetch();
     onClose();
   };
 

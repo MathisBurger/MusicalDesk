@@ -12,22 +12,11 @@ const MembershipList = () => {
     useMembershipYearsQuery();
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
-  const {
-    data: unpaidMemberships,
-    isLoading: unpaidLoading,
-    refetch: refetchUnpaid,
-  } = useUnpaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);
+  const { data: unpaidMemberships, isLoading: unpaidLoading } =
+    useUnpaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);
 
-  const {
-    data: paidMemberships,
-    isLoading: paidLoading,
-    refetch: refetchPaid,
-  } = usePaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);
-
-  const refetchAll = () => {
-    refetchPaid();
-    refetchUnpaid();
-  };
+  const { data: paidMemberships, isLoading: paidLoading } =
+    usePaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);
 
   if (yearsLoading) {
     return <LoadingComponent />;
@@ -55,7 +44,6 @@ const MembershipList = () => {
         loading={unpaidLoading}
         members={unpaidMemberships ?? []}
         selectedYear={selectedYear ?? 0}
-        refetch={refetchAll}
         canPay
       />
       <Typography level="h2" sx={{ marginTop: "1.5em" }}>
@@ -65,7 +53,6 @@ const MembershipList = () => {
         loading={paidLoading}
         members={paidMemberships ?? []}
         selectedYear={selectedYear ?? 0}
-        refetch={refetchAll}
       />
     </>
   );

@@ -13,7 +13,7 @@ import { useState } from "react";
 const MembersDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, isLoading, refetch } = useMemberQuery(parseInt(id, 10));
+  const { data, isLoading } = useMemberQuery(parseInt(id, 10));
   const { data: memberships, isLoading: membershipsLoading } =
     useUserPaidMembershipsQuery(parseInt(id, 10));
 
@@ -70,14 +70,12 @@ const MembersDetailsPage = () => {
           memberId={parseInt(id, 10)}
           onClose={() => setEditModalOpen(false)}
           member={data}
-          refetch={refetch}
         />
       )}
       {leaveModalOpen && (
         <ConfirmLeaveModal
           onClose={() => setLeaveModalOpen(false)}
           memberId={parseInt(id, 10)}
-          refetch={refetch}
         />
       )}
     </Stack>

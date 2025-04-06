@@ -13,10 +13,9 @@ import {
 
 interface CreateEventModalProps {
   onClose: () => void;
-  refetch: () => void;
 }
 
-const CreateEventModal = ({ onClose, refetch }: CreateEventModalProps) => {
+const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
   const form = useForm<CreateEventRequest>({
     defaultValues: {
       name: "",

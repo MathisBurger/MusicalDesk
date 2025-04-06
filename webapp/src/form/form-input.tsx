@@ -23,6 +23,8 @@ const mapType = (type?: string): string => {
       return "text";
     case "number":
       return "number";
+    case "date":
+      return "date";
   }
   return "text";
 };

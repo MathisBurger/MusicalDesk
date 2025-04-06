@@ -11,7 +11,7 @@ const EventsPage = () => {
   const [createEventModalOpen, setCreateEventModalOpen] =
     useState<boolean>(false);
 
-  const { data, isLoading, refetch } = useEventsQuery();
+  const { data, isLoading } = useEventsQuery();
 
   const cols: GridColDef[] = [
     {
@@ -52,10 +52,7 @@ const EventsPage = () => {
       <Divider />
       <EntityList rows={data ?? []} columns={cols} loading={isLoading} />
       {createEventModalOpen && (
-        <CreateEventModal
-          onClose={() => setCreateEventModalOpen(false)}
-          refetch={refetch}
-        />
+        <CreateEventModal onClose={() => setCreateEventModalOpen(false)} />
       )}
     </Stack>
   );

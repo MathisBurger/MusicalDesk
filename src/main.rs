@@ -1,3 +1,6 @@
+use std::fs;
+use std::path::Path;
+
 use actix_cors::Cors;
 use actix_web::http::header;
 use actix_web::web::Data;
@@ -22,6 +25,13 @@ async fn main() -> std::io::Result<()> {
     let log_level = std::env::var("RUST_LOG").unwrap_or_else(|_e| "info".to_string());
     std::env::set_var("RUST_LOG", log_level);
     pretty_env_logger::init();
+
+    let upload_dir_path = Path::new("./uploads");
+    if let Err(e) = fs::create_dir_all(&upload_dir_path) {
+        eprintln!("Failed to create directory: {}", e);
+    } else {
+        println!("Directory created or already exists.");
+    }
 
     let db_uri = std::env::var("DATABASE_URL")
         .unwrap_or("postgres://musicaldesk:musicaldesk@127.0.0.1:5432/musicaldesk".to_string());

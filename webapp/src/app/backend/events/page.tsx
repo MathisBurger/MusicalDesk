@@ -21,18 +21,23 @@ const EventsPage = () => {
     {
       field: "name",
       headerName: "Name",
+      width: 200,
     },
     {
       field: "price",
       headerName: "Price",
+      width: 120,
+      valueFormatter: (v) => `${v}€`,
     },
     {
       field: "tax_percentage",
       headerName: "Tax",
+      valueFormatter: (v) => `${v}%`,
     },
     {
       field: "event_date",
       headerName: "Event Date",
+      width: 200,
     },
   ];
 

@@ -1,6 +1,5 @@
 import FormInput from "@/form/form-input";
 import ImageUploadInput, { UploadFnResult } from "@/form/image-upload-input";
-import { FormValue } from "@/form/types";
 import useForm from "@/form/useForm";
 import useCreateEventMutation, {
   CreateEventRequest,

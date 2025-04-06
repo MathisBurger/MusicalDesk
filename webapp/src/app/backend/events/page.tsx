@@ -1,5 +1,6 @@
 "use client";
 import EntityList from "@/components/entity-list";
+import CreateEventModal from "@/components/events/modal/create-event";
 import useEventsQuery from "@/hooks/queries/useEventsQuery";
 import { Add } from "@mui/icons-material";
 import { Button, Divider, Grid, Stack, Typography } from "@mui/joy";
@@ -10,7 +11,7 @@ const EventsPage = () => {
   const [createEventModalOpen, setCreateEventModalOpen] =
     useState<boolean>(false);
 
-  const { data, isLoading } = useEventsQuery();
+  const { data, isLoading, refetch } = useEventsQuery();
 
   const cols: GridColDef[] = [
     {
@@ -50,6 +51,12 @@ const EventsPage = () => {
       </Grid>
       <Divider />
       <EntityList rows={data ?? []} columns={cols} loading={isLoading} />
+      {createEventModalOpen && (
+        <CreateEventModal
+          onClose={() => setCreateEventModalOpen(false)}
+          refetch={refetch}
+        />
+      )}
     </Stack>
   );
 };

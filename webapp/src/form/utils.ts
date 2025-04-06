@@ -1,9 +1,12 @@
 import { FormEvent } from "react";
 import {
+  ExplicitTypeHints,
   FormDefinition,
   FormType,
   FormValidationRules,
   FormValue,
+  Transformers,
+  Types,
 } from "./types";
 
 /**
@@ -15,8 +18,31 @@ import {
  */
 export const transformValue = (
   value: string | null,
-  defaultValue: FormValue,
+  defaultValue?: FormValue,
+  typehint?: Types,
 ): FormValue => {
+  if (value === null) {
+    return null;
+  }
+
+  if (typehint) {
+    if (typehint === "string") {
+      return `${value}`;
+    }
+    if (typehint === "number") {
+      return isNaN(Number(value)) ? null : Number(value);
+    }
+    if (typehint === "datetime-iso" && value !== "") {
+      return new Date(`${value}`).toISOString();
+    }
+    if (typehint === "datetime-utc" && value !== "") {
+      return new Date(`${value}`).toUTCString();
+    }
+  }
+
+  if ((defaultValue === null || defaultValue === undefined) && value === "") {
+    return null;
+  }
   if (typeof defaultValue === "number") {
     return isNaN(Number(value)) ? null : Number(value);
   }
@@ -32,7 +58,8 @@ export const transformValue = (
  */
 export const transformData = <T extends FormType>(
   event: FormEvent<FormDefinition>,
-  defaultValues: Record<keyof T, FormValue>,
+  defaultValues?: Record<keyof T, FormValue>,
+  typehints?: ExplicitTypeHints<T>,
 ): T => {
   const transformed: Partial<T> = {};
   for (const key in Object.keys(event.currentTarget.elements)) {
@@ -41,11 +68,33 @@ export const transformData = <T extends FormType>(
       /** @ts-expect-error Ignore here */
       transformed[element.name] = transformValue(
         element.value,
-        defaultValues[element.name],
+        defaultValues ? defaultValues[element.name] : undefined,
+        typehints ? typehints[element.name] : undefined,
       );
     }
   }
   return transformed as T;
+};
+
+/**
+ * Applies all transformers to the object
+ *
+ * @param data The data object
+ * @param transformers All transformers that should be applied
+ * @returns The transformed data object
+ */
+export const applyTransformers = <T extends FormType>(
+  data: T,
+  transformers?: Transformers<T>,
+): T => {
+  if (transformers === undefined) {
+    return data;
+  }
+  for (const key of Object.keys(transformers)) {
+    // @ts-expect-error ignore
+    data[key] = transformers[key](data[key]);
+  }
+  return data;
 };
 
 /**

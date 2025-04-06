@@ -1,5 +1,11 @@
 import { InfoOutlined } from "@mui/icons-material";
-import { FormControl, FormHelperText, FormLabel, Input } from "@mui/joy";
+import {
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
+  InputProps,
+} from "@mui/joy";
 import { FormValue } from "./types";
 
 /** Input props of an form input field */
@@ -10,6 +16,7 @@ export interface FormInputProps {
   error?: string;
   type?: string;
   defaultValue?: FormValue;
+  endDecorator?: InputProps["endDecorator"];
 }
 
 /**
@@ -25,6 +32,8 @@ const mapType = (type?: string): string => {
       return "number";
     case "date":
       return "date";
+    case "datetime":
+      return "datetime-local";
   }
   return "text";
 };
@@ -39,6 +48,7 @@ const FormInput = ({
   error,
   type,
   defaultValue,
+  endDecorator,
 }: FormInputProps) => {
   return (
     <FormControl required={required} error={error !== undefined}>
@@ -47,6 +57,7 @@ const FormInput = ({
         type={mapType(type)}
         name={name}
         defaultValue={defaultValue ?? ""}
+        endDecorator={endDecorator}
       />
       {error && (
         <FormHelperText>

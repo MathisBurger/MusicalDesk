@@ -1,8 +1,12 @@
 import FormInput from "@/form/form-input";
 import ImageUploadInput, { UploadFnResult } from "@/form/image-upload-input";
+import { FormValue } from "@/form/types";
 import useForm from "@/form/useForm";
-import { CreateEventRequest } from "@/hooks/mutations/useCreateEventMutation";
+import useCreateEventMutation, {
+  CreateEventRequest,
+} from "@/hooks/mutations/useCreateEventMutation";
 import useUploadFileMutation from "@/hooks/mutations/useUploadFileMutation";
+import useAlert from "@/hooks/useAlert";
 import {
   Button,
   DialogActions,
@@ -21,6 +25,9 @@ interface CreateEventModalProps {
 
 const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
   const { mutateAsync: uploadFile } = useUploadFileMutation();
+  const { mutateAsync: createEvent } = useCreateEventMutation();
+
+  const { displayAlert, showAlert } = useAlert();
 
   const uploadFn = async (
     name: string,
@@ -42,24 +49,40 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
     return { error: "Cannot upload file" };
   };
 
+  const submit = async (req: CreateEventRequest) => {
+    const result = await createEvent(req);
+    if (result) {
+      onClose();
+      return;
+    }
+    showAlert({
+      color: "danger",
+      content: "Cannot create event",
+      duration: 1500,
+    });
+  };
+
   const form = useForm<CreateEventRequest>({
-    defaultValues: {
-      name: "",
-      price: 0,
-      tax_percentage: 0,
-      image_id: -1,
-      event_date: new Date().toISOString(),
-      active_from: new Date().toISOString(),
-      active_until: new Date().toISOString(),
-    },
     labels: {
       name: "Name",
-      price: "Preis",
+      price: "Price",
       tax_percentage: "Tax",
       image_id: "Image",
       event_date: "Date",
       active_from: "Active from",
       active_until: "Active until",
+    },
+    validation: {
+      name: (v) => (v === "" ? "Please choose an valid name" : null),
+      price: (v) => (v === -1 ? "Please choose an valid value" : null),
+    },
+    explicitTypes: {
+      price: "number",
+      tax_percentage: "number",
+      image_id: "number",
+      event_date: "datetime-iso",
+      active_from: "datetime-iso",
+      active_until: "datetime-iso",
     },
     required: ["name", "price", "tax_percentage", "image_id", "event_date"],
   });
@@ -69,16 +92,23 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
         <DialogTitle>Create event</DialogTitle>
+        {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
-            <form onSubmit={form.onSubmit(async () => {})}>
+            <form onSubmit={form.onSubmit(submit)} onInvalid={form.onInvalid}>
               <FormInput {...form.getInputProps("name")} />
               <Grid container direction="row" spacing={2}>
                 <Grid xs={8}>
-                  <FormInput {...form.getInputProps("price")} />
+                  <FormInput
+                    {...form.getInputProps("price")}
+                    endDecorator="€"
+                  />
                 </Grid>
                 <Grid xs={4}>
-                  <FormInput {...form.getInputProps("tax_percentage")} />
+                  <FormInput
+                    {...form.getInputProps("tax_percentage")}
+                    endDecorator="%"
+                  />
                 </Grid>
               </Grid>
               <ImageUploadInput
@@ -86,18 +116,21 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
                 uploadFn={uploadFn}
                 accept="image/*"
               />
-              <FormInput {...form.getInputProps("event_date")} type="date" />
+              <FormInput
+                {...form.getInputProps("event_date")}
+                type="datetime"
+              />
               <Grid container direction="row" spacing={2}>
                 <Grid xs={6}>
                   <FormInput
                     {...form.getInputProps("active_from")}
-                    type="date"
+                    type="datetime"
                   />
                 </Grid>
                 <Grid xs={6}>
                   <FormInput
                     {...form.getInputProps("active_until")}
-                    type="date"
+                    type="datetime"
                   />
                 </Grid>
               </Grid>

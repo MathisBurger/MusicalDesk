@@ -20,6 +20,14 @@ export type FormValidationRules<T> = Record<
 /** Definition of possible form labels object */
 export type FormLabels<T> = Record<keyof T, string>;
 
+/** Definition of possible form transformers object */
+export type Transformers<T> = Record<keyof T, (value: FormValue) => FormValue>;
+
+type Types = "string" | "number" | "datetime-iso" | "datetime-utc";
+
+/** Definition of possible typehints for input fields. */
+export type ExplicitTypeHints<T> = Record<keyof T, Types>;
+
 /** All input props of an form input that are supported by the useForm hook */
 export type SupportedInputProps = Pick<
   FormInputProps,

@@ -1,12 +1,12 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormType } from "@/form/types";
 
 export interface CreateEventRequest extends FormType {
-  name: string;
-  price: number;
+  name: string | null;
+  price: number | null;
   tax_percentage: number;
   image_id: number;
-  event_date: string;
+  event_date: string | null;
   active_from: string | null;
   active_until: string | null;
 }
@@ -28,6 +28,15 @@ const createEvent = async (data: CreateEventRequest): Promise<Event | null> => {
   return (await result.json()) as Event;
 };
 
-const useCreateEventMutation = () => useMutation({ mutationFn: createEvent });
+const useCreateEventMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+  });
+};
 
 export default useCreateEventMutation;

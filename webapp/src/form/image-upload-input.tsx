@@ -43,11 +43,12 @@ const ImageUploadInput = ({
       {label && <FormLabel>{label}</FormLabel>}
       <Grid container direction="row" spacing={1}>
         <Grid xs={11}>
-          <Input name="_dummy_input" disabled value={currentFile?.name} />
+          <Input value={currentFile?.name} disabled required={required} />
           <input
             name={name}
             value={currentFile?.fileId}
             style={{ display: "none" }}
+            required={required}
           />
         </Grid>
         <Grid xs={1}>

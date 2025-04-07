@@ -7,6 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/joy";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
 interface EventCardProps {
@@ -14,6 +15,8 @@ interface EventCardProps {
 }
 
 const EventCard = ({ event }: EventCardProps) => {
+  const router = useRouter();
+
   const dateString = useMemo<string>(() => {
     const date: Date = new Date(event.event_date);
     return `${date.getDay()}.${date.getMonth()}.${date.getFullYear()}`;
@@ -37,7 +40,9 @@ const EventCard = ({ event }: EventCardProps) => {
           <Typography fontWeight="bold">{event.price}€</Typography>
         </Stack>
       </CardContent>
-      <Button>Details</Button>
+      <Button onClick={() => router.push(`/shop/events/${event.id}`)}>
+        Details
+      </Button>
     </Card>
   );
 };

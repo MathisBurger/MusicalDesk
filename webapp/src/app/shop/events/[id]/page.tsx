@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const ShopEventDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +25,10 @@ const ShopEventDetailsPage = () => {
   const { data, isLoading } = useShopEventQuery(parseInt(id, 10));
 
   const [numSelected, setNumSelected] = useState<number>(1);
+  const ticketsLeft = useMemo(
+    () => data?.tickets_left ?? 0,
+    [data?.tickets_left],
+  );
 
   if (isLoading) {
     return <LoadingComponent />;
@@ -39,18 +43,18 @@ const ShopEventDetailsPage = () => {
             <AspectRatio ratio="1/1">
               <img
                 alt=""
-                src={`${process.env.NEXT_PUBLIC_API_URL}/images/${data?.image_id}`}
+                src={`${process.env.NEXT_PUBLIC_API_URL}/images/${data?.event.image_id}`}
               />
             </AspectRatio>
           </Grid>
           <Grid xs={12} md={6}>
             <Card variant="outlined">
-              <Typography level="h2">{data?.name}</Typography>
+              <Typography level="h2">{data?.event.name}</Typography>
               <Divider />
               <Typography level="h3">
-                {data?.price}€ &nbsp;{" "}
+                {data?.event.price}€ &nbsp;{" "}
                 <Typography fontSize="0.5em">
-                  inkl. {data?.tax_percentage}% VAT
+                  inkl. {data?.event.tax_percentage}% VAT
                 </Typography>
               </Typography>
               <Stack direction="row" spacing={1} sx={{ width: "250px" }}>
@@ -75,7 +79,9 @@ const ShopEventDetailsPage = () => {
                   <Add />
                 </Button>
               </Stack>
-              <Typography>200 left</Typography>
+              <Typography fontWeight={ticketsLeft === 0 ? "bold" : undefined}>
+                {ticketsLeft > 0 ? `${ticketsLeft} left` : "sold out"}
+              </Typography>
               {currentUser === null && <Button>Login to buy</Button>}
               {currentUser && (
                 <Stack direction="row" spacing={2}>

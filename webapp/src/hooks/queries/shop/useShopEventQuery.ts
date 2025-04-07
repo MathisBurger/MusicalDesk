@@ -1,7 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { Event } from "../useEventsQuery";
 
-const queryEvent = async (id: number): Promise<Event | null> => {
+export interface ShopEvent {
+  event: Event;
+  tickets_left: number;
+}
+
+const queryEvent = async (id: number): Promise<ShopEvent | null> => {
   const result = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/shop/events/${id}`,
     {
@@ -12,7 +17,7 @@ const queryEvent = async (id: number): Promise<Event | null> => {
     },
   );
   if (result.ok) {
-    return (await result.json()) as Event;
+    return (await result.json()) as ShopEvent;
   }
   return null;
 };

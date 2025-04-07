@@ -16,7 +16,7 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BusinessIcon from "@mui/icons-material/Business";
 import ColorSchemeToggle from "./color-scheme-toggle";
 import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
-import { Event, SupervisedUserCircle } from "@mui/icons-material";
+import { Event, ShoppingCart, SupervisedUserCircle } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import RoleWrapper from "./wrapper/role-wrapper";
 
@@ -147,7 +147,7 @@ export default function Sidebar() {
             </ListItemButton>
           </ListItem>
 
-          <RoleWrapper roles={[UserRole.MemberManager]} hideAlert>
+          <RoleWrapper roles={[UserRole.MemberAdmin]} hideAlert>
             <ListItem>
               <ListItemButton onClick={() => router.push("/backend/members")}>
                 <SupervisedUserCircle />
@@ -157,12 +157,22 @@ export default function Sidebar() {
               </ListItemButton>
             </ListItem>
           </RoleWrapper>
-          <RoleWrapper roles={[UserRole.EventManager]} hideAlert>
+          <RoleWrapper roles={[UserRole.EventAdmin]} hideAlert>
             <ListItem>
               <ListItemButton onClick={() => router.push("/backend/events")}>
                 <Event />
                 <ListItemContent>
                   <Typography level="title-sm">Events</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+          </RoleWrapper>
+          <RoleWrapper roles={[UserRole.ShopCustomer]} hideAlert>
+            <ListItem>
+              <ListItemButton onClick={() => router.push("/")}>
+                <ShoppingCart />
+                <ListItemContent>
+                  <Typography level="title-sm">Shop</Typography>
                 </ListItemContent>
               </ListItemButton>
             </ListItem>

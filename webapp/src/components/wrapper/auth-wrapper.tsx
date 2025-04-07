@@ -32,7 +32,7 @@ const AuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
   const pathname = usePathname();
   const router = useRouter();
   const { data, isLoading, isFetched } = useUserSelfQuery(
-    pathname.startsWith("/backend"),
+    !pathname.startsWith("/login") || pathname.startsWith("/register"),
   );
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -67,7 +67,9 @@ const AuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      {children}
+      <CurrentUserContext.Provider value={currentUser}>
+        {children}
+      </CurrentUserContext.Provider>
     </CssVarsProvider>
   );
 };

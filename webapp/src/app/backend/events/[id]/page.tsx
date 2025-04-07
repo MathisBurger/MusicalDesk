@@ -27,7 +27,7 @@ const MemberDetailsPage = () => {
   }
 
   return (
-    <RoleWrapper roles={[UserRole.EventManager]}>
+    <RoleWrapper roles={[UserRole.EventAdmin]}>
       <Stack spacing={2}>
         <Typography level="h2">{data?.name}</Typography>
         <Divider />

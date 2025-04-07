@@ -20,7 +20,7 @@ const MembersPage = () => {
     useMembersLeftQuery();
 
   return (
-    <RoleWrapper roles={[UserRole.MemberManager]}>
+    <RoleWrapper roles={[UserRole.MemberAdmin]}>
       <Stack spacing={2}>
         <Grid container spacing={4} alignItems="center">
           <Grid>

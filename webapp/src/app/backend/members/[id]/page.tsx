@@ -35,7 +35,7 @@ const MembersDetailsPage = () => {
   ];
 
   return (
-    <RoleWrapper roles={[UserRole.MemberManager]}>
+    <RoleWrapper roles={[UserRole.MemberAdmin]}>
       <Stack spacing={2}>
         <Typography level="h2">
           {data?.first_name} {data?.last_name}

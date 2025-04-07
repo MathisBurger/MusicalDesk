@@ -1,0 +1,12 @@
+ALTER TABLE tickets
+ADD COLUMN owner_id INTEGER REFERENCES users (id);
+
+ALTER TABLE tickets
+ADD COLUMN bought_at TIMESTAMP
+WITH
+    TIME ZONE;
+
+ALTER TABLE tickets
+ADD COLUMN reserved_until TIMESTAMP
+WITH
+    TIME ZONE;

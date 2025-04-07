@@ -13,6 +13,7 @@ Features:
 - [ ] Backend code documentation
 - [ ] Expense management (With categories, Images of bills, etc.)
 - [ ] Annual finance reports
+- [ ] Transfer tickets to other users
 
 
 ## Application architecture decisions

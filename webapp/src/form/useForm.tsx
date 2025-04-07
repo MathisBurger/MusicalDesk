@@ -13,7 +13,7 @@ import { applyTransformers, transformData, validateData } from "./utils";
 import FormInput from "./form-input";
 
 /** Input props of the use form hook */
-interface UseFormProps<T extends FormType> {
+interface UseFormProps<T> {
   /** All default values of a form */
   // TODO: Make default values not required
   defaultValues?: Record<keyof T, FormValue>;
@@ -29,14 +29,15 @@ interface UseFormProps<T extends FormType> {
   explicitTypes?: ExplicitTypeHints<T>;
 }
 
-const useForm = <T extends FormType>({
+// eslint-disable-next-line
+const useForm = <T extends object>({
   defaultValues,
   validation,
   labels,
   required,
   transformers,
   explicitTypes,
-}: UseFormProps<T>) => {
+}: UseFormProps<FormType<T>>) => {
   const [errors, setErrors] = useState<Record<keyof T, string> | null>(null);
 
   /**
@@ -48,7 +49,11 @@ const useForm = <T extends FormType>({
   const onSubmit = (handler: (values: T) => Promise<void>) => {
     return (e: FormEvent<FormDefinition>) => {
       e.preventDefault();
-      const alignedData = transformData(e, defaultValues, explicitTypes) as T;
+      const alignedData = transformData(
+        e,
+        defaultValues,
+        explicitTypes,
+      ) as FormType<T>;
       const transformedData = applyTransformers(alignedData, transformers);
       if (validation !== undefined) {
         const validationResults = validateData<T>(transformedData, validation);
@@ -57,7 +62,7 @@ const useForm = <T extends FormType>({
           return;
         }
       }
-      handler(transformedData);
+      handler(transformedData as T);
     };
   };
 
@@ -103,7 +108,7 @@ const useForm = <T extends FormType>({
     const keySet = new Set([...defaultValueKeys, ...explicitTypesKeys]);
 
     return Array.from(keySet).map((key) => (
-      <FormInput {...getInputProps(key)} key={key} />
+      <FormInput {...getInputProps(key as keyof T)} key={key} />
     ));
   };
 

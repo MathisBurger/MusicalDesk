@@ -1,7 +1,6 @@
-import { FormType } from "@/form/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export interface CreateTicketsRequest extends FormType {
+export interface CreateTicketsRequest {
   valid_until: string;
   quantity: number;
 }

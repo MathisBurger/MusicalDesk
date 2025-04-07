@@ -52,7 +52,11 @@ const ImageUploadInput = ({
           />
         </Grid>
         <Grid xs={1}>
-          <Button color="neutral" onClick={() => setUploadModalOpen(true)}>
+          <Button
+            color="neutral"
+            onClick={() => setUploadModalOpen(true)}
+            type="button"
+          >
             <Upload />
           </Button>
         </Grid>

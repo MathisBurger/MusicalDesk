@@ -1,7 +1,6 @@
-import { FormType } from "@/form/types";
 import { useMutation } from "@tanstack/react-query";
 
-export interface RegisterRequest extends FormType {
+export interface RegisterRequest {
   email: string;
   password: string;
 }

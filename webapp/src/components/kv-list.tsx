@@ -14,10 +14,12 @@ const KvList = ({ displayData }: KvListProps) => {
     <Grid container spacing={3} sx={{ flexGrow: 1 }}>
       {displayData.map((row) => (
         <>
-          <Grid xs={4}>
+          <Grid xs={4} key={row.title}>
             <Typography fontWeight="bold">{row.title}:</Typography>
           </Grid>
-          <Grid xs={8}>{row.value}</Grid>
+          <Grid xs={8} key={row.title + "_value"}>
+            {row.value}
+          </Grid>
         </>
       ))}
     </Grid>

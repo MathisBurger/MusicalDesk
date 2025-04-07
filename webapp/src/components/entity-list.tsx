@@ -34,6 +34,13 @@ interface EntityListProps {
   loading: boolean;
 }
 
+const setFlexPropertyIfAllowed = (def: GridColDef): GridColDef => {
+  if (def.width) {
+    return def;
+  }
+  return { ...def, flex: 1 };
+};
+
 const getRowActions = (row: unknown, actions: EntityListRowAction[]) => {
   return (
     <CssVarsProvider>
@@ -88,11 +95,12 @@ const EntityList = ({
       const actions = {
         field: "_actions",
         headerName: "Actions",
+        flex: 1,
         renderCell: (props: GridRenderCellParams) =>
           getRowActions(props.row, filteredRowActions),
       };
 
-      return columns.concat([actions]);
+      return columns.map(setFlexPropertyIfAllowed).concat([actions]);
     }
 
     return columns;
@@ -121,6 +129,7 @@ const EntityList = ({
     },
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const processedRows = useMemo<readonly any[]>(
     () => (rows ?? []).map((row, i) => ({ ...row, _ghostId: -i })),
     [rows],

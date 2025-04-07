@@ -72,8 +72,6 @@ const FormInput = ({
     return defaultValue;
   }, [defaultValue, type]);
 
-  console.log(defaultValueOverride);
-
   return (
     <FormControl
       required={required}

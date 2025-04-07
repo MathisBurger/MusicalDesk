@@ -56,11 +56,11 @@ export const transformValue = (
  * @param defaultValues The default values of the form inputs
  * @returns The transformed data object
  */
-export const transformData = <T extends FormType>(
+export const transformData = <T>(
   event: FormEvent<FormDefinition>,
-  defaultValues?: Record<keyof T, FormValue>,
-  typehints?: ExplicitTypeHints<T>,
-): T => {
+  defaultValues?: FormType<T>,
+  typehints?: ExplicitTypeHints<FormType<T>>,
+): FormType<T> => {
   const transformed: Partial<T> = {};
   for (const key in Object.keys(event.currentTarget.elements)) {
     const element = event.currentTarget.elements[key];
@@ -73,7 +73,7 @@ export const transformData = <T extends FormType>(
       );
     }
   }
-  return transformed as T;
+  return transformed as FormType<T>;
 };
 
 /**
@@ -83,7 +83,7 @@ export const transformData = <T extends FormType>(
  * @param transformers All transformers that should be applied
  * @returns The transformed data object
  */
-export const applyTransformers = <T extends FormType>(
+export const applyTransformers = <T>(
   data: T,
   transformers?: Transformers<T>,
 ): T => {
@@ -104,9 +104,9 @@ export const applyTransformers = <T extends FormType>(
  * @param rules The rules used for validation
  * @returns The errors that occured during validation
  */
-export const validateData = <T extends FormType>(
-  data: T,
-  rules: FormValidationRules<T>,
+export const validateData = <T>(
+  data: FormType<T>,
+  rules: FormValidationRules<FormType<T>>,
 ): Record<keyof T, string> => {
   const ruleMismatches: Partial<Record<keyof T, string>> = {};
 

@@ -12,7 +12,7 @@ import {
   ModalDialog,
 } from "@mui/joy";
 import { CurrentFile, UploadFnResult } from "./image-upload-input";
-import { FormEvent, useState } from "react";
+import { useRef, useState } from "react";
 import useAlert from "@/hooks/useAlert";
 
 interface UploadModalProps {
@@ -29,23 +29,31 @@ const UploadModal = ({
   setCurrentFile,
 }: UploadModalProps) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [placeholderName, setPlaceholderName] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const { displayAlert, showAlert } = useAlert();
 
-  const uploadFile = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const uploadFile = async () => {
+    if (!fileInputRef.current?.files || name === "") {
+      showAlert({
+        color: "danger",
+        content: "Please fill the form",
+      });
+      return;
+    }
+
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const file: File | null = formData.get("file") as File | null;
-    if (file === null || file.size === 0) {
+    const file = fileInputRef.current?.files?.item(0);
+    if (!file || file.size === 0) {
       showAlert({
         color: "danger",
         content: "No file submitted",
         duration: 1000,
       });
     } else {
-      const result = await uploadFn(formData.get("name") as string, file);
+      const result = await uploadFn(name, file);
       if (result.error) {
         showAlert({
           color: "danger",
@@ -55,7 +63,7 @@ const UploadModal = ({
       } else {
         setCurrentFile({
           fileId: result.imageId ?? -1,
-          name: formData.get("name") as string,
+          name: name,
         });
         onClose();
       }
@@ -71,34 +79,32 @@ const UploadModal = ({
         <DialogTitle>Upload file</DialogTitle>
         <DialogContent>
           {displayAlert()}
-          <form onSubmit={uploadFile}>
-            <FormControl required>
-              <FormLabel>Name</FormLabel>
-              <Input
-                name="name"
-                required
-                sx={{ marginBottom: "1.5em" }}
-                defaultValue={placeholderName}
-              />
-            </FormControl>
-            <input
-              name="file"
-              type="file"
-              accept={accept}
+          <FormControl required>
+            <FormLabel>Name</FormLabel>
+            <Input
+              name="name"
               required
-              onChange={(e) =>
-                setPlaceholderName(e.target.value.split("\\").reverse()[0])
-              }
+              sx={{ marginBottom: "1.5em" }}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
-            <DialogActions>
-              <Button loading={loading} type="submit">
-                Create
-              </Button>
-              <Button color="neutral" onClick={onClose}>
-                Cancel
-              </Button>
-            </DialogActions>
-          </form>
+          </FormControl>
+          <input
+            name="file"
+            type="file"
+            accept={accept}
+            required
+            ref={fileInputRef}
+            onChange={(e) => setName(e.target.value.split("\\").reverse()[0])}
+          />
+          <DialogActions>
+            <Button loading={loading} onClick={uploadFile}>
+              Create
+            </Button>
+            <Button color="neutral" onClick={onClose}>
+              Cancel
+            </Button>
+          </DialogActions>
         </DialogContent>
       </ModalDialog>
     </Modal>

@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Member } from "../queries/useMembersQuery";
-import { FormType } from "@/form/types";
 
-export interface EditMemberRequest extends FormType {
+export interface EditMemberRequest {
   first_name: string;
   last_name: string;
   email: string | null;

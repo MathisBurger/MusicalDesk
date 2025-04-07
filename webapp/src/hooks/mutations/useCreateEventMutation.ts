@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { FormType } from "@/form/types";
 
-export interface EventRequest extends FormType {
+export interface EventRequest {
   name: string | null;
   price: number | null;
   tax_percentage: number;

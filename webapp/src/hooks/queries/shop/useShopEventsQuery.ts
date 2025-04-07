@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Event } from "../useEventsQuery";
+import { ShopEvent } from "./useShopEventQuery";
 
-const queryEvents = async (): Promise<Event[]> => {
+const queryEvents = async (): Promise<ShopEvent[]> => {
   const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shop/events`, {
     mode: "cors",
     headers: {
@@ -9,7 +10,7 @@ const queryEvents = async (): Promise<Event[]> => {
     },
   });
   if (result.ok) {
-    return (await result.json()) as Event[];
+    return (await result.json()) as ShopEvent[];
   }
   return [];
 };

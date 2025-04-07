@@ -7,7 +7,7 @@ use sqlx::Postgres;
 
 use super::generic::Error;
 
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 pub struct Event {
     pub id: i32,
     pub name: String,

@@ -3,6 +3,7 @@ use actix_web::{
     web::{Data, Path},
     HttpResponse,
 };
+use futures::future::join_all;
 use serde::Serialize;
 
 use crate::{
@@ -10,16 +11,31 @@ use crate::{
     AppState,
 };
 
-#[get("/shop/events")]
-pub async fn get_current_events(state: Data<AppState>) -> HttpResponse {
-    let events = Event::get_active_events(&state.database).await;
-    HttpResponse::Ok().json(events)
-}
-
 #[derive(Serialize)]
 struct ShopEvent {
     pub event: Event,
     pub tickets_left: i64,
+}
+
+#[get("/shop/events")]
+pub async fn get_current_events(state: Data<AppState>) -> HttpResponse {
+    let events = Event::get_active_events(&state.database).await;
+
+    let shop_events: Vec<ShopEvent> = join_all(events.iter().map(|event| {
+        let db = &state.database;
+        let event = event.clone();
+
+        async move {
+            let tickets_left = Ticket::get_left_over_ticket_count(event.id, db).await;
+            ShopEvent {
+                event,
+                tickets_left,
+            }
+        }
+    }))
+    .await;
+
+    HttpResponse::Ok().json(shop_events)
 }
 
 #[get("/shop/events/{id}")]

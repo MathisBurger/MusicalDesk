@@ -36,6 +36,8 @@ const mapType = (type?: string): string => {
     case "date":
       return "date";
     case "datetime":
+    case "datetime-iso":
+    case "datetime-utc":
       return "datetime-local";
   }
   return "text";

@@ -1,3 +1,4 @@
+import useShoppingCartQuery from "@/hooks/queries/shop/useShoppingCartQuery";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useLogout from "@/hooks/useLogout";
 import {
@@ -7,6 +8,7 @@ import {
 } from "@mui/icons-material";
 import {
   Avatar,
+  Badge,
   Box,
   DialogTitle,
   Drawer,
@@ -31,6 +33,8 @@ const ShopHeader = () => {
   const currentUser = useCurrentUser();
   const router = useRouter();
   const logout = useLogout();
+
+  const { data: shoppingCart } = useShoppingCartQuery();
 
   return (
     <Box
@@ -129,14 +133,17 @@ const ShopHeader = () => {
           {currentUser && (
             <>
               <Tooltip title="Shopping Cart" variant="outlined">
-                <IconButton
-                  size="sm"
-                  variant="plain"
-                  color="neutral"
-                  sx={{ alignSelf: "center" }}
-                >
-                  <ShoppingCart />
-                </IconButton>
+                <Badge badgeContent={shoppingCart?.length}>
+                  <IconButton
+                    size="sm"
+                    variant="plain"
+                    color="neutral"
+                    sx={{ alignSelf: "center" }}
+                    onClick={() => router.push("/shop/my-shopping-cart")}
+                  >
+                    <ShoppingCart />
+                  </IconButton>
+                </Badge>
               </Tooltip>
               <Dropdown
                 open={dropdownOpen}

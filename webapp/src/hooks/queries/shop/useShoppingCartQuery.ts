@@ -13,6 +13,7 @@ const queryShoppingCart = async (): Promise<ShoppingCartItem[]> => {
   const result = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/shop/shopping_cart`,
     {
+      credentials: "include",
       mode: "cors",
       headers: {
         Accept: "application/json",

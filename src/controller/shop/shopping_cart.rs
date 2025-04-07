@@ -1,6 +1,6 @@
 use actix_web::{
-    get, post,
-    web::{Data, Json},
+    delete, get, post,
+    web::{Data, Json, Path},
     HttpResponse,
 };
 use serde::Deserialize;
@@ -35,4 +35,15 @@ pub async fn add_ticket_to_shopping_cart(
 pub async fn get_shopping_cart(user: User, state: Data<AppState>) -> HttpResponse {
     let shopping_cart = Ticket::get_personal_shopping_cart(user.id, &state.database).await;
     HttpResponse::Ok().json(shopping_cart)
+}
+
+#[delete("/shop/shopping_cart/{id}")]
+pub async fn cancel_ticket_reservations(
+    user: User,
+    state: Data<AppState>,
+    path: Path<(i32,)>,
+) -> HttpResponse {
+    let canceled_tickets =
+        Ticket::cancel_ticket_reservations(path.0, user.id, &state.database).await;
+    HttpResponse::Ok().json(canceled_tickets)
 }

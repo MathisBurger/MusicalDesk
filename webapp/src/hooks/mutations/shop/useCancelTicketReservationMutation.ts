@@ -1,22 +1,15 @@
 import { Ticket } from "@/hooks/queries/useEventTicketsQuery";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export interface ShoppingCartRequest {
-  event_id: number;
-  quantity: number;
-}
-
-const addToCart = async (data: ShoppingCartRequest): Promise<Ticket[]> => {
+const cancelReservation = async (eventId: number): Promise<Ticket[]> => {
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/shop/shopping_cart`,
+    `${process.env.NEXT_PUBLIC_API_URL}/shop/shopping_cart/${eventId}`,
     {
-      method: "POST",
+      method: "DELETE",
       mode: "cors",
       credentials: "include",
-      body: JSON.stringify(data),
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json",
       },
     },
   );
@@ -26,19 +19,19 @@ const addToCart = async (data: ShoppingCartRequest): Promise<Ticket[]> => {
   return (await result.json()) as Ticket[];
 };
 
-const useAddTicketsToShoppingCartMutation = (data: ShoppingCartRequest) => {
+const useCancelTicketReservationMutation = (eventId: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => addToCart(data),
+    mutationFn: () => cancelReservation(eventId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shopEvents"] });
       queryClient.invalidateQueries({ queryKey: ["shoppingCart"] });
       queryClient.invalidateQueries({
-        queryKey: ["shopEvents", data.event_id],
+        queryKey: ["shopEvents", eventId],
       });
     },
   });
 };
 
-export default useAddTicketsToShoppingCartMutation;
+export default useCancelTicketReservationMutation;

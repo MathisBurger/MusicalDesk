@@ -98,4 +98,16 @@ impl Ticket {
         .await
         .expect("Cannot reserve tickets")
     }
+
+    pub async fn cancel_ticket_reservations(
+        event_id: i32,
+        user_id: i32,
+        db: &Pool<Postgres>,
+    ) -> Vec<Ticket> {
+        let reservation_deadline: DateTime<Utc> = Utc::now() + Duration::minutes(20);
+        sqlx::query_as!(Ticket, "UPDATE tickets SET owner_id = NULL, reserved_until = NULL WHERE bought_at IS NULL AND owner_id = $1 AND event_id = $2 RETURNING *", user_id, event_id)
+        .fetch_all(db)
+        .await
+        .expect("Cannot cancel tickets")
+    }
 }

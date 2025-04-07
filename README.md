@@ -3,8 +3,8 @@
 Features:
 
 - [x] Simple membership management
-- [ ] Shop frontend with event details
-- [ ] Navigate user back to page he visited before if it is a shop event uri
+- [x] Shop frontend with event details
+- [x] Navigate user back to page he visited before if it is a shop event uri
 - [ ] Stripe payment integration & ticket buy process
 - [ ] Option for customer to view his ticket orders & QR Code generation
 - [ ] Option to add tickets to your google / apple wallet

@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { Event } from "../useEventsQuery";
 import { ShopEvent } from "./useShopEventQuery";
 
 const queryEvents = async (): Promise<ShopEvent[]> => {

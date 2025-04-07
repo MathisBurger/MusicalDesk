@@ -21,6 +21,7 @@ pub struct Ticket {
 
 #[derive(Serialize)]
 pub struct ShoppingCartItem {
+    pub event_id: Option<i32>,
     pub image_id: Option<i32>,
     pub name: String,
     pub min_reserved_until: Option<DateTime<Utc>>,
@@ -66,7 +67,7 @@ impl Ticket {
         user_id: i32,
         db: &Pool<Postgres>,
     ) -> Vec<ShoppingCartItem> {
-        sqlx::query_as!(ShoppingCartItem, "SELECT e.image_id AS image_id, e.name AS name, MIN(tickets.reserved_until) AS min_reserved_until, COUNT(tickets.id) AS count, SUM(e.price) AS total_price FROM tickets
+        sqlx::query_as!(ShoppingCartItem, "SELECT e.id AS event_id, e.image_id AS image_id, e.name AS name, MIN(tickets.reserved_until) AS min_reserved_until, COUNT(tickets.id) AS count, SUM(e.price) AS total_price FROM tickets
             JOIN events e on tickets.event_id = e.id
             WHERE owner_id = $1 AND bought_at IS NULL AND reserved_until > NOW() GROUP BY e.id", user_id)
         .fetch_all(db)

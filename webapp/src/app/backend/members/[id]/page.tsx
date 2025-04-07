@@ -54,10 +54,10 @@ const MembersDetailsPage = () => {
               </Stack>
             </Card>
           </Grid>
-          <Grid xs={6}>
+          <Grid xs={12} md={6}>
             <MemberDetails member={data ?? null} loading={isLoading} />
           </Grid>
-          <Grid xs={6}>
+          <Grid xs={12} md={6}>
             <Card>
               <Typography level="h3">Paid Memberships</Typography>
               <EntityList

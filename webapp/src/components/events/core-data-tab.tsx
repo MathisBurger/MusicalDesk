@@ -41,13 +41,13 @@ const CoreDataTab = ({ event }: CoreDataTabProps) => {
 
   return (
     <Grid container direction="row" spacing={4}>
-      <Grid xs={6}>
+      <Grid xs={12} md={6}>
         <Card>
           <Typography level="h3">Core data</Typography>
           <KvList displayData={displayData} />
         </Card>
       </Grid>
-      <Grid xs={6}>
+      <Grid xs={12} md={6}>
         <Card>
           <Typography level="h3">Additional data</Typography>
           <img src={eventImage} />

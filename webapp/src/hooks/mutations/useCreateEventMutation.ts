@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormType } from "@/form/types";
 
-export interface CreateEventRequest extends FormType {
+export interface EventRequest extends FormType {
   name: string | null;
   price: number | null;
   tax_percentage: number;
@@ -11,7 +11,7 @@ export interface CreateEventRequest extends FormType {
   active_until: string | null;
 }
 
-const createEvent = async (data: CreateEventRequest): Promise<Event | null> => {
+const createEvent = async (data: EventRequest): Promise<Event | null> => {
   const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events`, {
     method: "POST",
     mode: "cors",

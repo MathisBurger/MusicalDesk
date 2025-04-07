@@ -6,7 +6,7 @@ export interface FormDefinition extends HTMLFormElement {
 }
 
 /** All possible value types a form entry can have */
-export type FormValue = string | number | null | undefined;
+export type FormValue = string | number | null | undefined | Date;
 
 /** The type a form data object must implement to be used and valid */
 export type FormType = Record<string, FormValue>;

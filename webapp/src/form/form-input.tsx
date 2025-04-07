@@ -7,6 +7,7 @@ import {
   InputProps,
 } from "@mui/joy";
 import { FormValue } from "./types";
+import { useMemo } from "react";
 
 /** Input props of an form input field */
 export interface FormInputProps {
@@ -17,6 +18,8 @@ export interface FormInputProps {
   type?: string;
   defaultValue?: FormValue;
   endDecorator?: InputProps["endDecorator"];
+  disabled?: boolean;
+  sx?: InputProps["sx"];
 }
 
 /**
@@ -38,6 +41,13 @@ const mapType = (type?: string): string => {
   return "text";
 };
 
+const padNum = (num: number): string => {
+  if (num < 10) {
+    return `0${num}`;
+  }
+  return `${num}`;
+};
+
 /**
  * The form input component that renders MUI form control with input and error
  */
@@ -49,15 +59,36 @@ const FormInput = ({
   type,
   defaultValue,
   endDecorator,
+  disabled,
+  sx,
 }: FormInputProps) => {
+  const defaultValueOverride = useMemo(() => {
+    if (defaultValue instanceof Date) {
+      if (type === "date") {
+        return `${defaultValue.getFullYear()}-${padNum(defaultValue.getMonth())}-${padNum(defaultValue.getDay())}`;
+      } else if (type === "datetime") {
+        return `${defaultValue.getFullYear()}-${padNum(defaultValue.getMonth())}-${padNum(defaultValue.getDay())}T${padNum(defaultValue.getHours())}:${padNum(defaultValue.getMinutes())}`;
+      }
+    }
+    return defaultValue;
+  }, [defaultValue, type]);
+
+  console.log(defaultValueOverride);
+
   return (
-    <FormControl required={required} error={error !== undefined}>
+    <FormControl
+      required={required}
+      error={error !== undefined}
+      disabled={disabled}
+    >
       {label && <FormLabel>{label}</FormLabel>}
       <Input
         type={mapType(type)}
         name={name}
-        defaultValue={defaultValue ?? ""}
+        defaultValue={defaultValueOverride ?? ""}
         endDecorator={endDecorator}
+        disabled={disabled}
+        sx={sx}
       />
       {error && (
         <FormHelperText>

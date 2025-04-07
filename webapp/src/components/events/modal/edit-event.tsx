@@ -1,10 +1,8 @@
 import FormInput from "@/form/form-input";
-import ImageUploadInput, { UploadFnResult } from "@/form/image-upload-input";
 import useForm from "@/form/useForm";
-import useCreateEventMutation, {
-  EventRequest,
-} from "@/hooks/mutations/useCreateEventMutation";
-import useUploadFileMutation from "@/hooks/mutations/useUploadFileMutation";
+import { EventRequest } from "@/hooks/mutations/useCreateEventMutation";
+import useUpdateEventMutation from "@/hooks/mutations/useUpdateEventMutation";
+import { Event } from "@/hooks/queries/useEventsQuery";
 import useAlert from "@/hooks/useAlert";
 import {
   Button,
@@ -20,48 +18,37 @@ import {
 
 interface CreateEventModalProps {
   onClose: () => void;
+  event: Event;
 }
 
-const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
-  const { mutateAsync: uploadFile } = useUploadFileMutation();
-  const { mutateAsync: createEvent, isPending } = useCreateEventMutation();
+const EditEventModal = ({ onClose, event }: CreateEventModalProps) => {
+  const { mutateAsync: updateEvent, isPending } = useUpdateEventMutation(
+    event.id,
+  );
 
   const { displayAlert, showAlert } = useAlert();
 
-  const uploadFn = async (
-    name: string,
-    file: File,
-  ): Promise<UploadFnResult> => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append(
-      "meta",
-      new Blob(
-        [JSON.stringify({ name, private: false, required_roles: null })],
-        { type: "application/json" },
-      ),
-    );
-    const res = await uploadFile(formData);
-    if (res) {
-      return { imageId: res.id };
-    }
-    return { error: "Cannot upload file" };
-  };
-
   const submit = async (req: EventRequest) => {
-    const result = await createEvent(req);
+    const result = await updateEvent(req);
     if (result) {
       onClose();
       return;
     }
     showAlert({
       color: "danger",
-      content: "Cannot create event",
+      content: "Cannot update event",
       duration: 1500,
     });
   };
 
   const form = useForm<EventRequest>({
+    defaultValues: {
+      ...event,
+      id: undefined,
+      event_date: new Date(event.event_date),
+      active_from: event.active_from ? new Date(event.active_from) : null,
+      active_until: event.active_until ? new Date(event.active_until) : null,
+    },
     labels: {
       name: "Name",
       price: "Price",
@@ -90,7 +77,7 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Create event</DialogTitle>
+        <DialogTitle>Update event</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -110,11 +97,7 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
                   />
                 </Grid>
               </Grid>
-              <ImageUploadInput
-                {...form.getInputProps("image_id")}
-                uploadFn={uploadFn}
-                accept="image/*"
-              />
+              <FormInput {...form.getInputProps("image_id")} disabled />
               <FormInput
                 {...form.getInputProps("event_date")}
                 type="datetime"
@@ -135,7 +118,7 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
               </Grid>
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Create
+                  Update
                 </Button>
                 <Button color="neutral" onClick={onClose}>
                   Cancel
@@ -149,4 +132,4 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
   );
 };
 
-export default CreateEventModal;
+export default EditEventModal;

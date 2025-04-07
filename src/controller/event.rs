@@ -1,5 +1,5 @@
 use actix_web::{
-    get, patch, post,
+    get, post,
     web::{Data, Json, Path},
     HttpResponse,
 };
@@ -63,7 +63,7 @@ pub async fn get_event(
     Ok(HttpResponse::Ok().json(event))
 }
 
-#[patch("/events/{id}")]
+#[post("/events/{id}")]
 pub async fn update_event(
     state: Data<AppState>,
     user: User,

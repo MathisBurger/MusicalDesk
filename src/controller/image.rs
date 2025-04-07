@@ -65,7 +65,7 @@ pub async fn upload_image(
 #[get("/images/{image_id}")]
 pub async fn get_image(
     state: Data<AppState>,
-    user: User,
+    user_option: Option<User>,
     path: Path<(i32,)>,
     req: HttpRequest,
 ) -> Result<HttpResponse, Error> {
@@ -73,6 +73,10 @@ pub async fn get_image(
     if !image.private {
         return get_file(&image, &req);
     }
+    let user = match user_option {
+        Some(x) => Ok(x),
+        None => Err(Error::Forbidden),
+    }?;
     if let Some(required_roles) = image.required_roles.clone() {
         if required_roles
             .iter()

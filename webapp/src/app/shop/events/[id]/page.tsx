@@ -1,4 +1,5 @@
 "use client";
+import BackButton from "@/components/back-button";
 import LoadingComponent from "@/components/loading";
 import ShopHeader from "@/components/shop/header";
 import useShopEventQuery from "@/hooks/queries/shop/useShopEventQuery";
@@ -15,16 +16,31 @@ import {
   Stack,
   Typography,
 } from "@mui/joy";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 const ShopEventDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const currentUser = useCurrentUser();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const { data, isLoading } = useShopEventQuery(parseInt(id, 10));
 
   const [numSelected, setNumSelected] = useState<number>(1);
+
+  const changeNum = (num: number) => {
+    if (num < 1) {
+      setNumSelected(1);
+    } else if (num > ticketsLeft) {
+      setNumSelected(ticketsLeft);
+    } else if (isNaN(num)) {
+      setNumSelected(1);
+    } else {
+      setNumSelected(num);
+    }
+  };
+
   const ticketsLeft = useMemo(
     () => data?.tickets_left ?? 0,
     [data?.tickets_left],
@@ -38,7 +54,8 @@ const ShopEventDetailsPage = () => {
     <>
       <ShopHeader />
       <Container sx={{ marginTop: "4em" }}>
-        <Grid container direction="row" spacing={4}>
+        <BackButton />
+        <Grid container direction="row" spacing={4} sx={{ marginTop: "10px" }}>
           <Grid xs={12} md={6}>
             <AspectRatio ratio="1/1">
               <img
@@ -57,33 +74,41 @@ const ShopEventDetailsPage = () => {
                   inkl. {data?.event.tax_percentage}% VAT
                 </Typography>
               </Typography>
-              <Stack direction="row" spacing={1} sx={{ width: "250px" }}>
-                <Button
-                  color="neutral"
-                  variant="outlined"
-                  onClick={() => setNumSelected(numSelected - 1)}
-                >
-                  <Remove />
-                </Button>
-                <Input
-                  type="number"
-                  endDecorator="st."
-                  value={numSelected}
-                  onChange={(e) => setNumSelected(parseInt(e.target.value, 10))}
-                />
-                <Button
-                  color="neutral"
-                  variant="outlined"
-                  onClick={() => setNumSelected(numSelected + 1)}
-                >
-                  <Add />
-                </Button>
-              </Stack>
+              {ticketsLeft > 0 && (
+                <Stack direction="row" spacing={1} sx={{ width: "250px" }}>
+                  <Button
+                    color="neutral"
+                    variant="outlined"
+                    onClick={() => changeNum(numSelected - 1)}
+                  >
+                    <Remove />
+                  </Button>
+                  <Input
+                    type="number"
+                    endDecorator="st."
+                    value={numSelected}
+                    onChange={(e) => changeNum(parseInt(e.target.value, 10))}
+                  />
+                  <Button
+                    color="neutral"
+                    variant="outlined"
+                    onClick={() => changeNum(numSelected + 1)}
+                  >
+                    <Add />
+                  </Button>
+                </Stack>
+              )}
               <Typography fontWeight={ticketsLeft === 0 ? "bold" : undefined}>
                 {ticketsLeft > 0 ? `${ticketsLeft} left` : "sold out"}
               </Typography>
-              {currentUser === null && <Button>Login to buy</Button>}
-              {currentUser && (
+              {ticketsLeft > 0 && currentUser === null && (
+                <Button
+                  onClick={() => router.push(`/login?redirect_uri=${pathname}`)}
+                >
+                  Login to buy
+                </Button>
+              )}
+              {ticketsLeft > 0 && currentUser && (
                 <Stack direction="row" spacing={2}>
                   <Button>Buy now</Button>
                   <Button variant="outlined">Add to shopping cart</Button>

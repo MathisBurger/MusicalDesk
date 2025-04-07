@@ -9,10 +9,11 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Link,
   Stack,
   Typography,
 } from "@mui/joy";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent } from "react";
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -26,10 +27,12 @@ interface SignInFormElement extends HTMLFormElement {
 
 const LoginPage = () => {
   const { mutateAsync, isPending } = useLoginMutation();
-  const { displayAlert, showAlert } = useAlert();
   // Do not fetch on initial load
   const { refetch } = useUserSelfQuery(false);
+
+  const { displayAlert, showAlert } = useAlert();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const onSubmit = async (event: FormEvent<SignInFormElement>) => {
     "use client";
@@ -42,7 +45,12 @@ const LoginPage = () => {
     const loginSuccessful = await mutateAsync(formData);
     if (loginSuccessful) {
       await refetch();
-      router.push("/backend/dashboard");
+      const redirect_uri = searchParams.get("redirect_uri");
+      if (redirect_uri !== null && redirect_uri.startsWith("/")) {
+        router.push(redirect_uri);
+      } else {
+        router.push("/backend/dashboard");
+      }
     } else {
       showAlert({
         color: "danger",
@@ -117,6 +125,9 @@ const LoginPage = () => {
                   <FormLabel>Password</FormLabel>
                   <Input type="password" name="password" disabled={isPending} />
                 </FormControl>
+                <Link underline="always" href="/register">
+                  Customer registration
+                </Link>
                 <Stack sx={{ gap: 4, mt: 2 }}>
                   <Button type="submit" fullWidth disabled={isPending}>
                     Sign in

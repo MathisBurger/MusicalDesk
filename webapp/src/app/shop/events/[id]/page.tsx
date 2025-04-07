@@ -2,6 +2,7 @@
 import BackButton from "@/components/back-button";
 import LoadingComponent from "@/components/loading";
 import ShopHeader from "@/components/shop/header";
+import useAddTicketsToShoppingCartMutation from "@/hooks/mutations/shop/useAddTicketsToShoppingCartMutation";
 import useShopEventQuery from "@/hooks/queries/shop/useShopEventQuery";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { Add, Remove } from "@mui/icons-material";
@@ -24,10 +25,14 @@ const ShopEventDetailsPage = () => {
   const currentUser = useCurrentUser();
   const router = useRouter();
   const pathname = usePathname();
+  const [numSelected, setNumSelected] = useState<number>(1);
 
   const { data, isLoading } = useShopEventQuery(parseInt(id, 10));
 
-  const [numSelected, setNumSelected] = useState<number>(1);
+  const { mutateAsync, isPending } = useAddTicketsToShoppingCartMutation({
+    event_id: parseInt(id, 10),
+    quantity: numSelected,
+  });
 
   const changeNum = (num: number) => {
     if (num < 1) {
@@ -111,7 +116,13 @@ const ShopEventDetailsPage = () => {
               {ticketsLeft > 0 && currentUser && (
                 <Stack direction="row" spacing={2}>
                   <Button>Buy now</Button>
-                  <Button variant="outlined">Add to shopping cart</Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => mutateAsync()}
+                    loading={isPending}
+                  >
+                    Add to shopping cart
+                  </Button>
                 </Stack>
               )}
             </Card>

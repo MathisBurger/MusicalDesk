@@ -31,16 +31,12 @@ const mapType = (type?: string): string => {
   switch (type) {
     case "string":
       return "text";
-    case "number":
-      return "number";
-    case "date":
-      return "date";
     case "datetime":
     case "datetime-iso":
     case "datetime-utc":
       return "datetime-local";
   }
-  return "text";
+  return type ?? "text";
 };
 
 const padNum = (num: number): string => {

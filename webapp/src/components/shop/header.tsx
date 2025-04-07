@@ -92,9 +92,9 @@ const ShopHeader = () => {
               color="neutral"
               size="sm"
               sx={{ alignSelf: "center" }}
-              onClick={() => router.push("/backend/dashboard")}
+              onClick={() => router.push("/shop/my-tickets")}
             >
-              Personal Area
+              My tickets
             </Button>
           )}
         </Stack>

@@ -1,5 +1,5 @@
 "use client";
-import AuthWrapper from "@/components/wrapper/auth-wrapper";
+import LayoutAuthWrapper from "@/components/wrapper/layout-auth-wrapper";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -29,7 +29,7 @@ export default function RootLayout({
     <html lang="de">
       <body>
         <QueryClientProvider client={queryClient}>
-          <AuthWrapper>{children}</AuthWrapper>
+          <LayoutAuthWrapper>{children}</LayoutAuthWrapper>
         </QueryClientProvider>
       </body>
     </html>

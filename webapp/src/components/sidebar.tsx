@@ -161,16 +161,6 @@ export default function Sidebar() {
               </ListItemButton>
             </ListItem>
           </RoleWrapper>
-          <RoleWrapper roles={[UserRole.ShopCustomer]} hideAlert>
-            <ListItem>
-              <ListItemButton onClick={() => router.push("/")}>
-                <ShoppingCart />
-                <ListItemContent>
-                  <Typography level="title-sm">Shop</Typography>
-                </ListItemContent>
-              </ListItemButton>
-            </ListItem>
-          </RoleWrapper>
         </List>
       </Box>
       <Divider />

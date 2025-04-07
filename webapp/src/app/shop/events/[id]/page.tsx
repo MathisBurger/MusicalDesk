@@ -8,6 +8,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { Add, Remove } from "@mui/icons-material";
 import {
   AspectRatio,
+  Box,
   Button,
   Card,
   Container,
@@ -56,80 +57,77 @@ const ShopEventDetailsPage = () => {
   }
 
   return (
-    <>
-      <ShopHeader />
-      <Container sx={{ marginTop: "4em" }}>
-        <BackButton />
-        <Grid container direction="row" spacing={4} sx={{ marginTop: "10px" }}>
-          <Grid xs={12} md={6}>
-            <AspectRatio ratio="1/1">
-              <img
-                alt=""
-                src={`${process.env.NEXT_PUBLIC_API_URL}/images/${data?.event.image_id}`}
-              />
-            </AspectRatio>
-          </Grid>
-          <Grid xs={12} md={6}>
-            <Card variant="outlined">
-              <Typography level="h2">{data?.event.name}</Typography>
-              <Divider />
-              <Typography level="h3">
-                {data?.event.price}€ &nbsp;{" "}
-                <Typography fontSize="0.5em">
-                  inkl. {data?.event.tax_percentage}% VAT
-                </Typography>
-              </Typography>
-              {ticketsLeft > 0 && (
-                <Stack direction="row" spacing={1} sx={{ width: "250px" }}>
-                  <Button
-                    color="neutral"
-                    variant="outlined"
-                    onClick={() => changeNum(numSelected - 1)}
-                  >
-                    <Remove />
-                  </Button>
-                  <Input
-                    type="number"
-                    endDecorator="st."
-                    value={numSelected}
-                    onChange={(e) => changeNum(parseInt(e.target.value, 10))}
-                  />
-                  <Button
-                    color="neutral"
-                    variant="outlined"
-                    onClick={() => changeNum(numSelected + 1)}
-                  >
-                    <Add />
-                  </Button>
-                </Stack>
-              )}
-              <Typography fontWeight={ticketsLeft === 0 ? "bold" : undefined}>
-                {ticketsLeft > 0 ? `${ticketsLeft} left` : "sold out"}
-              </Typography>
-              {ticketsLeft > 0 && currentUser === null && (
-                <Button
-                  onClick={() => router.push(`/login?redirect_uri=${pathname}`)}
-                >
-                  Login to buy
-                </Button>
-              )}
-              {ticketsLeft > 0 && currentUser && (
-                <Stack direction="row" spacing={2}>
-                  <Button>Buy now</Button>
-                  <Button
-                    variant="outlined"
-                    onClick={() => mutateAsync()}
-                    loading={isPending}
-                  >
-                    Add to shopping cart
-                  </Button>
-                </Stack>
-              )}
-            </Card>
-          </Grid>
+    <Box sx={{ marginTop: "2em" }}>
+      <BackButton />
+      <Grid container direction="row" spacing={4} sx={{ marginTop: "10px" }}>
+        <Grid xs={12} md={6}>
+          <AspectRatio ratio="1/1">
+            <img
+              alt=""
+              src={`${process.env.NEXT_PUBLIC_API_URL}/images/${data?.event.image_id}`}
+            />
+          </AspectRatio>
         </Grid>
-      </Container>
-    </>
+        <Grid xs={12} md={6}>
+          <Card variant="outlined">
+            <Typography level="h2">{data?.event.name}</Typography>
+            <Divider />
+            <Typography level="h3">
+              {data?.event.price}€ &nbsp;{" "}
+              <Typography fontSize="0.5em">
+                inkl. {data?.event.tax_percentage}% VAT
+              </Typography>
+            </Typography>
+            {ticketsLeft > 0 && (
+              <Stack direction="row" spacing={1} sx={{ width: "250px" }}>
+                <Button
+                  color="neutral"
+                  variant="outlined"
+                  onClick={() => changeNum(numSelected - 1)}
+                >
+                  <Remove />
+                </Button>
+                <Input
+                  type="number"
+                  endDecorator="st."
+                  value={numSelected}
+                  onChange={(e) => changeNum(parseInt(e.target.value, 10))}
+                />
+                <Button
+                  color="neutral"
+                  variant="outlined"
+                  onClick={() => changeNum(numSelected + 1)}
+                >
+                  <Add />
+                </Button>
+              </Stack>
+            )}
+            <Typography fontWeight={ticketsLeft === 0 ? "bold" : undefined}>
+              {ticketsLeft > 0 ? `${ticketsLeft} left` : "sold out"}
+            </Typography>
+            {ticketsLeft > 0 && currentUser === null && (
+              <Button
+                onClick={() => router.push(`/login?redirect_uri=${pathname}`)}
+              >
+                Login to buy
+              </Button>
+            )}
+            {ticketsLeft > 0 && currentUser && (
+              <Stack direction="row" spacing={2}>
+                <Button>Buy now</Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => mutateAsync()}
+                  loading={isPending}
+                >
+                  Add to shopping cart
+                </Button>
+              </Stack>
+            )}
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

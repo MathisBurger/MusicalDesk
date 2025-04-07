@@ -50,6 +50,14 @@ export default function Sidebar() {
   const currentUser = useCurrentUser();
   const router = useRouter();
 
+  const logout = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    router.push("/");
+  };
+
   return (
     <Sheet
       className="Sidebar"
@@ -166,7 +174,7 @@ export default function Sidebar() {
         <Box sx={{ minWidth: 0, flex: 1 }}>
           <Typography level="title-sm">{currentUser?.username}</Typography>
         </Box>
-        <IconButton size="sm" variant="plain" color="neutral">
+        <IconButton size="sm" variant="plain" color="neutral" onClick={logout}>
           <LogoutRoundedIcon />
         </IconButton>
       </Box>

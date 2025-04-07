@@ -5,6 +5,7 @@ use actix_web::{
     cookie::{Cookie, SameSite},
     post, web, HttpResponse,
 };
+use actix_web::{delete, HttpRequest};
 use bcrypt::verify;
 use serde::Deserialize;
 
@@ -48,6 +49,19 @@ pub async fn login(
         return Err(Error::Unauthorized);
     }
     Err(Error::NotFound)
+}
+
+#[delete("/auth/logout")]
+pub async fn logout() -> HttpResponse {
+    let mut cookie = Cookie::new("session", "");
+    cookie.set_path("/");
+    cookie.set_max_age(Duration::days(1));
+    cookie.set_http_only(true);
+    cookie.set_secure(false);
+    cookie.set_same_site(SameSite::Strict);
+    let mut resp = HttpResponse::Ok().finish();
+    resp.add_cookie(&cookie).unwrap();
+    resp
 }
 
 #[post("/auth/register_customer")]

@@ -22,7 +22,7 @@ const ShopEventList = () => {
         </>
       )}
       {(data ?? []).map((event) => (
-        <Grid xs={12} md={4} key={event.id} sx={{ display: "flex" }}>
+        <Grid xs={12} md={4} key={event.event.id} sx={{ display: "flex" }}>
           <EventCard event={event} />
         </Grid>
       ))}

@@ -1,5 +1,6 @@
 "use client";
 
+import BackButton from "@/components/back-button";
 import CoreDataTab from "@/components/events/core-data-tab";
 import EventTicketList from "@/components/events/event-ticket-list";
 import CreateTicketsModal from "@/components/events/modal/create-tickets";
@@ -29,6 +30,7 @@ const MemberDetailsPage = () => {
   return (
     <RoleWrapper roles={[UserRole.EventAdmin]}>
       <Stack spacing={2}>
+        <BackButton /> &nbsp;
         <Typography level="h2">{data?.name}</Typography>
         <Divider />
         <Card>

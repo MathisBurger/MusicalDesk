@@ -1,4 +1,5 @@
 "use client";
+import BackButton from "@/components/back-button";
 import useLoginMutation from "@/hooks/mutations/useLoginMutation";
 import useUserSelfQuery from "@/hooks/queries/useUserSelfQuery";
 import useAlert from "@/hooks/useAlert";
@@ -101,6 +102,7 @@ const LoginPage = () => {
               },
             }}
           >
+            <BackButton />
             <Typography component="h1" level="h3">
               Sign in
             </Typography>

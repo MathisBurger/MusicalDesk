@@ -1,4 +1,5 @@
 "use client";
+import BackButton from "@/components/back-button";
 import FormInput from "@/form/form-input";
 import useForm from "@/form/useForm";
 import useRegisterCustomerAccountMutation, {
@@ -84,6 +85,7 @@ const LoginPage = () => {
               },
             }}
           >
+            <BackButton />
             <Typography component="h1" level="h3">
               Sign up
             </Typography>

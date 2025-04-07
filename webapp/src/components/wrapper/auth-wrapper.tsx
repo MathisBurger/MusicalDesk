@@ -25,6 +25,13 @@ const theme = extendTheme({
         },
       },
     },
+    JoyMenu: {
+      styleOverrides: {
+        root: {
+          zIndex: 9997,
+        },
+      },
+    },
   },
 });
 
@@ -65,7 +72,7 @@ const AuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
   }
 
   return (
-    <CssVarsProvider disableTransitionOnChange>
+    <CssVarsProvider disableTransitionOnChange theme={theme}>
       <CssBaseline />
       <CurrentUserContext.Provider value={currentUser}>
         {children}

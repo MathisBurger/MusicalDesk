@@ -55,7 +55,7 @@ impl Event {
     pub async fn get_active_events(db: &Pool<Postgres>) -> Vec<Event> {
         sqlx::query_as!(
             Event,
-            "SELECT * FROM events WHERE NOW() BETWEEN active_from AND active_until"
+            "SELECT * FROM events WHERE NOW() BETWEEN COALESCE(active_from, '1900-01-01') AND COALESCE(active_until, '9999-12-31')"
         )
         .fetch_all(db)
         .await
@@ -65,7 +65,7 @@ impl Event {
     pub async fn get_active_event_by_id(id: i32, db: &Pool<Postgres>) -> Option<Event> {
         sqlx::query_as!(
             Event,
-            "SELECT * FROM events WHERE NOW() BETWEEN active_from AND active_until AND id = $1",
+            "SELECT * FROM events WHERE NOW() BETWEEN COALESCE(active_from, '1900-01-01') AND COALESCE(active_until, '9999-12-31') AND id = $1",
             id
         )
         .fetch_optional(db)

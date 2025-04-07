@@ -19,6 +19,7 @@ import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
 import { Event, ShoppingCart, SupervisedUserCircle } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import RoleWrapper from "./wrapper/role-wrapper";
+import useLogout from "@/hooks/useLogout";
 
 function openSidebar() {
   if (typeof window !== "undefined") {
@@ -50,14 +51,7 @@ export function toggleSidebar() {
 export default function Sidebar() {
   const currentUser = useCurrentUser();
   const router = useRouter();
-
-  const logout = async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-    router.push("/");
-  };
+  const logout = useLogout();
 
   return (
     <Sheet

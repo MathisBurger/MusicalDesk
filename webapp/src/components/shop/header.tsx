@@ -1,4 +1,5 @@
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useLogout from "@/hooks/useLogout";
 import {
   LanguageRounded,
   MenuRounded,
@@ -9,21 +10,27 @@ import {
   Box,
   DialogTitle,
   Drawer,
+  Dropdown,
   IconButton,
+  ListDivider,
+  MenuButton,
+  MenuItem,
   ModalClose,
   Stack,
   Tooltip,
-  Typography,
 } from "@mui/joy";
 import { Button } from "@mui/joy";
+import { Menu } from "@mui/joy";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const ShopHeader = () => {
-  const [open, setOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const currentUser = useCurrentUser();
   const router = useRouter();
+  const logout = useLogout();
 
   return (
     <Box
@@ -95,14 +102,14 @@ const ShopHeader = () => {
           <IconButton
             variant="plain"
             color="neutral"
-            onClick={() => setOpen(true)}
+            onClick={() => setDrawerOpen(true)}
           >
             <MenuRounded />
           </IconButton>
           <Drawer
             sx={{ display: { xs: "inline-flex", sm: "none" } }}
-            open={open}
-            onClose={() => setOpen(false)}
+            open={drawerOpen}
+            onClose={() => setDrawerOpen(false)}
           >
             <ModalClose />
             <DialogTitle>Acme Co.</DialogTitle>
@@ -119,24 +126,49 @@ const ShopHeader = () => {
             alignItems: "center",
           }}
         >
-          <Tooltip title="Shopping Cart" variant="outlined">
-            <IconButton
-              size="sm"
-              variant="plain"
-              color="neutral"
-              sx={{ alignSelf: "center" }}
-            >
-              <ShoppingCart />
-            </IconButton>
-          </Tooltip>
           {currentUser && (
             <>
-              <Avatar
-                src="https://i.pravatar.cc/40?img=2"
-                srcSet="https://i.pravatar.cc/80?img=2"
-                sx={{ borderRadius: "50%" }}
-              />
-              <Typography>{currentUser?.username}</Typography>
+              <Tooltip title="Shopping Cart" variant="outlined">
+                <IconButton
+                  size="sm"
+                  variant="plain"
+                  color="neutral"
+                  sx={{ alignSelf: "center" }}
+                >
+                  <ShoppingCart />
+                </IconButton>
+              </Tooltip>
+              <Dropdown
+                open={dropdownOpen}
+                onOpenChange={(_, open) => setDropdownOpen(open)}
+              >
+                <MenuButton>
+                  <Avatar
+                    src="https://i.pravatar.cc/40?img=2"
+                    srcSet="https://i.pravatar.cc/80?img=2"
+                    sx={{ borderRadius: "50%" }}
+                  />
+                </MenuButton>
+                <Menu>
+                  <MenuItem>{currentUser?.username}</MenuItem>
+                  <ListDivider />
+                  <MenuItem onClick={logout}>Logout</MenuItem>
+                </Menu>
+              </Dropdown>
+            </>
+          )}
+          {currentUser === null && (
+            <>
+              <Button
+                color="neutral"
+                variant="outlined"
+                onClick={() => router.push("/register")}
+              >
+                Sign up
+              </Button>
+              <Button color="primary" onClick={() => router.push("/login")}>
+                Sign in
+              </Button>
             </>
           )}
         </Box>

@@ -1,4 +1,5 @@
 "use client";
+import BackButton from "@/components/back-button";
 import EntityList from "@/components/entity-list";
 import MemberDetails from "@/components/members/member-details";
 import ConfirmLeaveModal from "@/components/members/modal/confirm-leave";
@@ -38,9 +39,11 @@ const MembersDetailsPage = () => {
     <RoleWrapper roles={[UserRole.MemberAdmin]}>
       <Stack spacing={2}>
         <Typography level="h2">
+          <BackButton /> &nbsp;
           {data?.first_name} {data?.last_name}
         </Typography>
         <Divider />
+
         <Grid container direction="row" spacing={4}>
           <Grid xs={12}>
             <Card>

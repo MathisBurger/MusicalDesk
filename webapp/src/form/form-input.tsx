@@ -64,13 +64,14 @@ const FormInput = ({
   disabled,
   sx,
 }: FormInputProps) => {
-  const defaultValueOverride = useMemo(() => {
+  const defaultValueOverride = useMemo<Exclude<FormValue, Date>>(() => {
     if (defaultValue instanceof Date) {
       if (type === "date") {
         return `${defaultValue.getFullYear()}-${padNum(defaultValue.getMonth())}-${padNum(defaultValue.getDay())}`;
       } else if (type === "datetime") {
         return `${defaultValue.getFullYear()}-${padNum(defaultValue.getMonth())}-${padNum(defaultValue.getDay())}T${padNum(defaultValue.getHours())}:${padNum(defaultValue.getMinutes())}`;
       }
+      return "no valid date format";
     }
     return defaultValue;
   }, [defaultValue, type]);

@@ -8,6 +8,8 @@ import MembershipList from "@/components/members/membership-list";
 import useMembersQuery from "@/hooks/queries/useMembersQuery";
 import DisplayMemberList from "@/components/members/display-member-list";
 import useMembersLeftQuery from "@/hooks/queries/useMembersLeftQuery";
+import RoleWrapper from "@/components/wrapper/role-wrapper";
+import { UserRole } from "@/hooks/useCurrentUser";
 
 const MembersPage = () => {
   const [createMemberModalOpen, setCreateMemberModalOpen] =
@@ -18,40 +20,42 @@ const MembersPage = () => {
     useMembersLeftQuery();
 
   return (
-    <Stack spacing={2}>
-      <Grid container spacing={4} alignItems="center">
-        <Grid>
-          <Typography level="h1">Members</Typography>
+    <RoleWrapper roles={[UserRole.MemberManager]}>
+      <Stack spacing={2}>
+        <Grid container spacing={4} alignItems="center">
+          <Grid>
+            <Typography level="h1">Members</Typography>
+          </Grid>
+          <Grid>
+            <Button onClick={() => setCreateMemberModalOpen(true)}>
+              <Add />
+              &nbsp; Create
+            </Button>
+          </Grid>
         </Grid>
-        <Grid>
-          <Button onClick={() => setCreateMemberModalOpen(true)}>
-            <Add />
-            &nbsp; Create
-          </Button>
-        </Grid>
-      </Grid>
-      <Divider />
-      <TabLayout tabs={["Members", "Left Members", "Memberships"]}>
-        <TabPanel value={0}>
-          <DisplayMemberList
-            members={members ?? []}
-            isLoading={membersLoading}
-          />
-        </TabPanel>
-        <TabPanel value={1}>
-          <DisplayMemberList
-            members={leftMembers ?? []}
-            isLoading={leftMembersLoading}
-          />
-        </TabPanel>
-        <TabPanel value={2}>
-          <MembershipList />
-        </TabPanel>
-      </TabLayout>
-      {createMemberModalOpen && (
-        <CreateMemberModal onClose={() => setCreateMemberModalOpen(false)} />
-      )}
-    </Stack>
+        <Divider />
+        <TabLayout tabs={["Members", "Left Members", "Memberships"]}>
+          <TabPanel value={0}>
+            <DisplayMemberList
+              members={members ?? []}
+              isLoading={membersLoading}
+            />
+          </TabPanel>
+          <TabPanel value={1}>
+            <DisplayMemberList
+              members={leftMembers ?? []}
+              isLoading={leftMembersLoading}
+            />
+          </TabPanel>
+          <TabPanel value={2}>
+            <MembershipList />
+          </TabPanel>
+        </TabLayout>
+        {createMemberModalOpen && (
+          <CreateMemberModal onClose={() => setCreateMemberModalOpen(false)} />
+        )}
+      </Stack>
+    </RoleWrapper>
   );
 };
 

@@ -1,7 +1,9 @@
 "use client";
 import EntityList, { EntityListRowAction } from "@/components/entity-list";
 import CreateEventModal from "@/components/events/modal/create-event";
+import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useEventsQuery from "@/hooks/queries/useEventsQuery";
+import { UserRole } from "@/hooks/useCurrentUser";
 import { Add } from "@mui/icons-material";
 import { Button, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { GridColDef } from "@mui/x-data-grid";
@@ -53,29 +55,31 @@ const EventsPage = () => {
   ];
 
   return (
-    <Stack spacing={2}>
-      <Grid container spacing={4} alignItems="center">
-        <Grid>
-          <Typography level="h1">Events</Typography>
+    <RoleWrapper roles={[UserRole.EventManager]}>
+      <Stack spacing={2}>
+        <Grid container spacing={4} alignItems="center">
+          <Grid>
+            <Typography level="h1">Events</Typography>
+          </Grid>
+          <Grid>
+            <Button onClick={() => setCreateEventModalOpen(true)}>
+              <Add />
+              &nbsp; Create
+            </Button>
+          </Grid>
         </Grid>
-        <Grid>
-          <Button onClick={() => setCreateEventModalOpen(true)}>
-            <Add />
-            &nbsp; Create
-          </Button>
-        </Grid>
-      </Grid>
-      <Divider />
-      <EntityList
-        rows={data ?? []}
-        columns={cols}
-        loading={isLoading}
-        rowActions={rowActions}
-      />
-      {createEventModalOpen && (
-        <CreateEventModal onClose={() => setCreateEventModalOpen(false)} />
-      )}
-    </Stack>
+        <Divider />
+        <EntityList
+          rows={data ?? []}
+          columns={cols}
+          loading={isLoading}
+          rowActions={rowActions}
+        />
+        {createEventModalOpen && (
+          <CreateEventModal onClose={() => setCreateEventModalOpen(false)} />
+        )}
+      </Stack>
+    </RoleWrapper>
   );
 };
 

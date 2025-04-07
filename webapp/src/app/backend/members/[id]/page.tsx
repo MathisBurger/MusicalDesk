@@ -3,8 +3,10 @@ import EntityList from "@/components/entity-list";
 import MemberDetails from "@/components/members/member-details";
 import ConfirmLeaveModal from "@/components/members/modal/confirm-leave";
 import EditMemberModal from "@/components/members/modal/edit-member";
+import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useMemberQuery from "@/hooks/queries/useMemberQuery";
 import useUserPaidMembershipsQuery from "@/hooks/queries/useUserPaidMemberships";
+import { UserRole } from "@/hooks/useCurrentUser";
 import { Button, Card, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { GridColDef } from "@mui/x-data-grid";
 import { useParams } from "next/navigation";
@@ -33,52 +35,54 @@ const MembersDetailsPage = () => {
   ];
 
   return (
-    <Stack spacing={2}>
-      <Typography level="h2">
-        {data?.first_name} {data?.last_name}
-      </Typography>
-      <Divider />
-      <Grid container direction="row" spacing={4}>
-        <Grid xs={12}>
-          <Card>
-            <Stack direction="row" spacing={2}>
-              <Button color="primary" onClick={() => setEditModalOpen(true)}>
-                Edit
-              </Button>
-              <Button color="danger" onClick={() => setLeaveModalOpen(true)}>
-                Leave
-              </Button>
-            </Stack>
-          </Card>
+    <RoleWrapper roles={[UserRole.MemberManager]}>
+      <Stack spacing={2}>
+        <Typography level="h2">
+          {data?.first_name} {data?.last_name}
+        </Typography>
+        <Divider />
+        <Grid container direction="row" spacing={4}>
+          <Grid xs={12}>
+            <Card>
+              <Stack direction="row" spacing={2}>
+                <Button color="primary" onClick={() => setEditModalOpen(true)}>
+                  Edit
+                </Button>
+                <Button color="danger" onClick={() => setLeaveModalOpen(true)}>
+                  Leave
+                </Button>
+              </Stack>
+            </Card>
+          </Grid>
+          <Grid xs={6}>
+            <MemberDetails member={data ?? null} loading={isLoading} />
+          </Grid>
+          <Grid xs={6}>
+            <Card>
+              <Typography level="h3">Paid Memberships</Typography>
+              <EntityList
+                loading={membershipsLoading}
+                rows={memberships ?? []}
+                columns={columns}
+              />
+            </Card>
+          </Grid>
         </Grid>
-        <Grid xs={6}>
-          <MemberDetails member={data ?? null} loading={isLoading} />
-        </Grid>
-        <Grid xs={6}>
-          <Card>
-            <Typography level="h3">Paid Memberships</Typography>
-            <EntityList
-              loading={membershipsLoading}
-              rows={memberships ?? []}
-              columns={columns}
-            />
-          </Card>
-        </Grid>
-      </Grid>
-      {editModalOpen && data && (
-        <EditMemberModal
-          memberId={parseInt(id, 10)}
-          onClose={() => setEditModalOpen(false)}
-          member={data}
-        />
-      )}
-      {leaveModalOpen && (
-        <ConfirmLeaveModal
-          onClose={() => setLeaveModalOpen(false)}
-          memberId={parseInt(id, 10)}
-        />
-      )}
-    </Stack>
+        {editModalOpen && data && (
+          <EditMemberModal
+            memberId={parseInt(id, 10)}
+            onClose={() => setEditModalOpen(false)}
+            member={data}
+          />
+        )}
+        {leaveModalOpen && (
+          <ConfirmLeaveModal
+            onClose={() => setLeaveModalOpen(false)}
+            memberId={parseInt(id, 10)}
+          />
+        )}
+      </Stack>
+    </RoleWrapper>
   );
 };
 

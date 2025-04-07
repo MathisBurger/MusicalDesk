@@ -2,6 +2,8 @@ import { createContext, useContext } from "react";
 
 export enum UserRole {
   Admin = "admin",
+  MemberManager = "memeber_manager",
+  EventManager = "event_manager",
 }
 
 export interface User {

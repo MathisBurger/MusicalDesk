@@ -1,15 +1,18 @@
 "use client";
-import EntityList from "@/components/entity-list";
+import EntityList, { EntityListRowAction } from "@/components/entity-list";
 import CreateEventModal from "@/components/events/modal/create-event";
 import useEventsQuery from "@/hooks/queries/useEventsQuery";
 import { Add } from "@mui/icons-material";
 import { Button, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { GridColDef } from "@mui/x-data-grid";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const EventsPage = () => {
   const [createEventModalOpen, setCreateEventModalOpen] =
     useState<boolean>(false);
+
+  const router = useRouter();
 
   const { data, isLoading } = useEventsQuery();
 
@@ -41,6 +44,14 @@ const EventsPage = () => {
     },
   ];
 
+  const rowActions: EntityListRowAction[] = [
+    {
+      name: "Details",
+      color: "primary",
+      onClick: (row) => router.push(`/backend/events/${row.id}`),
+    },
+  ];
+
   return (
     <Stack spacing={2}>
       <Grid container spacing={4} alignItems="center">
@@ -55,7 +66,12 @@ const EventsPage = () => {
         </Grid>
       </Grid>
       <Divider />
-      <EntityList rows={data ?? []} columns={cols} loading={isLoading} />
+      <EntityList
+        rows={data ?? []}
+        columns={cols}
+        loading={isLoading}
+        rowActions={rowActions}
+      />
       {createEventModalOpen && (
         <CreateEventModal onClose={() => setCreateEventModalOpen(false)} />
       )}

@@ -26,6 +26,7 @@ pub async fn add_ticket_to_shopping_cart(
     if tickets_left < req.quantity {
         return Ok(HttpResponse::BadRequest().body("Not enough tickets left"));
     }
+
     let tickets =
         Ticket::reserve_for_event(req.event_id, user.id, req.quantity, &state.database).await;
     Ok(HttpResponse::Ok().json(tickets))

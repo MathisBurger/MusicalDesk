@@ -4,6 +4,7 @@ use chrono::Utc;
 use serde::Serialize;
 use sqlx::Pool;
 use sqlx::Postgres;
+use stripe::CheckoutSessionId;
 
 use super::generic::Error;
 
@@ -17,6 +18,7 @@ pub struct Ticket {
     pub owner_id: Option<i32>,
     pub bought_at: Option<DateTime<Utc>>,
     pub reserved_until: Option<DateTime<Utc>>,
+    pub locked_in_checkout_session: Option<String>,
 }
 
 #[derive(Serialize, Debug)]
@@ -71,14 +73,14 @@ impl Ticket {
     ) -> Vec<ShoppingCartItem> {
         sqlx::query_as!(ShoppingCartItem, "SELECT e.id AS event_id, e.image_id AS image_id, e.name AS name, MIN(tickets.reserved_until) AS min_reserved_until, COUNT(tickets.id) AS count, SUM(e.price) AS total_price, e.price_id AS price_id FROM tickets
             JOIN events e on tickets.event_id = e.id
-            WHERE owner_id = $1 AND bought_at IS NULL AND reserved_until > NOW() GROUP BY e.id", user_id)
+            WHERE owner_id = $1 AND bought_at IS NULL AND (reserved_until > NOW() OR locked_in_checkout_session IS NOT NULL) GROUP BY e.id", user_id)
         .fetch_all(db)
         .await
         .expect("Cannot load shopping cart items")
     }
 
     pub async fn get_left_over_ticket_count(event_id: i32, db: &Pool<Postgres>) -> i64 {
-        sqlx::query!("SELECT COUNT(*) AS count FROM tickets WHERE bought_at IS NULL AND ( reserved_until IS NULL OR reserved_until < NOW()) AND event_id = $1", event_id)
+        sqlx::query!("SELECT COUNT(*) AS count FROM tickets WHERE bought_at IS NULL AND locked_in_checkout_session IS NULL AND ( reserved_until IS NULL OR reserved_until < NOW()) AND event_id = $1", event_id)
             .fetch_one(db)
             .await
             .expect("Cannot load lef tover tickets")
@@ -94,7 +96,7 @@ impl Ticket {
     ) -> Vec<Ticket> {
         let reservation_deadline: DateTime<Utc> = Utc::now() + Duration::minutes(20);
         sqlx::query_as!(Ticket, "UPDATE tickets SET owner_id = $1, reserved_until = $2 WHERE id = ANY(
-        SELECT id FROM tickets WHERE event_id = $3 AND bought_at IS NULL AND ( reserved_until IS NULL OR reserved_until < NOW()) LIMIT $4
+        SELECT id FROM tickets WHERE event_id = $3 AND bought_at IS NULL AND locked_in_checkout_session IS NULL AND ( reserved_until IS NULL OR reserved_until < NOW()) LIMIT $4
         ) RETURNING *", user_id, reservation_deadline, event_id, amount)
         .fetch_all(db)
         .await
@@ -106,10 +108,31 @@ impl Ticket {
         user_id: i32,
         db: &Pool<Postgres>,
     ) -> Vec<Ticket> {
-        let reservation_deadline: DateTime<Utc> = Utc::now() + Duration::minutes(20);
-        sqlx::query_as!(Ticket, "UPDATE tickets SET owner_id = NULL, reserved_until = NULL WHERE bought_at IS NULL AND owner_id = $1 AND event_id = $2 RETURNING *", user_id, event_id)
+        sqlx::query_as!(Ticket, "UPDATE tickets SET owner_id = NULL, reserved_until = NULL WHERE bought_at IS NULL AND locked_in_checkout_session IS NULL AND owner_id = $1 AND event_id = $2 RETURNING *", user_id, event_id)
         .fetch_all(db)
         .await
         .expect("Cannot cancel tickets")
+    }
+
+    /// Locks all tickets for checkout that are currently for this user in the shopping cart
+    pub async fn lock_tickets_for_checkout(
+        user_id: i32,
+        session_id: &CheckoutSessionId,
+        db: &Pool<Postgres>,
+    ) -> Vec<Ticket> {
+        sqlx::query_as!(Ticket, "UPDATE tickets SET locked_in_checkout_session = $1 WHERE owner_id = $2 AND reserved_until > NOW() AND bought_at IS NULL RETURNING *",session_id.as_str(), user_id)
+            .fetch_all(db)
+            .await
+            .expect("Cannot lock tickets for checkout")
+    }
+
+    pub async fn mark_tickets_as_bought(
+        session_id: String,
+        db: &Pool<Postgres>,
+    ) -> Result<Vec<Ticket>, Error> {
+        sqlx::query_as!(Ticket, "UPDATE tickets SET bought_at = NOW(), reserved_until = NULL WHERE locked_in_checkout_session = $1 RETURNING *", session_id)
+            .fetch_all(db)
+            .await
+            .map_err(|_x|Error::BadRequest)
     }
 }

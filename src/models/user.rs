@@ -1,7 +1,8 @@
 use bcrypt::{hash, DEFAULT_COST};
+use chrono::{DateTime, Utc};
 use serde::Serialize;
 use sqlx::{Pool, Postgres};
-use stripe::Customer;
+use stripe::{CheckoutSessionId, Customer};
 
 use crate::controller::auth::RegisterRequest;
 
@@ -17,6 +18,7 @@ pub struct User {
     pub email: Option<String>,
     #[serde(skip_serializing)]
     pub customer_id: Option<String>,
+    pub current_checkout_session: Option<String>,
 }
 
 impl User {
@@ -63,6 +65,22 @@ impl User {
             User,
             "UPDATE users SET customer_id = $1 WHERE id = $2 RETURNING *",
             customer.id.as_str(),
+            user_id
+        )
+        .fetch_one(db)
+        .await
+        .expect("Cannot update customer reference")
+    }
+
+    pub async fn update_stripe_checkout_session_reference(
+        user_id: i32,
+        session_id: &CheckoutSessionId,
+        db: &Pool<Postgres>,
+    ) -> User {
+        sqlx::query_as!(
+            User,
+            "UPDATE users SET current_checkout_session = $1 WHERE id = $2 RETURNING *",
+            session_id.as_str(),
             user_id
         )
         .fetch_one(db)

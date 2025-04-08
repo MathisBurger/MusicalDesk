@@ -1,9 +1,10 @@
 use std::str::FromStr;
 
+use chrono::{DateTime, Utc};
 use stripe::{
-    CheckoutSession, CheckoutSessionMode, CreateCheckoutSession, CreateCheckoutSessionLineItems,
-    CreateCustomer, CreatePrice, CreateProduct, Currency, Customer, CustomerId, IdOrCreate, Price,
-    PriceId, Product, ProductId, UpdatePrice, UpdateProduct,
+    CheckoutSession, CheckoutSessionId, CheckoutSessionMode, CreateCheckoutSession,
+    CreateCheckoutSessionLineItems, CreateCustomer, CreatePrice, CreateProduct, Currency, Customer,
+    CustomerId, IdOrCreate, Price, PriceId, Product, ProductId, UpdatePrice, UpdateProduct,
 };
 
 use crate::models::{event::Event, generic::Error, ticket::ShoppingCartItem, user::User};
@@ -11,13 +12,17 @@ use crate::models::{event::Event, generic::Error, ticket::ShoppingCartItem, user
 pub async fn generate_checkout(
     user: &User,
     shopping_cart: Vec<ShoppingCartItem>,
+    expires_at: DateTime<Utc>,
+    cancel_url: String,
+    success_url: String,
 ) -> Result<CheckoutSession, Error> {
     let customer = get_customer(user).await?;
 
     let mut create_checkout = CreateCheckoutSession::new();
-    create_checkout.cancel_url = Some("http://localhost:3000/cancel");
-    create_checkout.success_url = Some("http://localhost:3000/success");
+    create_checkout.cancel_url = Some(cancel_url.as_str());
+    create_checkout.success_url = Some(success_url.as_str());
     create_checkout.customer = Some(customer.id);
+    create_checkout.expires_at = Some(expires_at.timestamp());
     create_checkout.mode = Some(CheckoutSessionMode::Payment);
     create_checkout.line_items = Some(
         shopping_cart
@@ -33,7 +38,19 @@ pub async fn generate_checkout(
     let client = get_client();
     CheckoutSession::create(&client, create_checkout)
         .await
-        .map_err(|_x| Error::BadRequest)
+        .map_err(|_x| {
+            println!("{}", _x.to_string());
+            Error::BadRequest
+        })
+}
+
+pub async fn get_checkout_session(session_id: &String) -> Result<CheckoutSession, Error> {
+    let client = get_client();
+    let checkout_session_id =
+        CheckoutSessionId::from_str(session_id.as_str()).expect("Invalid session id");
+    CheckoutSession::retrieve(&client, &checkout_session_id, &[])
+        .await
+        .map_err(|_x| Error::NotFound)
 }
 
 pub async fn create_product(event: &Event, image_uri: String) -> Result<Product, Error> {
@@ -93,7 +110,7 @@ pub async fn create_customer(user: &User) -> Result<Customer, Error> {
 
 pub async fn get_customer(user: &User) -> Result<Customer, Error> {
     let client = get_client();
-    if (user.customer_id.is_none()) {
+    if user.customer_id.is_none() {
         return Err(Error::BadRequest);
     }
     let customer_id = CustomerId::from_str(user.customer_id.clone().unwrap().as_str())

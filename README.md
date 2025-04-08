@@ -8,7 +8,7 @@ Features:
 - [x] Stripe payment integration & ticket buy process
 - [x] Add cron scheduler that permanently revokes expired sessions
 - [x] Return to old checkout session button
-- [ ] Frontend success and cancel pages
+- [x] Frontend success and cancel pages
 - [ ] Option for customer to view his ticket orders & QR Code generation
 - [ ] Set reference in ticket in which payment it has been bought
 - [ ] Option to add tickets to your google / apple wallet

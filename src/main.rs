@@ -6,12 +6,14 @@ use actix_web::http::header;
 use actix_web::web::Data;
 use actix_web::{middleware, App, HttpServer};
 use bcrypt::{hash, DEFAULT_COST};
+use dotenv::dotenv;
 use models::generic::UserRole;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::{Pool, Postgres};
 
 mod controller;
 mod models;
+mod service;
 mod session;
 mod util;
 
@@ -22,6 +24,8 @@ pub struct AppState {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    dotenv().ok();
+
     let log_level = std::env::var("RUST_LOG").unwrap_or_else(|_e| "info".to_string());
     std::env::set_var("RUST_LOG", log_level);
     pretty_env_logger::init();

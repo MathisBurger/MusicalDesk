@@ -1,7 +1,7 @@
 use actix_web::{
     get, post,
     web::{Data, Json, Path},
-    HttpResponse,
+    HttpRequest, HttpResponse,
 };
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
@@ -12,6 +12,7 @@ use crate::{
         generic::{Error, UserRole},
         user::User,
     },
+    service::stripe::{create_product, update_product},
     AppState,
 };
 
@@ -31,11 +32,14 @@ pub async fn create_event(
     state: Data<AppState>,
     user: User,
     data: Json<EventRequest>,
+    req: HttpRequest,
 ) -> Result<HttpResponse, Error> {
     if !user.has_role_or_admin(UserRole::EventAdmin) {
         return Err(Error::Forbidden);
     }
     let event = Event::create_event(&data, &state.database).await?;
+
+    create_product(&event, generate_image_uri(&req, &event)).await;
     Ok(HttpResponse::Ok().json(event))
 }
 
@@ -69,10 +73,22 @@ pub async fn update_event(
     user: User,
     data: Json<EventRequest>,
     path: Path<(i32,)>,
+    req: HttpRequest,
 ) -> Result<HttpResponse, Error> {
     if !user.has_role_or_admin(UserRole::EventAdmin) {
         return Err(Error::Forbidden);
     }
     let event = Event::update_event(path.0, &data, &state.database).await?;
+    update_product(&event, generate_image_uri(&req, &event)).await;
     Ok(HttpResponse::Ok().json(event))
+}
+
+fn generate_image_uri(req: &HttpRequest, event: &Event) -> String {
+    let image_uri = req
+        .url_for(
+            "get_image",
+            &[format!("{}", event.image_id.unwrap()).as_str()],
+        )
+        .unwrap();
+    image_uri.to_string()
 }

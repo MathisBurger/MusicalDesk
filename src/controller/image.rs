@@ -62,7 +62,7 @@ pub async fn upload_image(
     Ok(HttpResponse::Ok().json(image))
 }
 
-#[get("/images/{image_id}")]
+#[get("/images/{image_id}", name = "get_image")]
 pub async fn get_image(
     state: Data<AppState>,
     user_option: Option<User>,

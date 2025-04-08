@@ -8,7 +8,7 @@ actix-web = "4"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1.0"
 sqlx = { version = "0.8", features = [
-    "runtime-async-std",
+    "runtime-tokio-rustls",
     "postgres",
     "chrono",
     "bigdecimal",
@@ -25,3 +25,7 @@ futures = "0.3.31"
 chrono = { version = "0.4.40", features = ["serde"] }
 actix-multipart = "0.7.2"
 actix-files = "0.6.6"
+async-stripe = { version = "=0.40.0", features = [
+    "runtime-tokio-hyper-rustls",
+] }
+dotenv = "0.15.0"

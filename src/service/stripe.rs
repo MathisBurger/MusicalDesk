@@ -3,18 +3,16 @@ use std::str::FromStr;
 use stripe::{
     CheckoutSession, CheckoutSessionMode, CreateCheckoutSession, CreateCheckoutSessionLineItems,
     CreateCustomer, CreatePrice, CreateProduct, Currency, Customer, CustomerId, IdOrCreate, Price,
-    Product, ProductId, UpdatePrice, UpdateProduct,
+    PriceId, Product, ProductId, UpdatePrice, UpdateProduct,
 };
 
-use crate::models::{event::Event, ticket::ShoppingCartItem, user::User};
-
-// TODO: DO a little more defensive programming here. What if there is no default price? What if , what if, what if?
+use crate::models::{event::Event, generic::Error, ticket::ShoppingCartItem, user::User};
 
 pub async fn generate_checkout(
     user: &User,
     shopping_cart: Vec<ShoppingCartItem>,
-) -> CheckoutSession {
-    let customer = get_customer(user).await;
+) -> Result<CheckoutSession, Error> {
+    let customer = get_customer(user).await?;
 
     let mut create_checkout = CreateCheckoutSession::new();
     create_checkout.cancel_url = Some("http://localhost:3000/cancel");
@@ -35,10 +33,10 @@ pub async fn generate_checkout(
     let client = get_client();
     CheckoutSession::create(&client, create_checkout)
         .await
-        .unwrap()
+        .map_err(|_x| Error::BadRequest)
 }
 
-pub async fn create_product(event: &Event, image_uri: String) -> Product {
+pub async fn create_product(event: &Event, image_uri: String) -> Result<Product, Error> {
     let client = get_client();
 
     let mut create_product = CreateProduct::new(event.name.as_str());
@@ -51,45 +49,36 @@ pub async fn create_product(event: &Event, image_uri: String) -> Product {
         unit_amount: Some((event.price * 100_f32) as i64),
         unit_amount_decimal: None,
     });
+
     // TODO: Implement tax code
-    Product::create(&client, create_product).await.unwrap()
+    Product::create(&client, create_product)
+        .await
+        .map_err(|_x| Error::BadRequest)
 }
 
-pub async fn update_product(event: &Event, image_uri: String) -> Product {
+pub async fn update_product(event: &Event, image_uri: String) -> Result<Product, Error> {
     let client = get_client();
-    let product_id = ProductId::from_str(event.price_id.clone().unwrap().as_str()).unwrap();
+
+    if event.price_id.is_none() {
+        return Err(Error::BadRequest);
+    }
+
+    let product_id = ProductId::from_str(event.price_id.clone().unwrap().as_str())
+        .expect("product ID has invalid format");
 
     let mut update_product = UpdateProduct::new();
     update_product.name = Some(event.name.as_str());
     update_product.images = Some(vec![image_uri]);
     // TODO: Implement tax code
-    let mut product = Product::update(&client, &product_id, update_product)
+
+    let product = Product::update(&client, &product_id, update_product)
         .await
-        .unwrap();
+        .map_err(|_x| Error::BadRequest)?;
 
-    let default_price = product.clone().default_price.unwrap();
-    let price_id = default_price.id();
-    let price = Price::retrieve(&client, &price_id, &[]).await.unwrap();
-    if price.unit_amount.unwrap() != (event.price * 100_f32) as i64 {
-        let mut create_price = CreatePrice::new(Currency::EUR);
-        create_price.unit_amount = Some((event.price * 100_f32) as i64);
-        create_price.product = Some(IdOrCreate::Id(&product_id));
-
-        let new_price = Price::create(&client, create_price).await.unwrap();
-        let mut new_price_update = UpdateProduct::new();
-        new_price_update.default_price = Some(new_price.id.as_str());
-        product = Product::update(&client, &product_id, new_price_update)
-            .await
-            .unwrap();
-
-        let mut old_price = UpdatePrice::new();
-        old_price.active = Some(false);
-        Price::update(&client, &price_id, old_price).await;
-    }
-    product
+    update_product_price(product, &event).await
 }
 
-pub async fn create_customer(user: &User) -> Customer {
+pub async fn create_customer(user: &User) -> Result<Customer, Error> {
     let client = get_client();
     let mut params = CreateCustomer::new();
     params.name = Some(&user.username);
@@ -97,15 +86,70 @@ pub async fn create_customer(user: &User) -> Customer {
         Some(email) => Some(email.as_str()),
         None => None,
     };
-    Customer::create(&client, params).await.unwrap()
+    Customer::create(&client, params)
+        .await
+        .map_err(|_x| Error::BadRequest)
 }
 
-pub async fn get_customer(user: &User) -> Customer {
+pub async fn get_customer(user: &User) -> Result<Customer, Error> {
     let client = get_client();
-    let customer_id = CustomerId::from_str(user.customer_id.clone().unwrap().as_str()).unwrap();
+    if (user.customer_id.is_none()) {
+        return Err(Error::BadRequest);
+    }
+    let customer_id = CustomerId::from_str(user.customer_id.clone().unwrap().as_str())
+        .expect("Invalid customer ID");
     Customer::retrieve(&client, &customer_id, &[])
         .await
-        .unwrap()
+        .map_err(|_e| Error::BadRequest)
+}
+
+async fn update_product_price(mut product: Product, event: &Event) -> Result<Product, Error> {
+    let client = get_client();
+
+    if product.default_price.is_none() {
+        return create_new_default_price_for_product(product, event, None).await;
+    }
+    let default_price = product.clone().default_price.unwrap();
+    let price_id = default_price.id();
+    let price = Price::retrieve(&client, &price_id, &[]).await.unwrap();
+
+    // Only update price if the price has changed
+    if price.unit_amount.unwrap() != (event.price * 100_f32) as i64 {
+        product = create_new_default_price_for_product(product, event, Some(price_id)).await?;
+    }
+    Ok(product)
+}
+
+async fn create_new_default_price_for_product(
+    mut product: Product,
+    event: &Event,
+    price_id: Option<PriceId>,
+) -> Result<Product, Error> {
+    let client = get_client();
+
+    let mut create_price = CreatePrice::new(Currency::EUR);
+    create_price.unit_amount = Some((event.price * 100_f32) as i64);
+    create_price.product = Some(IdOrCreate::Id(&product.id));
+
+    let new_price = Price::create(&client, create_price)
+        .await
+        .map_err(|_x| Error::BadRequest)?;
+    let mut new_price_update = UpdateProduct::new();
+    new_price_update.default_price = Some(new_price.id.as_str());
+    product = Product::update(&client, &product.id, new_price_update)
+        .await
+        .map_err(|_x| Error::BadRequest)?;
+
+    // Archive old default price if exists
+    if let Some(price_id_unwrap) = price_id {
+        let mut old_price = UpdatePrice::new();
+        old_price.active = Some(false);
+        Price::update(&client, &price_id_unwrap, old_price)
+            .await
+            .map_err(|_x| Error::BadRequest)?;
+    }
+
+    Ok(product)
 }
 
 fn get_client() -> stripe::Client {

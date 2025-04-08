@@ -21,7 +21,7 @@ pub async fn create_shopping_cart_payment_session(
     if shopping_cart.len() == 0 {
         return Err(Error::BadRequest);
     }
-    let checkout_session = generate_checkout(&user, shopping_cart).await;
+    let checkout_session = generate_checkout(&user, shopping_cart).await?;
     Ok(HttpResponse::Ok().json(PaymentSessionResponse {
         checkout_uri: checkout_session.url.unwrap(),
     }))

@@ -1,11 +1,11 @@
 use actix_web::cookie::time::Duration;
 
+use actix_web::delete;
 use actix_web::web::Data;
 use actix_web::{
     cookie::{Cookie, SameSite},
     post, web, HttpResponse,
 };
-use actix_web::{delete, HttpRequest};
 use bcrypt::verify;
 use serde::Deserialize;
 
@@ -71,7 +71,7 @@ pub async fn register_as_customer(
     data: web::Json<RegisterRequest>,
 ) -> Result<HttpResponse, Error> {
     let new_user = User::create_customer_account(&data, &state.database).await?;
-    let customer = create_customer(&new_user).await;
+    let customer = create_customer(&new_user).await?;
     let with_customer =
         User::update_stripe_customer_reference(new_user.id, &customer, &state.database).await;
     Ok(HttpResponse::Ok().json(with_customer))

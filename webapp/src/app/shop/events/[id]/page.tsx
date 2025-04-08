@@ -1,8 +1,8 @@
 "use client";
 import BackButton from "@/components/back-button";
 import LoadingComponent from "@/components/loading";
-import ShopHeader from "@/components/shop/header";
 import useAddTicketsToShoppingCartMutation from "@/hooks/mutations/shop/useAddTicketsToShoppingCartMutation";
+import useCheckoutMutation from "@/hooks/mutations/shop/useCheckoutMutation";
 import useShopEventQuery from "@/hooks/queries/shop/useShopEventQuery";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { Add, Remove } from "@mui/icons-material";
@@ -11,7 +11,6 @@ import {
   Box,
   Button,
   Card,
-  Container,
   Divider,
   Grid,
   Input,
@@ -34,6 +33,18 @@ const ShopEventDetailsPage = () => {
     event_id: parseInt(id, 10),
     quantity: numSelected,
   });
+  const { mutateAsync: checkoutMutate, isPending: checkoutPending } =
+    useCheckoutMutation();
+
+  const buyNow = async () => {
+    const res = await mutateAsync();
+    if (res.length > 0) {
+      const checkoutRes = await checkoutMutate();
+      if (checkoutRes) {
+        router.replace(checkoutRes.checkout_uri);
+      }
+    }
+  };
 
   const changeNum = (num: number) => {
     if (num < 1) {
@@ -114,7 +125,9 @@ const ShopEventDetailsPage = () => {
             )}
             {ticketsLeft > 0 && currentUser && (
               <Stack direction="row" spacing={2}>
-                <Button>Buy now</Button>
+                <Button loading={isPending || checkoutPending} onClick={buyNow}>
+                  Buy now
+                </Button>
                 <Button
                   variant="outlined"
                   onClick={() => mutateAsync()}

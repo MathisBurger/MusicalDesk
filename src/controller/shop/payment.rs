@@ -120,7 +120,7 @@ pub async fn checkout_successful(
         .finish())
 }
 
-#[get("/shop/current_checkout_session", name = "checkout_success")]
+#[get("/shop/current_checkout_session")]
 pub async fn current_checkout_session(user: User) -> Result<HttpResponse, Error> {
     if let Some(session_id) = user.current_checkout_session {
         let checkout_session = get_checkout_session(&session_id).await?;

@@ -17,7 +17,6 @@ pub async fn session_cleanup_cron_scheduler(db: &Pool<Postgres>) {
         let now = Utc::now();
         let delay = (datetime - now).to_std().unwrap();
         sleep(delay).await;
-        println!("Execute");
         DbCheckoutSession::delete_pending(db).await;
     }
 }

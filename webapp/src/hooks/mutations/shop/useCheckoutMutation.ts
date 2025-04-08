@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 
-interface PaymentCheckoutResponse {
+export interface PaymentCheckoutResponse {
   checkout_uri: string;
 }
 

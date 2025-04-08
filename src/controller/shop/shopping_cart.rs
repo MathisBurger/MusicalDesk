@@ -22,6 +22,10 @@ pub async fn add_ticket_to_shopping_cart(
     state: Data<AppState>,
     req: Json<AddToShoppingCartRequest>,
 ) -> Result<HttpResponse, Error> {
+    if user.current_checkout_session.is_some() {
+        return Err(Error::Forbidden);
+    }
+
     let tickets_left = Ticket::get_left_over_ticket_count(req.event_id, &state.database).await;
     if tickets_left < req.quantity {
         return Ok(HttpResponse::BadRequest().body("Not enough tickets left"));

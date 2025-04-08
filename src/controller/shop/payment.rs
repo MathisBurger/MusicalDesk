@@ -119,3 +119,18 @@ pub async fn checkout_successful(
         .append_header(("Location", location.as_str()))
         .finish())
 }
+
+#[get("/shop/current_checkout_session", name = "checkout_success")]
+pub async fn current_checkout_session(user: User) -> Result<HttpResponse, Error> {
+    if let Some(session_id) = user.current_checkout_session {
+        let checkout_session = get_checkout_session(&session_id).await?;
+
+        if checkout_session.status.unwrap() != CheckoutSessionStatus::Open {
+            return Err(Error::BadRequest);
+        }
+        return Ok(HttpResponse::Ok().json(PaymentSessionResponse {
+            checkout_uri: checkout_session.url.unwrap(),
+        }));
+    }
+    Err(Error::NotFound)
+}

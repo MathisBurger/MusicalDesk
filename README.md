@@ -6,8 +6,8 @@ Features:
 - [x] Shop frontend with event details
 - [x] Navigate user back to page he visited before if it is a shop event uri
 - [x] Stripe payment integration & ticket buy process
-- [ ] Add cron scheduler that permanently revokes expired sessions
-- [ ] Return to old checkout session button
+- [x] Add cron scheduler that permanently revokes expired sessions
+- [x] Return to old checkout session button
 - [ ] Frontend success and cancel pages
 - [ ] Option for customer to view his ticket orders & QR Code generation
 - [ ] Set reference in ticket in which payment it has been bought

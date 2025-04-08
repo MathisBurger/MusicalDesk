@@ -12,5 +12,6 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(shopping_cart::cancel_ticket_reservations)
         .service(payment::create_shopping_cart_payment_session)
         .service(payment::cancel_current_checkout_session)
-        .service(payment::checkout_successful);
+        .service(payment::checkout_successful)
+        .service(payment::current_checkout_session);
 }

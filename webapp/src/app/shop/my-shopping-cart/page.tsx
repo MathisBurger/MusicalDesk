@@ -3,6 +3,7 @@ import BackButton from "@/components/back-button";
 import LoadingComponent from "@/components/loading";
 import ShoppingCartEntry from "@/components/shop/shopping-cart-entry";
 import useCheckoutMutation from "@/hooks/mutations/shop/useCheckoutMutation";
+import useCurrentCheckoutSessionQuery from "@/hooks/queries/shop/useCurrentCheckoutSessionQuery";
 import useShoppingCartQuery from "@/hooks/queries/shop/useShoppingCartQuery";
 import { Button, Card, Stack, Typography } from "@mui/joy";
 import { useRouter } from "next/navigation";
@@ -10,6 +11,8 @@ import { useMemo } from "react";
 
 const MyShoppingCartPage = () => {
   const { data, isLoading } = useShoppingCartQuery();
+  const { data: currentCheckoutSession, isLoading: currentSessionLoading } =
+    useCurrentCheckoutSessionQuery();
   const { mutateAsync, isPending } = useCheckoutMutation();
   const router = useRouter();
 
@@ -27,7 +30,7 @@ const MyShoppingCartPage = () => {
     return 0;
   }, [data]);
 
-  if (isLoading) {
+  if (isLoading || currentSessionLoading) {
     return <LoadingComponent />;
   }
 
@@ -42,7 +45,18 @@ const MyShoppingCartPage = () => {
         <Typography level="h4" fontWeight="bold">
           Total: {total}€
         </Typography>
-        <Button disabled={total === 0} loading={isPending} onClick={checkout}>
+        {currentCheckoutSession && (
+          <Button
+            onClick={() => router.replace(currentCheckoutSession.checkout_uri)}
+          >
+            Continue current checkout
+          </Button>
+        )}
+        <Button
+          disabled={total === 0 || !!currentCheckoutSession}
+          loading={isPending}
+          onClick={checkout}
+        >
           {" "}
           Proceed with Checkout
         </Button>

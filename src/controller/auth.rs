@@ -9,6 +9,7 @@ use actix_web::{delete, HttpRequest};
 use bcrypt::verify;
 use serde::Deserialize;
 
+use crate::service::stripe::create_customer;
 use crate::{
     models::{generic::Error, user::User},
     util::jwt::generate_jwt,
@@ -70,5 +71,8 @@ pub async fn register_as_customer(
     data: web::Json<RegisterRequest>,
 ) -> Result<HttpResponse, Error> {
     let new_user = User::create_customer_account(&data, &state.database).await?;
-    Ok(HttpResponse::Ok().json(new_user))
+    let customer = create_customer(&new_user).await;
+    let with_customer =
+        User::update_stripe_customer_reference(new_user.id, &customer, &state.database).await;
+    Ok(HttpResponse::Ok().json(with_customer))
 }

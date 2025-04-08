@@ -38,9 +38,9 @@ pub async fn create_event(
         return Err(Error::Forbidden);
     }
     let event = Event::create_event(&data, &state.database).await?;
-
-    create_product(&event, generate_image_uri(&req, &event)).await;
-    Ok(HttpResponse::Ok().json(event))
+    let product = create_product(&event, generate_image_uri(&req, &event)).await;
+    let with_stripe = Event::update_stripe_references(event.id, &product, &state.database).await;
+    Ok(HttpResponse::Ok().json(with_stripe))
 }
 
 #[get("/events")]
@@ -79,8 +79,9 @@ pub async fn update_event(
         return Err(Error::Forbidden);
     }
     let event = Event::update_event(path.0, &data, &state.database).await?;
-    update_product(&event, generate_image_uri(&req, &event)).await;
-    Ok(HttpResponse::Ok().json(event))
+    let product = update_product(&event, generate_image_uri(&req, &event)).await;
+    let with_stripe = Event::update_stripe_references(event.id, &product, &state.database).await;
+    Ok(HttpResponse::Ok().json(with_stripe))
 }
 
 fn generate_image_uri(req: &HttpRequest, event: &Event) -> String {

@@ -4,6 +4,7 @@ use chrono::Utc;
 use serde::Serialize;
 use sqlx::Pool;
 use sqlx::Postgres;
+use stripe::Product;
 
 use super::generic::Error;
 
@@ -17,6 +18,10 @@ pub struct Event {
     pub event_date: DateTime<Utc>,
     pub active_from: Option<DateTime<Utc>>,
     pub active_until: Option<DateTime<Utc>>,
+    #[serde(skip_serializing)]
+    pub product_id: Option<String>,
+    #[serde(skip_serializing)]
+    pub price_id: Option<String>,
 }
 
 impl Event {
@@ -71,5 +76,27 @@ impl Event {
         .fetch_optional(db)
         .await
         .expect("Cannot load active events")
+    }
+
+    pub async fn update_stripe_references(
+        id: i32,
+        product: &Product,
+        db: &Pool<Postgres>,
+    ) -> Event {
+        let default_price = product.default_price.clone();
+        let price_id: Option<String> = match default_price {
+            Some(price) => Some(price.clone().id().to_string()),
+            None => None,
+        };
+        sqlx::query_as!(
+            Event,
+            "UPDATE events SET product_id = $1, price_id = $2 WHERE id = $3 RETURNING *",
+            product.id.as_str(),
+            price_id,
+            id
+        )
+        .fetch_one(db)
+        .await
+        .expect("Cannot update stripe references")
     }
 }

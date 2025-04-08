@@ -1,6 +1,7 @@
 use bcrypt::{hash, DEFAULT_COST};
 use serde::Serialize;
 use sqlx::{Pool, Postgres};
+use stripe::Customer;
 
 use crate::controller::auth::RegisterRequest;
 
@@ -14,6 +15,8 @@ pub struct User {
     pub password: String,
     pub roles: Vec<String>,
     pub email: Option<String>,
+    #[serde(skip_serializing)]
+    pub customer_id: Option<String>,
 }
 
 impl User {
@@ -49,5 +52,21 @@ impl User {
             .fetch_one(db)
             .await
             .map_err(|_x| Error::AlreadyExists)
+    }
+
+    pub async fn update_stripe_customer_reference(
+        user_id: i32,
+        customer: &Customer,
+        db: &Pool<Postgres>,
+    ) -> User {
+        sqlx::query_as!(
+            User,
+            "UPDATE users SET customer_id = $1 WHERE id = $2 RETURNING *",
+            customer.id.as_str(),
+            user_id
+        )
+        .fetch_one(db)
+        .await
+        .expect("Cannot update customer reference")
     }
 }

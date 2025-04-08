@@ -8,6 +8,7 @@ use actix_web::{middleware, App, HttpServer};
 use bcrypt::{hash, DEFAULT_COST};
 use dotenv::dotenv;
 use models::generic::UserRole;
+use service::checkout_session::session_cleanup_cron_scheduler;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::{Pool, Postgres};
 
@@ -50,6 +51,11 @@ async fn main() -> std::io::Result<()> {
     create_admin_user(&db_pool)
         .await
         .expect("Cannot create admin user");
+
+    let scheduler_db_pool = db_pool.clone();
+    tokio::spawn(async move {
+        session_cleanup_cron_scheduler(&scheduler_db_pool).await;
+    });
 
     let state = AppState { database: db_pool };
 

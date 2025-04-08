@@ -49,4 +49,11 @@ impl DbCheckoutSession {
         .map_err(|_x| Error::BadRequest)?;
         Ok(())
     }
+
+    pub async fn delete_pending(db: &Pool<Postgres>) {
+        sqlx::query!("DELETE FROM checkout_sessions WHERE active_until < NOW()",)
+            .execute(db)
+            .await
+            .expect("Cannot delete checkout sessions");
+    }
 }

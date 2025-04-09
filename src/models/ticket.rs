@@ -33,6 +33,19 @@ pub struct ShoppingCartItem {
     pub price_id: Option<String>,
 }
 
+#[derive(Serialize)]
+pub struct UserTicket {
+    pub id: i32,
+    pub event_id: Option<i32>,
+    pub event_name: Option<String>,
+    pub event_image_id: Option<i32>,
+    pub valid_until: DateTime<Utc>,
+    pub invalidated: bool,
+    pub invalidated_at: Option<DateTime<Utc>>,
+    pub owner_id: Option<i32>,
+    pub bought_at: Option<DateTime<Utc>>,
+}
+
 impl Ticket {
     pub async fn create_tickets(
         event_id: i32,
@@ -65,18 +78,6 @@ impl Ticket {
         .fetch_all(db)
         .await
         .expect("Cannot load tickets")
-    }
-
-    pub async fn get_personal_shopping_cart(
-        user_id: i32,
-        db: &Pool<Postgres>,
-    ) -> Vec<ShoppingCartItem> {
-        sqlx::query_as!(ShoppingCartItem, "SELECT e.id AS event_id, e.image_id AS image_id, e.name AS name, MIN(tickets.reserved_until) AS min_reserved_until, COUNT(tickets.id) AS count, SUM(e.price) AS total_price, e.price_id AS price_id FROM tickets
-            JOIN events e on tickets.event_id = e.id
-            WHERE owner_id = $1 AND bought_at IS NULL AND (reserved_until > NOW() OR locked_in_checkout_session IS NOT NULL) GROUP BY e.id", user_id)
-        .fetch_all(db)
-        .await
-        .expect("Cannot load shopping cart items")
     }
 
     pub async fn get_left_over_ticket_count(event_id: i32, db: &Pool<Postgres>) -> i64 {
@@ -134,5 +135,39 @@ impl Ticket {
             .fetch_all(db)
             .await
             .map_err(|_x|Error::BadRequest)
+    }
+}
+
+impl ShoppingCartItem {
+    pub async fn get_personal_shopping_cart(
+        user_id: i32,
+        db: &Pool<Postgres>,
+    ) -> Vec<ShoppingCartItem> {
+        sqlx::query_as!(ShoppingCartItem, "SELECT e.id AS event_id, e.image_id AS image_id, e.name AS name, MIN(tickets.reserved_until) AS min_reserved_until, COUNT(tickets.id) AS count, SUM(e.price) AS total_price, e.price_id AS price_id FROM tickets
+            JOIN events e on tickets.event_id = e.id
+            WHERE owner_id = $1 AND bought_at IS NULL AND (reserved_until > NOW() OR locked_in_checkout_session IS NOT NULL) GROUP BY e.id", user_id)
+        .fetch_all(db)
+        .await
+        .expect("Cannot load shopping cart items")
+    }
+}
+
+impl UserTicket {
+    pub async fn get_current_user_tickets(user_id: i32, db: &Pool<Postgres>) -> Vec<UserTicket> {
+        sqlx::query_as!(UserTicket, "SELECT tickets.id AS id, e.id AS event_id, e.name AS event_name, e.image_id AS event_image_id, valid_until, invalidated, invalidated_at, owner_id, bought_at
+        FROM tickets JOIN events e ON e.id = event_id
+        WHERE owner_id = $1 AND bought_at IS NOT NULL AND valid_until > NOW()", user_id)
+            .fetch_all(db)
+            .await
+            .expect("Cannot load current user tickets")
+    }
+
+    pub async fn get_old_user_tickets(user_id: i32, db: &Pool<Postgres>) -> Vec<UserTicket> {
+        sqlx::query_as!(UserTicket, "SELECT tickets.id AS id, e.id AS event_id, e.name AS event_name, e.image_id AS event_image_id, valid_until, invalidated, invalidated_at, owner_id, bought_at
+        FROM tickets JOIN events e ON e.id = event_id
+        WHERE owner_id = $1 AND bought_at IS NOT NULL AND valid_until < NOW()", user_id)
+            .fetch_all(db)
+            .await
+            .expect("Cannot load current user tickets")
     }
 }

@@ -6,7 +6,11 @@ use actix_web::{
 use serde::Deserialize;
 
 use crate::{
-    models::{generic::Error, ticket::Ticket, user::User},
+    models::{
+        generic::Error,
+        ticket::{ShoppingCartItem, Ticket},
+        user::User,
+    },
     AppState,
 };
 
@@ -38,7 +42,8 @@ pub async fn add_ticket_to_shopping_cart(
 
 #[get("/shop/shopping_cart")]
 pub async fn get_shopping_cart(user: User, state: Data<AppState>) -> HttpResponse {
-    let shopping_cart = Ticket::get_personal_shopping_cart(user.id, &state.database).await;
+    let shopping_cart =
+        ShoppingCartItem::get_personal_shopping_cart(user.id, &state.database).await;
     HttpResponse::Ok().json(shopping_cart)
 }
 

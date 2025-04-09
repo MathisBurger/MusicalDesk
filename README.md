@@ -10,11 +10,11 @@ Features:
 - [x] Return to old checkout session button
 - [x] Frontend success and cancel pages
 - [ ] Option for customer to view his ticket orders & QR Code generation
-- [ ] Set reference in ticket in which payment it has been bought
 - [ ] Option to add tickets to your google / apple wallet
 - [ ] Create backend users & user overview that are not customers
 - [ ] Add option to frontend to invalidate tickets and see their status
 - [ ] Backend code documentation
+- [ ] Set reference in ticket in which payment it has been bought
 - [ ] Expense management (With categories, Images of bills, etc.)
 - [ ] Annual finance reports
 - [ ] Transfer tickets to other users

@@ -1,5 +1,5 @@
 "use client";
-import { Check, CheckCircle } from "@mui/icons-material";
+import { CheckCircle } from "@mui/icons-material";
 import { Box, Button, Stack, Typography } from "@mui/joy";
 import { useRouter } from "next/navigation";
 

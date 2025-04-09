@@ -8,7 +8,12 @@ use serde::Serialize;
 use stripe::CheckoutSessionStatus;
 
 use crate::{
-    models::{checkout_session::DbCheckoutSession, generic::Error, ticket::Ticket, user::User},
+    models::{
+        checkout_session::DbCheckoutSession,
+        generic::Error,
+        ticket::{ShoppingCartItem, Ticket},
+        user::User,
+    },
     service::stripe::{generate_checkout, get_checkout_session},
     util::rand::generate_secret,
     AppState,
@@ -30,7 +35,8 @@ pub async fn create_shopping_cart_payment_session(
         return Err(Error::Forbidden);
     }
 
-    let shopping_cart = Ticket::get_personal_shopping_cart(user.id, &state.database).await;
+    let shopping_cart =
+        ShoppingCartItem::get_personal_shopping_cart(user.id, &state.database).await;
     if shopping_cart.len() == 0 {
         return Err(Error::BadRequest);
     }

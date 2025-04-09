@@ -16,6 +16,7 @@
     "@mui/x-data-grid": "^7.28.1",
     "@next/env": "^15.2.3",
     "@tanstack/react-query": "^5.69.0",
+    "bwip-js": "^4.5.3",
     "next": "15.2.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

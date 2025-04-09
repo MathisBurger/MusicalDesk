@@ -7,9 +7,10 @@ use chrono::{DateTime, Utc};
 use serde::Deserialize;
 
 use crate::{
+    dto::ticket::UserTicketWithAztec,
     models::{
         generic::{Error, UserRole},
-        ticket::Ticket,
+        ticket::{Ticket, UserTicket},
         user::User,
     },
     AppState,
@@ -52,4 +53,18 @@ pub async fn get_tickets_for_event(
     }
     let tickets = Ticket::get_tickets_by_event_id(path.0, &state.database).await;
     Ok(HttpResponse::Ok().json(tickets))
+}
+
+#[get("/tickets/{id}")]
+pub async fn get_user_ticket(
+    user: User,
+    state: Data<AppState>,
+    path: Path<(i32,)>,
+) -> Result<HttpResponse, Error> {
+    let ticket_option =
+        UserTicket::get_user_ticket_by_id_and_owner(path.0, user.id, &state.database).await;
+    if let Some(ticket) = ticket_option {
+        return Ok(HttpResponse::Ok().json(UserTicketWithAztec::from_user_ticket(&ticket)));
+    }
+    return Ok(HttpResponse::NotFound().finish());
 }

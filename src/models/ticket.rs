@@ -170,4 +170,17 @@ impl UserTicket {
             .await
             .expect("Cannot load current user tickets")
     }
+
+    pub async fn get_user_ticket_by_id_and_owner(
+        id: i32,
+        owner_id: i32,
+        db: &Pool<Postgres>,
+    ) -> Option<UserTicket> {
+        sqlx::query_as!(UserTicket, "SELECT tickets.id AS id, e.id AS event_id, e.name AS event_name, e.image_id AS event_image_id, valid_until, invalidated, invalidated_at, owner_id, bought_at
+        FROM tickets JOIN events e ON e.id = event_id
+        WHERE tickets.id = $1 AND owner_id = $2", id, owner_id)
+            .fetch_optional(db)
+            .await
+            .expect("Cannot load current user tickets")
+    }
 }

@@ -13,6 +13,7 @@ use sqlx::postgres::PgPoolOptions;
 use sqlx::{Pool, Postgres};
 
 mod controller;
+mod dto;
 mod models;
 mod service;
 mod session;

@@ -34,7 +34,8 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(event::get_event)
         .service(event::update_event)
         .service(ticket::create_tickets_for_event)
-        .service(ticket::get_tickets_for_event);
+        .service(ticket::get_tickets_for_event)
+        .service(ticket::get_user_ticket);
 
     shop::init_controllers(cfg);
 }

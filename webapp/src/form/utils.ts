@@ -8,7 +8,6 @@ import {
   Transformers,
   Types,
 } from "./types";
-import { isArray } from "util";
 
 /**
  * Transforms the values into the desired format

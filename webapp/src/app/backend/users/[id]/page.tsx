@@ -4,6 +4,7 @@ import BackButton from "@/components/back-button";
 import KvList, { DisplayedData } from "@/components/kv-list";
 import LoadingComponent from "@/components/loading";
 import UpdateBackendUserModal from "@/components/user/update-modal";
+import UpdateBackendUserPasswordModal from "@/components/user/update-password-modal";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useBackendUserQuery from "@/hooks/queries/user/useBackendUserQuery";
 import { UserRole } from "@/hooks/useCurrentUser";
@@ -14,6 +15,7 @@ import { useMemo, useState } from "react";
 const UserDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [passwordModalOpen, setPasswordModalOpen] = useState<boolean>(false);
 
   const { data, isLoading } = useBackendUserQuery(parseInt(id, 10));
 
@@ -57,6 +59,13 @@ const UserDetailsPage = () => {
           <Button color="primary" onClick={() => setEditModalOpen(true)}>
             Edit
           </Button>
+          <Button
+            color="danger"
+            variant="outlined"
+            onClick={() => setPasswordModalOpen(true)}
+          >
+            Update password
+          </Button>
         </Stack>
         <Grid container>
           <Grid xs={6}>
@@ -69,6 +78,12 @@ const UserDetailsPage = () => {
           <UpdateBackendUserModal
             user={data}
             onClose={() => setEditModalOpen(false)}
+          />
+        )}
+        {passwordModalOpen && data && (
+          <UpdateBackendUserPasswordModal
+            user={data}
+            onClose={() => setPasswordModalOpen(false)}
           />
         )}
       </Stack>

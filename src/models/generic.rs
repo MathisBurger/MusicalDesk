@@ -3,6 +3,7 @@ use serde::Serialize;
 use std::error::Error as ErrorTrait;
 use thiserror::Error;
 
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum UserRole {
     Admin,
     MemberAdmin,
@@ -11,6 +12,9 @@ pub enum UserRole {
     Default,
     ShopCustomer,
 }
+
+pub const BACKEND_ROLES: [UserRole; 3] =
+    [UserRole::Admin, UserRole::EventAdmin, UserRole::MemberAdmin];
 
 impl ToString for UserRole {
     fn to_string(&self) -> String {

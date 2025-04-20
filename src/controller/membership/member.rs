@@ -1,9 +1,9 @@
+use super::MemberRequest;
 use actix_web::{
     delete, get, post,
     web::{Data, Json, Path},
     HttpResponse,
 };
-use serde::Deserialize;
 
 use crate::{
     models::{
@@ -13,19 +13,6 @@ use crate::{
     },
     AppState,
 };
-
-#[derive(Deserialize)]
-pub struct MemberRequest {
-    pub first_name: String,
-    pub last_name: String,
-    pub email: Option<String>,
-    pub street: Option<String>,
-    pub house_nr: Option<String>,
-    pub zip: Option<String>,
-    pub city: Option<String>,
-    pub iban: Option<String>,
-    pub membership_fee: Option<f32>,
-}
 
 #[post("/members")]
 pub async fn create(

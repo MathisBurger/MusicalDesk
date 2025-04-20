@@ -1,11 +1,4 @@
-use actix_web::{
-    get, post,
-    web::{Data, Json, Path},
-    HttpRequest, HttpResponse,
-};
-use chrono::{DateTime, Utc};
-use serde::Deserialize;
-
+use super::EventRequest;
 use crate::{
     models::{
         event::Event,
@@ -15,17 +8,11 @@ use crate::{
     service::stripe::{create_product, update_product},
     AppState,
 };
-
-#[derive(Deserialize)]
-pub struct EventRequest {
-    pub name: String,
-    pub price: f32,
-    pub tax_percentage: f32,
-    pub image_id: Option<i32>,
-    pub event_date: DateTime<Utc>,
-    pub active_from: Option<DateTime<Utc>>,
-    pub active_until: Option<DateTime<Utc>>,
-}
+use actix_web::{
+    get, post,
+    web::{Data, Json, Path},
+    HttpRequest, HttpResponse,
+};
 
 #[post("/events")]
 pub async fn create_event(

@@ -1,7 +1,8 @@
-use crate::controller::member::MemberRequest;
 use chrono::{serde::ts_seconds_option, DateTime, Utc};
 use serde::Serialize;
 use sqlx::{Pool, Postgres};
+
+use crate::controller::membership::MemberRequest;
 
 use super::generic::Error;
 

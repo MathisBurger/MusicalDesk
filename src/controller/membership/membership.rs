@@ -1,10 +1,9 @@
+use super::CreateMembershipPaymentRequest;
 use actix_web::{
     get, post,
     web::{Data, Json, Path},
     HttpResponse,
 };
-use chrono::{DateTime, Utc};
-use serde::Deserialize;
 
 use crate::{
     models::{
@@ -15,13 +14,6 @@ use crate::{
     },
     AppState,
 };
-
-#[derive(Deserialize)]
-pub struct CreateMembershipPaymentRequest {
-    pub year: i32,
-    pub member_id: i32,
-    pub paid_at: DateTime<Utc>,
-}
 
 #[get("/memberships/years")]
 pub async fn get_membership_years(

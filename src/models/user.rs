@@ -1,10 +1,9 @@
 use bcrypt::{hash, DEFAULT_COST};
-use chrono::{DateTime, Utc};
 use serde::Serialize;
 use sqlx::{Pool, Postgres};
 use stripe::{CheckoutSessionId, Customer};
 
-use crate::controller::auth::RegisterRequest;
+use crate::{controller::shop::customer::RegisterRequest, models::generic::BACKEND_ROLES};
 
 use super::generic::{Error, UserRole};
 
@@ -86,5 +85,49 @@ impl User {
         .fetch_one(db)
         .await
         .expect("Cannot update customer reference")
+    }
+
+    pub async fn get_backend_users(db: &Pool<Postgres>) -> Vec<User> {
+        let roles: Vec<String> = BACKEND_ROLES.iter().map(|role| role.to_string()).collect();
+        sqlx::query_as!(User, "SELECT * FROM users WHERE roles && $1", &roles)
+            .fetch_all(db)
+            .await
+            .expect("Cannot load all users")
+    }
+
+    pub async fn get_user(id: i32, db: &Pool<Postgres>) -> Option<User> {
+        sqlx::query_as!(User, "SELECT * FROM users WHERE id = $1", id)
+            .fetch_optional(db)
+            .await
+            .expect("Cannot load user")
+    }
+
+    pub async fn update_user(user: User, db: &Pool<Postgres>) -> Option<User> {
+        sqlx::query_as!(
+            User,
+            "UPDATE users SET email = $1, roles = $2 WHERE id = $3 RETURNING *",
+            user.email,
+            &user.roles,
+            user.id
+        )
+        .fetch_optional(db)
+        .await
+        .expect("Cannot update user")
+    }
+
+    pub async fn update_password(
+        id: i32,
+        new_password: String,
+        db: &Pool<Postgres>,
+    ) -> Option<User> {
+        sqlx::query_as!(
+            User,
+            "UPDATE users SET password = $1 WHERE id = $2 RETURNING *",
+            new_password,
+            id
+        )
+        .fetch_optional(db)
+        .await
+        .expect("Cannot update user")
     }
 }

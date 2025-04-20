@@ -13,7 +13,7 @@ MVP Planning:
 - [x] Frontend success and cancel pages
 - [x] Option for customer to view his ticket orders & QR Code generation
 - [x] Remove invalidated field from tickets. invalidated_at is enough
-- [ ] Create backend users & user overview that are not customers
+- [x] Create backend users & user overview that are not customers
 - [ ] Add option to frontend to invalidate tickets and see their status
 - [ ] Expense management (With categories, Images of bills, etc.)
 - [ ] Annual finance reports

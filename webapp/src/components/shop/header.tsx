@@ -14,12 +14,17 @@ import {
   Drawer,
   Dropdown,
   IconButton,
+  List,
   ListDivider,
+  ListItem,
+  ListItemButton,
+  ListItemContent,
   MenuButton,
   MenuItem,
   ModalClose,
   Stack,
   Tooltip,
+  Typography,
 } from "@mui/joy";
 import { Button } from "@mui/joy";
 import { Menu } from "@mui/joy";
@@ -119,7 +124,31 @@ const ShopHeader = () => {
             <ModalClose />
             <DialogTitle>Acme Co.</DialogTitle>
             <Box sx={{ px: 1 }}>
-              <p>Content here </p>
+              <List
+                size="sm"
+                sx={{
+                  gap: 1,
+                  "--List-nestedInsetStart": "30px",
+                  "--ListItem-radius": (theme) => theme.vars.radius.sm,
+                }}
+              >
+                <ListItem>
+                  <ListItemButton onClick={() => router.push("/")}>
+                    <ListItemContent>
+                      <Typography level="title-sm">Shop</Typography>
+                    </ListItemContent>
+                  </ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton
+                    onClick={() => router.push("/shop/my-tickets")}
+                  >
+                    <ListItemContent>
+                      <Typography level="title-sm">Tickets</Typography>
+                    </ListItemContent>
+                  </ListItemButton>
+                </ListItem>
+              </List>
             </Box>
           </Drawer>
         </Box>

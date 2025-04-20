@@ -24,11 +24,11 @@ const MyTicketsPage = () => {
   }
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} sx={{ paddingBottom: "10em" }}>
       <Typography level="h1">My tickets</Typography>
       <Grid container direction="row" spacing={2}>
         {(currentTickets ?? []).map((ticket) => (
-          <Grid xs={3} key={ticket.id}>
+          <Grid xs={12} md={3} key={ticket.id}>
             <TicketCard ticket={ticket} />
           </Grid>
         ))}
@@ -51,7 +51,7 @@ const MyTicketsPage = () => {
               sx={{ marginTop: "2em" }}
             >
               {(oldTickets ?? []).map((ticket) => (
-                <Grid xs={3} key={ticket.id}>
+                <Grid xs={12} md={3} key={ticket.id}>
                   <TicketCard ticket={ticket} />
                 </Grid>
               ))}

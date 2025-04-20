@@ -8,7 +8,6 @@ const QrCode = ({ content }: QrCodeProps) => {
     <QRCodeCanvas
       value={content}
       level="H"
-      includeMargin
       style={{ width: "100%", height: "auto" }}
     />
   );

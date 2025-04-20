@@ -1,5 +1,5 @@
 "use client";
-import EntityList from "@/components/entity-list";
+import EntityList, { EntityListRowAction } from "@/components/entity-list";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useBackendUsersQuery from "@/hooks/queries/user/useBackendUsersQuery";
 import { UserRole } from "@/hooks/useCurrentUser";
@@ -14,10 +14,12 @@ import {
   Typography,
 } from "@mui/joy";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const BackendUsersPage = () => {
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   const { data, isLoading } = useBackendUsersQuery();
 
@@ -48,6 +50,14 @@ const BackendUsersPage = () => {
     },
   ];
 
+  const rowActions: EntityListRowAction[] = [
+    {
+      color: "primary",
+      onClick: (row) => router.push(`/backend/users/${row.id}`),
+      name: "Details",
+    },
+  ];
+
   return (
     <RoleWrapper roles={[UserRole.Admin]}>
       <Stack spacing={2}>
@@ -63,7 +73,12 @@ const BackendUsersPage = () => {
           </Grid>
         </Grid>
         <Divider />
-        <EntityList columns={cols} rows={data ?? []} loading={isLoading} />
+        <EntityList
+          columns={cols}
+          rows={data ?? []}
+          loading={isLoading}
+          rowActions={rowActions}
+        />
       </Stack>
     </RoleWrapper>
   );

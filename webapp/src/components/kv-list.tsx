@@ -1,8 +1,9 @@
 import { Grid, Typography } from "@mui/joy";
+import { ReactNode } from "react";
 
 export interface DisplayedData {
   title: string;
-  value: string | number | undefined | null;
+  value: ReactNode;
 }
 
 interface KvListProps {

@@ -1,4 +1,4 @@
-import { Member } from "@/hooks/queries/useMembersQuery";
+import { Member } from "@/hooks/queries/membership/useMembersQuery";
 import LoadingComponent from "../loading";
 import { Card, Typography } from "@mui/joy";
 import { useMemo } from "react";

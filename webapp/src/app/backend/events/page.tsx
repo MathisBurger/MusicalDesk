@@ -2,7 +2,7 @@
 import EntityList, { EntityListRowAction } from "@/components/entity-list";
 import CreateEventModal from "@/components/events/modal/create-event";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
-import useEventsQuery from "@/hooks/queries/useEventsQuery";
+import useEventsQuery from "@/hooks/queries/event/useEventsQuery";
 import { UserRole } from "@/hooks/useCurrentUser";
 import { Add } from "@mui/icons-material";
 import { Button, Divider, Grid, Stack, Typography } from "@mui/joy";

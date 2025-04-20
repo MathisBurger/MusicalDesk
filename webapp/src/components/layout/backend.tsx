@@ -1,5 +1,5 @@
 import { CurrentUserContext, User } from "@/hooks/useCurrentUser";
-import { Box, CssBaseline, CssVarsProvider, Theme } from "@mui/joy";
+import { Box, CssBaseline, CssVarsProvider } from "@mui/joy";
 import { PropsWithChildren } from "react";
 import Sidebar from "../sidebar";
 import Header from "../header";

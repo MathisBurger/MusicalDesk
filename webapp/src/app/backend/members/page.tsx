@@ -5,9 +5,9 @@ import { Add } from "@mui/icons-material";
 import TabLayout from "@/components/wrapper/tab-layout";
 import CreateMemberModal from "@/components/members/modal/create-member";
 import MembershipList from "@/components/members/membership-list";
-import useMembersQuery from "@/hooks/queries/useMembersQuery";
+import useMembersQuery from "@/hooks/queries/membership/useMembersQuery";
 import DisplayMemberList from "@/components/members/display-member-list";
-import useMembersLeftQuery from "@/hooks/queries/useMembersLeftQuery";
+import useMembersLeftQuery from "@/hooks/queries/membership/useMembersLeftQuery";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import { UserRole } from "@/hooks/useCurrentUser";
 

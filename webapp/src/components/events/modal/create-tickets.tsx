@@ -1,7 +1,7 @@
 import useForm from "@/form/useForm";
 import useCreateTicketsMutation, {
   CreateTicketsRequest,
-} from "@/hooks/mutations/useCreateTicketsMutation";
+} from "@/hooks/mutations/event/useCreateTicketsMutation";
 import useAlert from "@/hooks/useAlert";
 import {
   Button,

@@ -8,7 +8,7 @@ import EditEventModal from "@/components/events/modal/edit-event";
 import LoadingComponent from "@/components/loading";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import TabLayout from "@/components/wrapper/tab-layout";
-import useEventQuery from "@/hooks/queries/useEventQuery";
+import useEventQuery from "@/hooks/queries/event/useEventQuery";
 import { UserRole } from "@/hooks/useCurrentUser";
 import { Button, Card, Divider, Stack, TabPanel, Typography } from "@mui/joy";
 import { useParams } from "next/navigation";

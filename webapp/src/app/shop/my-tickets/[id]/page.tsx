@@ -1,7 +1,7 @@
 "use client";
 import LoadingComponent from "@/components/loading";
 import TicketDetails from "@/components/ticket/ticket-details";
-import useUserTicketQuery from "@/hooks/queries/useUserTicketQuery";
+import useUserTicketQuery from "@/hooks/queries/event/useUserTicketQuery";
 import { Alert } from "@mui/joy";
 import { useParams } from "next/navigation";
 

@@ -1,10 +1,10 @@
 "use client";
-import useMembershipYearsQuery from "@/hooks/queries/useMembershipYearsQuery";
+import useMembershipYearsQuery from "@/hooks/queries/membership/useMembershipYearsQuery";
 import LoadingComponent from "../loading";
 import { useState } from "react";
 import { Option, Select, Typography } from "@mui/joy";
-import useUnpaidMembershipsQuery from "@/hooks/queries/useUnpaidMembershipsQuery";
-import usePaidMembershipsQuery from "@/hooks/queries/usePaidMembershipsQuery";
+import useUnpaidMembershipsQuery from "@/hooks/queries/membership/useUnpaidMembershipsQuery";
+import usePaidMembershipsQuery from "@/hooks/queries/membership/usePaidMembershipsQuery";
 import DisplayMembershipList from "./display-membership-list";
 
 const MembershipList = () => {

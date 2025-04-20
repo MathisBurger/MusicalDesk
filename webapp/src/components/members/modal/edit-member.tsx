@@ -3,8 +3,8 @@ import { FormValue } from "@/form/types";
 import useForm from "@/form/useForm";
 import useEditMemberMutation, {
   EditMemberRequest,
-} from "@/hooks/mutations/useEditMemberMutation";
-import { Member } from "@/hooks/queries/useMembersQuery";
+} from "@/hooks/mutations/membership/useEditMemberMutation";
+import { Member } from "@/hooks/queries/membership/useMembersQuery";
 import useAlert from "@/hooks/useAlert";
 import {
   Button,

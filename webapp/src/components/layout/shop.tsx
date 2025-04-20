@@ -1,5 +1,5 @@
 import { CurrentUserContext, User } from "@/hooks/useCurrentUser";
-import { Container, CssBaseline, CssVarsProvider, Theme } from "@mui/joy";
+import { Container, CssBaseline, CssVarsProvider } from "@mui/joy";
 import { PropsWithChildren } from "react";
 import ShopHeader from "../shop/header";
 import useTheme from "@/hooks/useTheme";

@@ -1,5 +1,5 @@
 "use client";
-import useLeaveMemberMutation from "@/hooks/mutations/useLeaveMemberMutation";
+import useLeaveMemberMutation from "@/hooks/mutations/membership/useLeaveMemberMutation";
 import useAlert from "@/hooks/useAlert";
 import {
   Button,

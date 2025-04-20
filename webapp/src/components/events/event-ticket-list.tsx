@@ -1,4 +1,4 @@
-import useEventTicketsQuery from "@/hooks/queries/useEventTicketsQuery";
+import useEventTicketsQuery from "@/hooks/queries/event/useEventTicketsQuery";
 import { GridColDef } from "@mui/x-data-grid";
 import EntityList from "../entity-list";
 

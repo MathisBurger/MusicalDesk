@@ -4,7 +4,7 @@ import { FormValue } from "@/form/types";
 import useForm from "@/form/useForm";
 import useCreateMemberMutation, {
   CreateMemberRequest,
-} from "@/hooks/mutations/useCreateMemberMutation";
+} from "@/hooks/mutations/membership/useCreateMemberMutation";
 import useAlert from "@/hooks/useAlert";
 import {
   Button,

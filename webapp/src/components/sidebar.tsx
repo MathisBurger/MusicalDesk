@@ -16,7 +16,7 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BusinessIcon from "@mui/icons-material/Business";
 import ColorSchemeToggle from "./color-scheme-toggle";
 import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
-import { Event, ShoppingCart, SupervisedUserCircle } from "@mui/icons-material";
+import { Event, SupervisedUserCircle } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import RoleWrapper from "./wrapper/role-wrapper";
 import useLogout from "@/hooks/useLogout";
@@ -157,6 +157,16 @@ export default function Sidebar() {
                 <Event />
                 <ListItemContent>
                   <Typography level="title-sm">Events</Typography>
+                </ListItemContent>
+              </ListItemButton>
+            </ListItem>
+          </RoleWrapper>
+          <RoleWrapper roles={[UserRole.Admin]} hideAlert>
+            <ListItem>
+              <ListItemButton onClick={() => router.push("/backend/users")}>
+                <SupervisedUserCircle />
+                <ListItemContent>
+                  <Typography level="title-sm">Users</Typography>
                 </ListItemContent>
               </ListItemButton>
             </ListItem>

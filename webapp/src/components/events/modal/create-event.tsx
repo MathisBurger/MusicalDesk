@@ -3,7 +3,7 @@ import ImageUploadInput, { UploadFnResult } from "@/form/image-upload-input";
 import useForm from "@/form/useForm";
 import useCreateEventMutation, {
   EventRequest,
-} from "@/hooks/mutations/useCreateEventMutation";
+} from "@/hooks/mutations/event/useCreateEventMutation";
 import useUploadFileMutation from "@/hooks/mutations/useUploadFileMutation";
 import useAlert from "@/hooks/useAlert";
 import {

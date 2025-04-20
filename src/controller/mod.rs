@@ -6,7 +6,7 @@ pub mod event;
 mod image;
 pub mod membership;
 pub mod shop;
-mod user;
+pub mod user;
 
 pub fn init_controllers(cfg: &mut ServiceConfig) {
     cfg.service(default::default)

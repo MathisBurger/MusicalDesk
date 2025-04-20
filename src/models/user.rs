@@ -3,7 +3,13 @@ use serde::Serialize;
 use sqlx::{Pool, Postgres};
 use stripe::{CheckoutSessionId, Customer};
 
-use crate::{controller::shop::customer::RegisterRequest, models::generic::BACKEND_ROLES};
+use crate::{
+    controller::{
+        shop::customer::RegisterRequest,
+        user::{CreateUserRequest, UpdateUserRequest},
+    },
+    models::generic::BACKEND_ROLES,
+};
 
 use super::generic::{Error, UserRole};
 
@@ -102,13 +108,30 @@ impl User {
             .expect("Cannot load user")
     }
 
-    pub async fn update_user(user: User, db: &Pool<Postgres>) -> Option<User> {
+    pub async fn create_user(req: &CreateUserRequest, db: &Pool<Postgres>) -> Result<User, Error> {
+        let hash = hash(req.password.clone(), DEFAULT_COST).unwrap();
         sqlx::query_as!(
             User,
-            "UPDATE users SET email = $1, roles = $2 WHERE id = $3 RETURNING *",
-            user.email,
-            &user.roles,
-            user.id
+            "INSERT INTO users (username, password, roles) VALUES ($1, $2, $3) RETURNING *",
+            req.username,
+            hash,
+            &req.roles
+        )
+        .fetch_one(db)
+        .await
+        .map_err(|_x| Error::BadRequest)
+    }
+
+    pub async fn update_user(
+        id: i32,
+        req: &UpdateUserRequest,
+        db: &Pool<Postgres>,
+    ) -> Option<User> {
+        sqlx::query_as!(
+            User,
+            "UPDATE users SET roles = $1 WHERE id = $2 RETURNING *",
+            &req.roles,
+            id
         )
         .fetch_optional(db)
         .await
@@ -120,10 +143,11 @@ impl User {
         new_password: String,
         db: &Pool<Postgres>,
     ) -> Option<User> {
+        let hash = hash(new_password, DEFAULT_COST).unwrap();
         sqlx::query_as!(
             User,
             "UPDATE users SET password = $1 WHERE id = $2 RETURNING *",
-            new_password,
+            hash,
             id
         )
         .fetch_optional(db)

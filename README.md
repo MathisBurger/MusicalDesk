@@ -1,6 +1,6 @@
 # MusicalDesk
 
-Features:
+MVP Planning:
 
 - [x] Simple membership management
 - [x] Shop frontend with event details
@@ -13,12 +13,14 @@ Features:
 - [x] Remove invalidated field from tickets. invalidated_at is enough
 - [ ] Create backend users & user overview that are not customers
 - [ ] Add option to frontend to invalidate tickets and see their status
-- [ ] Backend code documentation
-- [ ] Set reference in ticket in which payment it has been bought
-- [ ] Add useful dashboard
 - [ ] Expense management (With categories, Images of bills, etc.)
 - [ ] Annual finance reports
-- [ ] Transfer tickets to other users
+- [ ] Backend code documentation
+- [ ] Extend user information (firstName, lastName, function, etc.)
+- [ ] Set reference in ticket in which payment it has been bought
+- [ ] Add useful dashboard
+- [ ] Add frontend translations
+- [ ] Make translation language configurable in user settings
 
 
 ## Application architecture decisions

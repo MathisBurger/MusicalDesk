@@ -27,15 +27,15 @@ impl ToString for UserRole {
         }
     }
 }
-
-impl From<String> for UserRole {
-    fn from(value: String) -> Self {
+impl TryFrom<&String> for UserRole {
+    type Error = Error;
+    fn try_from(value: &String) -> Result<Self, Self::Error> {
         match value.as_str() {
-            "admin" => Self::Admin,
-            "member_admin" => Self::MemberAdmin,
-            "event_admin" => Self::EventAdmin,
-            "shop_customer" => Self::ShopCustomer,
-            _ => Self::Default,
+            "admin" => Ok(Self::Admin),
+            "member_admin" => Ok(Self::MemberAdmin),
+            "event_admin" => Ok(Self::EventAdmin),
+            "shop_customer" => Ok(Self::ShopCustomer),
+            _ => Err(Error::BadRequest),
         }
     }
 }

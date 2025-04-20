@@ -80,7 +80,7 @@ pub async fn get_image(
     if let Some(required_roles) = image.required_roles.clone() {
         if required_roles
             .iter()
-            .filter(|role| user.has_role_or_admin(UserRole::from((*role).clone())))
+            .filter(|role| user.has_role_or_admin(UserRole::try_from(*role).unwrap()))
             .count()
             > 0
         {

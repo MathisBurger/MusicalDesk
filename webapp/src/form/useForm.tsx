@@ -16,7 +16,7 @@ import FormInput from "./form-input";
 interface UseFormProps<T> {
   /** All default values of a form */
   // TODO: Make default values not required
-  defaultValues?: Record<keyof T, FormValue>;
+  defaultValues?: Partial<Record<keyof T, FormValue>>;
   /** All validation rules that a form can have */
   validation?: FormValidationRules<T>;
   /** All labels of an form */
@@ -46,7 +46,7 @@ const useForm = <T extends object>({
    * @param handler The handler that handles the values after form submission
    * @returns The form submit event handler
    */
-  const onSubmit = (handler: (values: T) => Promise<void>) => {
+  const onSubmit = (handler: (values: T) => Promise<void> | void) => {
     return (e: FormEvent<FormDefinition>) => {
       e.preventDefault();
       const alignedData = transformData(
@@ -72,7 +72,7 @@ const useForm = <T extends object>({
     setErrors({ [`${e.target.name}`]: "This value is required" });
   };
 
-  const getFormType = (key: string) => {
+  const getFormType = (key: keyof T) => {
     if (explicitTypes && explicitTypes[key]) {
       return explicitTypes[key];
     }
@@ -92,7 +92,7 @@ const useForm = <T extends object>({
       name: key as string,
       label: labels ? labels[key] : undefined,
       required: required ? required.indexOf(key) > -1 : undefined,
-      type: getFormType(key as string),
+      type: getFormType(key),
       error: errors ? errors[key] : undefined,
       defaultValue: defaultValues ? defaultValues[key] : undefined,
     };

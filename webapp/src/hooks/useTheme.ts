@@ -5,21 +5,21 @@ const theme = extendTheme({
     JoyModal: {
       styleOverrides: {
         root: {
-          zIndex: 9999,
+          zIndex: 9997,
         },
       },
     },
     JoySelect: {
       styleOverrides: {
         listbox: {
-          zIndex: 9997,
+          zIndex: 9998,
         },
       },
     },
     JoyMenu: {
       styleOverrides: {
         root: {
-          zIndex: 9997,
+          zIndex: 9998,
         },
       },
     },

@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 
 export enum UserRole {
   Admin = "admin",
-  MemberAdmin = "memeber_admin",
+  MemberAdmin = "member_admin",
   EventAdmin = "event_admin",
   ShopCustomer = "shop_customer",
 }

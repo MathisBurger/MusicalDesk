@@ -38,6 +38,9 @@ export const transformValue = (
     if (typehint === "datetime-utc" && value !== "") {
       return new Date(`${value}`).toUTCString();
     }
+    if (typehint === "array") {
+      return JSON.parse(value);
+    }
   }
 
   if ((defaultValue === null || defaultValue === undefined) && value === "") {
@@ -58,8 +61,8 @@ export const transformValue = (
  */
 export const transformData = <T>(
   event: FormEvent<FormDefinition>,
-  defaultValues?: FormType<T>,
-  typehints?: ExplicitTypeHints<FormType<T>>,
+  defaultValues?: Partial<FormType<T>>,
+  typehints?: Partial<ExplicitTypeHints<FormType<T>>>,
 ): FormType<T> => {
   const transformed: Partial<T> = {};
   for (const key in Object.keys(event.currentTarget.elements)) {
@@ -68,8 +71,8 @@ export const transformData = <T>(
       /** @ts-expect-error Ignore here */
       transformed[element.name] = transformValue(
         element.value,
-        defaultValues ? defaultValues[element.name] : undefined,
-        typehints ? typehints[element.name] : undefined,
+        defaultValues ? defaultValues[element.name as keyof T] : undefined,
+        typehints ? typehints[element.name as keyof T] : undefined,
       );
     }
   }
@@ -111,6 +114,7 @@ export const validateData = <T>(
   const ruleMismatches: Partial<Record<keyof T, string>> = {};
 
   for (const rule of Object.entries(rules)) {
+    /** @ts-expect-error Ignore */
     const validationResult = rule[1](data[rule[0]]);
     if (validationResult !== null) {
       /** @ts-expect-error Ignore */

@@ -1,5 +1,7 @@
 # MusicalDesk
 
+[![](https://tokei.rs/b1/github/MathisBurger/MusicalDesk?category=lines)](https://github.com/XAMPPRocky/tokei)
+
 MVP Planning:
 
 - [x] Simple membership management

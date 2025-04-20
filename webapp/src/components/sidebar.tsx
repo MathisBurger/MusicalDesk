@@ -63,7 +63,7 @@ export default function Sidebar() {
           md: "none",
         },
         transition: "transform 0.4s, width 0.4s",
-        zIndex: 9998,
+        zIndex: 9997,
         height: "100dvh",
         width: "var(--Sidebar-width)",
         top: 0,

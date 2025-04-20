@@ -153,6 +153,7 @@ const LoginPage = () => {
           backgroundColor: "background.level1",
           backgroundSize: "cover",
           backgroundPosition: "center",
+          zIndex: 9997,
           backgroundRepeat: "no-repeat",
           backgroundImage: `url(${process.env.NEXT_PUBLIC_LOGIN_IMAGE_URL})`,
           [theme.getColorSchemeSelector("dark")]: {

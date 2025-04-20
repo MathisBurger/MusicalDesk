@@ -61,7 +61,7 @@ const ShopHeader = () => {
           borderColor: "divider",
           position: "sticky",
           top: 0,
-          zIndex: 1100,
+          zIndex: 9998,
         },
       ]}
     >

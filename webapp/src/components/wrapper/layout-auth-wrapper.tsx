@@ -38,6 +38,10 @@ const LayoutAuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
     return <LoadingComponent />;
   }
 
+  if (pathname === "/login" || pathname == "register") {
+    return <>{children}</>;
+  }
+
   // Define shop layout
   return <ShopLayout currentUser={currentUser}>{children}</ShopLayout>;
 };

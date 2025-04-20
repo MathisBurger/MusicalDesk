@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { User } from "../useCurrentUser";
+import { User } from "../../useCurrentUser";
 
 const userQuery = async (): Promise<User | null> => {
   const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/self`, {

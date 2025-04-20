@@ -1,7 +1,7 @@
 "use client";
 import BackButton from "@/components/back-button";
 import useLoginMutation from "@/hooks/mutations/useLoginMutation";
-import useUserSelfQuery from "@/hooks/queries/useUserSelfQuery";
+import useUserSelfQuery from "@/hooks/queries/user/useUserSelfQuery";
 import useAlert from "@/hooks/useAlert";
 import {
   Box,

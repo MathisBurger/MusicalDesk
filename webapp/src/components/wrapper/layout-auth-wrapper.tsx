@@ -2,7 +2,7 @@
 import { PropsWithChildren, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { User } from "@/hooks/useCurrentUser";
-import useUserSelfQuery from "@/hooks/queries/useUserSelfQuery";
+import useUserSelfQuery from "@/hooks/queries/user/useUserSelfQuery";
 import LoadingComponent from "../loading";
 import BackendLayout from "../layout/backend";
 import ShopLayout from "../layout/shop";

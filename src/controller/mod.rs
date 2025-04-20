@@ -13,6 +13,11 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(auth::login)
         .service(auth::logout)
         .service(user::get_current_user)
+        .service(user::get_backend_users)
+        .service(user::get_backend_user)
+        .service(user::create_backend_user)
+        .service(user::update_backend_user)
+        .service(user::update_backend_user_password)
         .service(image::get_image)
         .service(image::upload_image);
 

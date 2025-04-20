@@ -9,8 +9,7 @@ Features:
 - [x] Add cron scheduler that permanently revokes expired sessions
 - [x] Return to old checkout session button
 - [x] Frontend success and cancel pages
-- [ ] Option for customer to view his ticket orders & QR Code generation
-- [ ] Option to add tickets to your google / apple wallet
+- [x] Option for customer to view his ticket orders & QR Code generation
 - [ ] Remove invalidated field from tickets. invalidated_at is enough
 - [ ] Create backend users & user overview that are not customers
 - [ ] Add option to frontend to invalidate tickets and see their status

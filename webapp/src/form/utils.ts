@@ -8,6 +8,7 @@ import {
   Transformers,
   Types,
 } from "./types";
+import { isArray } from "util";
 
 /**
  * Transforms the values into the desired format
@@ -45,6 +46,9 @@ export const transformValue = (
 
   if ((defaultValue === null || defaultValue === undefined) && value === "") {
     return null;
+  }
+  if (Array.isArray(defaultValue)) {
+    return JSON.parse(value);
   }
   if (typeof defaultValue === "number") {
     return isNaN(Number(value)) ? null : Number(value);

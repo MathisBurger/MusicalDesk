@@ -3,13 +3,17 @@
 import BackButton from "@/components/back-button";
 import KvList, { DisplayedData } from "@/components/kv-list";
 import LoadingComponent from "@/components/loading";
+import UpdateBackendUserModal from "@/components/user/update-modal";
+import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useBackendUserQuery from "@/hooks/queries/user/useBackendUserQuery";
-import { Card, Chip, Divider, Grid, Stack, Typography } from "@mui/joy";
+import { UserRole } from "@/hooks/useCurrentUser";
+import { Button, Card, Chip, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { useParams } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 const UserDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
 
   const { data, isLoading } = useBackendUserQuery(parseInt(id, 10));
 
@@ -26,7 +30,7 @@ const UserDetailsPage = () => {
       {
         title: "Roles",
         value: (
-          <Stack spacing={1} direction="row">
+          <Stack spacing={1} direction="row" flexWrap="wrap" rowGap={2}>
             {(data?.roles ?? []).map((role) => (
               <Chip variant="soft" color="primary" key={role}>
                 {role}
@@ -44,18 +48,31 @@ const UserDetailsPage = () => {
   }
 
   return (
-    <Stack spacing={2}>
-      <Typography level="h1">User details</Typography>
-      <Divider />
-      <BackButton />
-      <Grid container>
-        <Grid xs={6}>
-          <Card>
-            <KvList displayData={displayData} />
-          </Card>
+    <RoleWrapper roles={[UserRole.Admin]}>
+      <Stack spacing={2}>
+        <Typography level="h1">User details</Typography>
+        <Divider />
+        <Stack direction="row" spacing={2}>
+          <BackButton />
+          <Button color="primary" onClick={() => setEditModalOpen(true)}>
+            Edit
+          </Button>
+        </Stack>
+        <Grid container>
+          <Grid xs={6}>
+            <Card>
+              <KvList displayData={displayData} />
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    </Stack>
+        {editModalOpen && data && (
+          <UpdateBackendUserModal
+            user={data}
+            onClose={() => setEditModalOpen(false)}
+          />
+        )}
+      </Stack>
+    </RoleWrapper>
   );
 };
 

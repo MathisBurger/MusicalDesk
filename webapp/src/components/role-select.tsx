@@ -5,13 +5,15 @@ import { ReactNode } from "react";
 interface RoleSelectProps {
   name: string;
   multiple?: boolean;
+  defaultValue?: UserRole[];
 }
 
-const RoleSelect = ({ name, multiple }: RoleSelectProps) => {
+const RoleSelect = ({ name, multiple, defaultValue }: RoleSelectProps) => {
   return (
     <Select
       name={name}
       multiple={multiple}
+      defaultValue={defaultValue}
       renderValue={(options: SelectOption<string>[]): ReactNode => (
         <Stack spacing={1} direction="row">
           {options.map((role) => (

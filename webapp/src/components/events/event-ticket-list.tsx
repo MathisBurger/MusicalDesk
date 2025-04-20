@@ -17,14 +17,12 @@ const EventTicketList = ({ eventId }: EventTicketListProps) => {
     {
       field: "valid_until",
       headerName: "Valid until",
-    },
-    {
-      field: "invalidated",
-      headerName: "Invalidated",
+      width: 200,
     },
     {
       field: "invalidated_at",
       headerName: "Invalidated at",
+      width: 200,
     },
   ];
 

@@ -10,11 +10,12 @@ Features:
 - [x] Return to old checkout session button
 - [x] Frontend success and cancel pages
 - [x] Option for customer to view his ticket orders & QR Code generation
-- [ ] Remove invalidated field from tickets. invalidated_at is enough
+- [x] Remove invalidated field from tickets. invalidated_at is enough
 - [ ] Create backend users & user overview that are not customers
 - [ ] Add option to frontend to invalidate tickets and see their status
 - [ ] Backend code documentation
 - [ ] Set reference in ticket in which payment it has been bought
+- [ ] Add useful dashboard
 - [ ] Expense management (With categories, Images of bills, etc.)
 - [ ] Annual finance reports
 - [ ] Transfer tickets to other users

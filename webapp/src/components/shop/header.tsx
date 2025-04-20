@@ -1,6 +1,7 @@
 import useShoppingCartQuery from "@/hooks/queries/shop/useShoppingCartQuery";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
 import useLogout from "@/hooks/useLogout";
+import { isGranted } from "@/utils/auth";
 import {
   LanguageRounded,
   MenuRounded,
@@ -107,6 +108,17 @@ const ShopHeader = () => {
               My tickets
             </Button>
           )}
+          {!isGranted(currentUser, [UserRole.ShopCustomer]) && (
+            <Button
+              variant="plain"
+              color="neutral"
+              size="sm"
+              sx={{ alignSelf: "center" }}
+              onClick={() => router.push("/backend/dashboard")}
+            >
+              Backend
+            </Button>
+          )}
         </Stack>
         <Box sx={{ display: { xs: "inline-flex", sm: "none" } }}>
           <IconButton
@@ -145,6 +157,15 @@ const ShopHeader = () => {
                   >
                     <ListItemContent>
                       <Typography level="title-sm">Tickets</Typography>
+                    </ListItemContent>
+                  </ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton
+                    onClick={() => router.push("/backend/dashboard")}
+                  >
+                    <ListItemContent>
+                      <Typography level="title-sm">Backend</Typography>
                     </ListItemContent>
                   </ListItemButton>
                 </ListItem>

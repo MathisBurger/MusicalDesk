@@ -13,7 +13,6 @@ pub struct Ticket {
     pub id: i32,
     pub event_id: i32,
     pub valid_until: DateTime<Utc>,
-    pub invalidated: bool,
     pub invalidated_at: Option<DateTime<Utc>>,
     pub owner_id: Option<i32>,
     pub bought_at: Option<DateTime<Utc>>,
@@ -40,7 +39,6 @@ pub struct UserTicket {
     pub event_name: Option<String>,
     pub event_image_id: Option<i32>,
     pub valid_until: DateTime<Utc>,
-    pub invalidated: bool,
     pub invalidated_at: Option<DateTime<Utc>>,
     pub owner_id: Option<i32>,
     pub bought_at: Option<DateTime<Utc>>,
@@ -56,10 +54,9 @@ impl Ticket {
         let mut tx = db.begin().await.map_err(|_x| Error::BadRequest)?;
         for _i in 0..quantity {
             sqlx::query!(
-                "INSERT INTO tickets (event_id, valid_until, invalidated) VALUES ($1, $2, $3)",
+                "INSERT INTO tickets (event_id, valid_until) VALUES ($1, $2)",
                 event_id,
-                valid_until,
-                false,
+                valid_until
             )
             .execute(&mut *tx)
             .await
@@ -154,7 +151,7 @@ impl ShoppingCartItem {
 
 impl UserTicket {
     pub async fn get_current_user_tickets(user_id: i32, db: &Pool<Postgres>) -> Vec<UserTicket> {
-        sqlx::query_as!(UserTicket, "SELECT tickets.id AS id, e.id AS event_id, e.name AS event_name, e.image_id AS event_image_id, valid_until, invalidated, invalidated_at, owner_id, bought_at
+        sqlx::query_as!(UserTicket, "SELECT tickets.id AS id, e.id AS event_id, e.name AS event_name, e.image_id AS event_image_id, valid_until, invalidated_at, owner_id, bought_at
         FROM tickets JOIN events e ON e.id = event_id
         WHERE owner_id = $1 AND bought_at IS NOT NULL AND valid_until > NOW()", user_id)
             .fetch_all(db)
@@ -163,7 +160,7 @@ impl UserTicket {
     }
 
     pub async fn get_old_user_tickets(user_id: i32, db: &Pool<Postgres>) -> Vec<UserTicket> {
-        sqlx::query_as!(UserTicket, "SELECT tickets.id AS id, e.id AS event_id, e.name AS event_name, e.image_id AS event_image_id, valid_until, invalidated, invalidated_at, owner_id, bought_at
+        sqlx::query_as!(UserTicket, "SELECT tickets.id AS id, e.id AS event_id, e.name AS event_name, e.image_id AS event_image_id, valid_until, invalidated_at, owner_id, bought_at
         FROM tickets JOIN events e ON e.id = event_id
         WHERE owner_id = $1 AND bought_at IS NOT NULL AND valid_until < NOW()", user_id)
             .fetch_all(db)
@@ -176,7 +173,7 @@ impl UserTicket {
         owner_id: i32,
         db: &Pool<Postgres>,
     ) -> Option<UserTicket> {
-        sqlx::query_as!(UserTicket, "SELECT tickets.id AS id, e.id AS event_id, e.name AS event_name, e.image_id AS event_image_id, valid_until, invalidated, invalidated_at, owner_id, bought_at
+        sqlx::query_as!(UserTicket, "SELECT tickets.id AS id, e.id AS event_id, e.name AS event_name, e.image_id AS event_image_id, valid_until, invalidated_at, owner_id, bought_at
         FROM tickets JOIN events e ON e.id = event_id
         WHERE tickets.id = $1 AND owner_id = $2", id, owner_id)
             .fetch_optional(db)

@@ -1,10 +1,6 @@
-use std::io::Read;
-
 use actix_web::{
-    get,
-    http::header,
-    post,
-    web::{self, Data, Json, Path, Query},
+    get, post,
+    web::{Data, Json, Path},
     HttpResponse,
 };
 use chrono::{DateTime, Utc};
@@ -17,7 +13,7 @@ use crate::{
         ticket::{Ticket, UserTicket},
         user::User,
     },
-    util::qrcode::{generate_qr_code_image, generate_qrcode_jwt},
+    util::qrcode::get_ticket_id_from_qrcode_content,
     AppState,
 };
 
@@ -72,4 +68,49 @@ pub async fn get_user_ticket(
         return Ok(HttpResponse::Ok().json(UserTicketWithQrContent::from_user_ticket(&ticket)));
     }
     return Ok(HttpResponse::NotFound().finish());
+}
+
+#[derive(Deserialize)]
+struct QrTicketRequest {
+    pub qr_content: String,
+}
+
+#[post("/tickets/invalidate")]
+pub async fn invalidate_ticket(
+    user: User,
+    state: Data<AppState>,
+    req: Json<QrTicketRequest>,
+) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::TicketInvalidator) {
+        return Err(Error::Forbidden);
+    }
+    if let Some(ticket_id) = get_ticket_id_from_qrcode_content(req.qr_content.clone()) {
+        let ticket = Ticket::get_ticket_by_id(ticket_id, &state.database)
+            .await
+            .ok_or(Error::NotFound)?;
+        if ticket.owner_id.is_none() {
+            return Err(Error::BadRequest);
+        }
+        let invalidated_ticket = Ticket::invalidate_ticket(ticket.id, &state.database).await;
+        return Ok(HttpResponse::Ok().json(invalidated_ticket));
+    }
+    return Err(Error::BadRequest);
+}
+
+#[post("/tickets/view_by_qr_code")]
+pub async fn view_ticket_by_qr_code(
+    user: User,
+    state: Data<AppState>,
+    req: Json<QrTicketRequest>,
+) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::TicketInvalidator) {
+        return Err(Error::Forbidden);
+    }
+    if let Some(ticket_id) = get_ticket_id_from_qrcode_content(req.qr_content.clone()) {
+        let ticket = Ticket::get_ticket_by_id(ticket_id, &state.database)
+            .await
+            .ok_or(Error::NotFound)?;
+        return Ok(HttpResponse::Ok().json(ticket));
+    }
+    return Err(Error::BadRequest);
 }

@@ -11,6 +11,7 @@ pub enum UserRole {
     // Default role for backend users (not for shop users)
     Default,
     ShopCustomer,
+    TicketInvalidator,
 }
 
 pub const BACKEND_ROLES: [UserRole; 3] =
@@ -24,6 +25,7 @@ impl ToString for UserRole {
             Self::MemberAdmin => "member_admin".to_string(),
             Self::EventAdmin => "event_admin".to_string(),
             Self::ShopCustomer => "shop_customer".to_string(),
+            Self::TicketInvalidator => "ticket_invalidator".to_string(),
         }
     }
 }
@@ -35,6 +37,7 @@ impl TryFrom<&String> for UserRole {
             "member_admin" => Ok(Self::MemberAdmin),
             "event_admin" => Ok(Self::EventAdmin),
             "shop_customer" => Ok(Self::ShopCustomer),
+            "ticket_invalidator" => Ok(Self::TicketInvalidator),
             _ => Err(Error::BadRequest),
         }
     }

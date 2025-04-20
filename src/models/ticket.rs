@@ -77,6 +77,13 @@ impl Ticket {
         .expect("Cannot load tickets")
     }
 
+    pub async fn get_ticket_by_id(id: i32, db: &Pool<Postgres>) -> Option<Ticket> {
+        sqlx::query_as!(Ticket, "SELECT * FROM tickets WHERE id = $1", id)
+            .fetch_optional(db)
+            .await
+            .expect("Cannot load tickets")
+    }
+
     pub async fn get_left_over_ticket_count(event_id: i32, db: &Pool<Postgres>) -> i64 {
         sqlx::query!("SELECT COUNT(*) AS count FROM tickets WHERE bought_at IS NULL AND locked_in_checkout_session IS NULL AND ( reserved_until IS NULL OR reserved_until < NOW()) AND event_id = $1", event_id)
             .fetch_one(db)
@@ -132,6 +139,17 @@ impl Ticket {
             .fetch_all(db)
             .await
             .map_err(|_x|Error::BadRequest)
+    }
+
+    pub async fn invalidate_ticket(ticket_id: i32, db: &Pool<Postgres>) -> Ticket {
+        sqlx::query_as!(
+            Ticket,
+            "UPDATE tickets SET invalidated_at = NOW() WHERE id = $1 RETURNING *",
+            ticket_id
+        )
+        .fetch_one(db)
+        .await
+        .expect("Cannot invalidate ticket")
     }
 }
 

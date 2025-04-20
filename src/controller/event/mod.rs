@@ -23,5 +23,7 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(event::update_event)
         .service(ticket::create_tickets_for_event)
         .service(ticket::get_tickets_for_event)
-        .service(ticket::get_user_ticket);
+        .service(ticket::get_user_ticket)
+        .service(ticket::invalidate_ticket)
+        .service(ticket::view_ticket_by_qr_code);
 }

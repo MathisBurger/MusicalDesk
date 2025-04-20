@@ -5,6 +5,7 @@ export enum UserRole {
   MemberAdmin = "member_admin",
   EventAdmin = "event_admin",
   ShopCustomer = "shop_customer",
+  TicketInvalidator = "ticket_invalidator",
 }
 
 export interface User {

@@ -2,3 +2,4 @@
 /uploads
 sqlx-data.json
 .env.local
+/certs

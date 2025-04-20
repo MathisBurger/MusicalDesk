@@ -1,18 +1,23 @@
+use std::io::Read;
+
 use actix_web::{
-    get, post,
-    web::{Data, Json, Path},
+    get,
+    http::header,
+    post,
+    web::{self, Data, Json, Path, Query},
     HttpResponse,
 };
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
 
 use crate::{
-    dto::ticket::UserTicketWithAztec,
+    dto::ticket::UserTicketWithQrContent,
     models::{
         generic::{Error, UserRole},
         ticket::{Ticket, UserTicket},
         user::User,
     },
+    util::qrcode::{generate_qr_code_image, generate_qrcode_jwt},
     AppState,
 };
 
@@ -64,7 +69,7 @@ pub async fn get_user_ticket(
     let ticket_option =
         UserTicket::get_user_ticket_by_id_and_owner(path.0, user.id, &state.database).await;
     if let Some(ticket) = ticket_option {
-        return Ok(HttpResponse::Ok().json(UserTicketWithAztec::from_user_ticket(&ticket)));
+        return Ok(HttpResponse::Ok().json(UserTicketWithQrContent::from_user_ticket(&ticket)));
     }
     return Ok(HttpResponse::NotFound().finish());
 }

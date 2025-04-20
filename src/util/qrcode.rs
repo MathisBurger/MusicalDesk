@@ -1,12 +1,15 @@
-use std::collections::BTreeMap;
-
 use hmac::{Hmac, Mac};
+use image::{DynamicImage, ImageBuffer, Luma};
 use jwt::{SignWithKey, VerifyWithKey};
 use sha2::Sha256;
+use std::{
+    collections::BTreeMap,
+    io::{Bytes, Cursor, Read},
+};
 
 use crate::models::ticket::UserTicket;
 
-pub fn generate_aztec_jwt(ticket: &UserTicket) -> String {
+pub fn generate_qrcode_jwt(ticket: &UserTicket) -> String {
     let secret = std::env::var("AZTEC_SECRET").unwrap_or("secret".to_string());
     let key: Hmac<Sha256> = Hmac::new_from_slice(secret.as_bytes()).unwrap();
 
@@ -15,7 +18,7 @@ pub fn generate_aztec_jwt(ticket: &UserTicket) -> String {
     claims.sign_with_key(&key).unwrap()
 }
 
-pub fn get_ticket_id_from_aztec_content(content: String) -> Option<i32> {
+pub fn get_ticket_id_from_qrcode_content(content: String) -> Option<i32> {
     let secret = std::env::var("AZTEC_SECRET").unwrap_or("secret".to_string());
     let key: Hmac<Sha256> = Hmac::new_from_slice(secret.as_bytes()).unwrap();
 
@@ -29,4 +32,14 @@ pub fn get_ticket_id_from_aztec_content(content: String) -> Option<i32> {
     }
 
     return None;
+}
+
+pub fn generate_qr_code_image(content: String) -> Vec<u8> {
+    let code = qrcode::QrCode::new(content.as_bytes()).unwrap();
+    let image = code.render::<Luma<u8>>().build();
+    let mut buffer = Cursor::new(Vec::new());
+    DynamicImage::ImageLuma8(image)
+        .write_to(&mut buffer, image::ImageFormat::Png)
+        .unwrap();
+    buffer.into_inner()
 }

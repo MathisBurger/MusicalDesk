@@ -59,7 +59,7 @@ impl Ticket {
                 "INSERT INTO tickets (event_id, valid_until, invalidated) VALUES ($1, $2, $3)",
                 event_id,
                 valid_until,
-                false
+                false,
             )
             .execute(&mut *tx)
             .await

@@ -1,10 +1,10 @@
 use chrono::{DateTime, Utc};
 use serde::Serialize;
 
-use crate::{models::ticket::UserTicket, util::aztec::generate_aztec_jwt};
+use crate::{models::ticket::UserTicket, util::qrcode::generate_qrcode_jwt};
 
 #[derive(Serialize)]
-pub struct UserTicketWithAztec {
+pub struct UserTicketWithQrContent {
     pub id: i32,
     pub event_id: Option<i32>,
     pub event_name: Option<String>,
@@ -14,12 +14,12 @@ pub struct UserTicketWithAztec {
     pub invalidated_at: Option<DateTime<Utc>>,
     pub owner_id: Option<i32>,
     pub bought_at: Option<DateTime<Utc>>,
-    pub aztec_content: String,
+    pub qr_content: String,
 }
 
-impl UserTicketWithAztec {
+impl UserTicketWithQrContent {
     pub fn from_user_ticket(ticket: &UserTicket) -> Self {
-        UserTicketWithAztec {
+        UserTicketWithQrContent {
             id: ticket.id,
             event_id: ticket.event_id,
             event_name: ticket.event_name.clone(),
@@ -29,7 +29,7 @@ impl UserTicketWithAztec {
             invalidated_at: ticket.invalidated_at,
             owner_id: ticket.owner_id,
             bought_at: ticket.bought_at,
-            aztec_content: generate_aztec_jwt(ticket),
+            qr_content: generate_qrcode_jwt(ticket),
         }
     }
 }

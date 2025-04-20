@@ -10,7 +10,7 @@ use std::{
 use crate::models::ticket::UserTicket;
 
 pub fn generate_qrcode_jwt(ticket: &UserTicket) -> String {
-    let secret = std::env::var("AZTEC_SECRET").unwrap_or("secret".to_string());
+    let secret = std::env::var("QR_SECRET").unwrap_or("secret".to_string());
     let key: Hmac<Sha256> = Hmac::new_from_slice(secret.as_bytes()).unwrap();
 
     let mut claims = BTreeMap::new();
@@ -19,7 +19,7 @@ pub fn generate_qrcode_jwt(ticket: &UserTicket) -> String {
 }
 
 pub fn get_ticket_id_from_qrcode_content(content: String) -> Option<i32> {
-    let secret = std::env::var("AZTEC_SECRET").unwrap_or("secret".to_string());
+    let secret = std::env::var("QR_SECRET").unwrap_or("secret".to_string());
     let key: Hmac<Sha256> = Hmac::new_from_slice(secret.as_bytes()).unwrap();
 
     let claims_option: Option<BTreeMap<String, i32>> = content.verify_with_key(&key).ok();

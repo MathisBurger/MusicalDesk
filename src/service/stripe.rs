@@ -1,6 +1,7 @@
 use std::str::FromStr;
 
 use chrono::{DateTime, Utc};
+use log::error;
 use stripe::{
     CheckoutSession, CheckoutSessionId, CheckoutSessionMode, CreateCheckoutSession,
     CreateCheckoutSessionLineItems, CreateCustomer, CreatePrice, CreateProduct, Currency, Customer,
@@ -17,7 +18,6 @@ pub async fn generate_checkout(
     success_url: String,
 ) -> Result<CheckoutSession, Error> {
     let customer = get_customer(user).await?;
-
     let mut create_checkout = CreateCheckoutSession::new();
     create_checkout.cancel_url = Some(cancel_url.as_str());
     create_checkout.success_url = Some(success_url.as_str());
@@ -117,7 +117,10 @@ pub async fn get_customer(user: &User) -> Result<Customer, Error> {
         .expect("Invalid customer ID");
     Customer::retrieve(&client, &customer_id, &[])
         .await
-        .map_err(|_e| Error::BadRequest)
+        .map_err(|e| {
+            error!(target: "stripe", "{}", e.to_string());
+            Error::BadRequest
+        })
 }
 
 async fn update_product_price(mut product: Product, event: &Event) -> Result<Product, Error> {

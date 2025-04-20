@@ -23,7 +23,7 @@ import {
 } from "@mui/joy";
 import { Button } from "@mui/joy";
 import { Menu } from "@mui/joy";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const ShopHeader = () => {
@@ -33,6 +33,7 @@ const ShopHeader = () => {
   const currentUser = useCurrentUser();
   const router = useRouter();
   const logout = useLogout();
+  const pathname = usePathname();
 
   const { data: shoppingCart } = useShoppingCartQuery();
 
@@ -173,7 +174,10 @@ const ShopHeader = () => {
               >
                 Sign up
               </Button>
-              <Button color="primary" onClick={() => router.push("/login")}>
+              <Button
+                color="primary"
+                onClick={() => router.push(`login?redirect_uri=${pathname}`)}
+              >
                 Sign in
               </Button>
             </>

@@ -34,9 +34,3 @@ pub async fn get_old_user_tickets(
         .collect();
     Ok(HttpResponse::Ok().json(tickets_with_code))
 }
-
-pub async fn generate_pkpass(user: User, state: Data<AppState>, path: Path<(i32,)>) {
-    let ticket_option =
-        UserTicket::get_user_ticket_by_id_and_owner(path.0, user.id, &state.database).await;
-    if let Some(ticket) = ticket_option {}
-}

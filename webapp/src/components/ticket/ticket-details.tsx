@@ -1,11 +1,11 @@
-import { UserTicketWithAztec } from "@/hooks/queries/shop/useCurrentUserTicketsQuery";
+import { UserTicketWithQrCode } from "@/hooks/queries/shop/useCurrentUserTicketsQuery";
 import { AspectRatio, Card, Grid, Stack, Typography } from "@mui/joy";
-import AztecCode from "../aztec-code";
+import AztecCode from "../qr-code";
 import { useMemo } from "react";
 import KvList, { DisplayedData } from "../kv-list";
 
 interface TicketDetailsProps {
-  ticket: UserTicketWithAztec;
+  ticket: UserTicketWithQrCode;
   isShop: boolean;
 }
 
@@ -33,7 +33,7 @@ const TicketDetails = ({ ticket }: TicketDetailsProps) => {
       <Grid xs={12} md={6}>
         <Card variant="outlined" sx={{ display: "grid", placeItems: "center" }}>
           <Stack spacing={2} sx={{ width: "65%" }}>
-            <AztecCode content={ticket.aztec_content} />
+            <AztecCode content={ticket.qr_content} />
           </Stack>
         </Card>
       </Grid>

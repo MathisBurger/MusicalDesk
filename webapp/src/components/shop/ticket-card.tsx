@@ -1,10 +1,10 @@
-import { UserTicketWithAztec } from "@/hooks/queries/shop/useCurrentUserTicketsQuery";
+import { UserTicketWithQrCode } from "@/hooks/queries/shop/useCurrentUserTicketsQuery";
 import { Button, Card, Typography } from "@mui/joy";
-import AztecCode from "../aztec-code";
+import QrCode from "../qr-code";
 import { useRouter } from "next/navigation";
 
 interface TicketCardProps {
-  ticket: UserTicketWithAztec;
+  ticket: UserTicketWithQrCode;
 }
 
 const TicketCard = ({ ticket }: TicketCardProps) => {
@@ -12,7 +12,7 @@ const TicketCard = ({ ticket }: TicketCardProps) => {
 
   return (
     <Card variant="outlined">
-      <AztecCode content={ticket.aztec_content} />
+      <QrCode content={ticket.qr_content} />
       <Typography level="h4">{ticket.event_name}</Typography>
       <Typography>{ticket.valid_until}</Typography>
       <Button

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-export interface UserTicketWithAztec {
+export interface UserTicketWithQrCode {
   id: number;
   event_id: number;
   event_name: string;
@@ -10,10 +10,10 @@ export interface UserTicketWithAztec {
   invalidated_at: string | null;
   owner_id: number;
   bought_at: string;
-  aztec_content: string;
+  qr_content: string;
 }
 
-const queryTickets = async (): Promise<UserTicketWithAztec[]> => {
+const queryTickets = async (): Promise<UserTicketWithQrCode[]> => {
   const result = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/shop/tickets/current`,
     {
@@ -25,7 +25,7 @@ const queryTickets = async (): Promise<UserTicketWithAztec[]> => {
     },
   );
   if (result.ok) {
-    return (await result.json()) as UserTicketWithAztec[];
+    return (await result.json()) as UserTicketWithQrCode[];
   }
   return [];
 };

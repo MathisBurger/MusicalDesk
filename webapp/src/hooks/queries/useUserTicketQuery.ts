@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { UserTicketWithAztec } from "./shop/useCurrentUserTicketsQuery";
+import { UserTicketWithQrCode } from "./shop/useCurrentUserTicketsQuery";
 
-const queryTicket = async (id: number): Promise<UserTicketWithAztec | null> => {
+const queryTicket = async (
+  id: number,
+): Promise<UserTicketWithQrCode | null> => {
   const result = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/tickets/${id}`,
     {
@@ -13,7 +15,7 @@ const queryTicket = async (id: number): Promise<UserTicketWithAztec | null> => {
     },
   );
   if (result.ok) {
-    return (await result.json()) as UserTicketWithAztec | null;
+    return (await result.json()) as UserTicketWithQrCode | null;
   }
   return null;
 };

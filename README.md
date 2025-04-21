@@ -23,6 +23,7 @@ MVP Planning:
 - [ ] Add useful dashboard
 - [ ] Add frontend translations
 - [ ] Make translation language configurable in user settings
+- [ ] Handle cascade in database
 
 
 ## Application architecture decisions

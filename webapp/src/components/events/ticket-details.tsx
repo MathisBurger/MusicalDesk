@@ -7,6 +7,8 @@ import AztecCode from "../qr-code";
 import { useMemo } from "react";
 import KvList, { DisplayedData } from "../kv-list";
 import BackButton from "../back-button";
+import useUserQuery from "@/hooks/queries/user/useUserQuery";
+import LoadingComponent from "../loading";
 
 interface TicketDetailsProps {
   ticket: UserTicketWithQrCode | UserTicket;
@@ -15,6 +17,11 @@ interface TicketDetailsProps {
 }
 
 const TicketDetails = ({ ticket, hasQrCode = true }: TicketDetailsProps) => {
+  const { data: user, isLoading } = useUserQuery(
+    ticket.owner_id ?? 0,
+    !!ticket.owner_id,
+  );
+
   const displayedData = useMemo<DisplayedData[]>(
     () => [
       {
@@ -29,8 +36,12 @@ const TicketDetails = ({ ticket, hasQrCode = true }: TicketDetailsProps) => {
         title: "Bought at",
         value: ticket.bought_at ?? "<never>",
       },
+      {
+        title: "Owner",
+        value: isLoading ? <LoadingComponent /> : user?.username,
+      },
     ],
-    [ticket],
+    [ticket, user, isLoading],
   );
 
   return (

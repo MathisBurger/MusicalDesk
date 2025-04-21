@@ -18,6 +18,7 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(user::create_backend_user)
         .service(user::update_backend_user)
         .service(user::update_backend_user_password)
+        .service(user::get_user)
         .service(image::get_image)
         .service(image::upload_image);
 

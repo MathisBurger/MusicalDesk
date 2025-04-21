@@ -151,7 +151,10 @@ export default function Sidebar() {
               </ListItemButton>
             </ListItem>
           </RoleWrapper>
-          <RoleWrapper roles={[UserRole.EventAdmin]} hideAlert>
+          <RoleWrapper
+            roles={[UserRole.EventAdmin, UserRole.TicketInvalidator]}
+            hideAlert
+          >
             <ListItem>
               <ListItemButton onClick={() => router.push("/backend/events")}>
                 <Event />
@@ -161,7 +164,7 @@ export default function Sidebar() {
               </ListItemButton>
             </ListItem>
           </RoleWrapper>
-          <RoleWrapper roles={[UserRole.Admin]} hideAlert>
+          <RoleWrapper roles={[]} hideAlert>
             <ListItem>
               <ListItemButton onClick={() => router.push("/backend/users")}>
                 <SupervisedUserCircle />

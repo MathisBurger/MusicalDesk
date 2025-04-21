@@ -47,7 +47,7 @@ const EventsPage = () => {
         <Divider />
         <TabLayout tabs={tabs}>
           {isGranted(currentUser, [UserRole.EventAdmin, UserRole.Admin]) && (
-            <TabPanel value={0}>
+            <TabPanel value={tabs.length - 3}>
               <EventList />
             </TabPanel>
           )}
@@ -56,10 +56,10 @@ const EventsPage = () => {
             UserRole.Admin,
           ]) && (
             <>
-              <TabPanel value={1}>
+              <TabPanel value={tabs.length - 2}>
                 <InvalidateView />
               </TabPanel>
-              <TabPanel value={2}>
+              <TabPanel value={tabs.length - 1}>
                 <TicketByQrCodeView />
               </TabPanel>
             </>

@@ -101,13 +101,6 @@ impl User {
             .expect("Cannot load all users")
     }
 
-    pub async fn get_user(id: i32, db: &Pool<Postgres>) -> Option<User> {
-        sqlx::query_as!(User, "SELECT * FROM users WHERE id = $1", id)
-            .fetch_optional(db)
-            .await
-            .expect("Cannot load user")
-    }
-
     pub async fn create_user(req: &CreateUserRequest, db: &Pool<Postgres>) -> Result<User, Error> {
         let hash = hash(req.password.clone(), DEFAULT_COST).unwrap();
         sqlx::query_as!(

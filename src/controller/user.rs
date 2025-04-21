@@ -29,6 +29,25 @@ pub async fn get_current_user(user: User) -> Result<HttpResponse, Error> {
     Ok(HttpResponse::Ok().json(user))
 }
 
+#[get("/users/{id}")]
+pub async fn get_user(
+    user: User,
+    state: Data<AppState>,
+    path: Path<(i32,)>,
+) -> Result<HttpResponse, Error> {
+    let requested_user = User::get_by_id(path.0, &state.database)
+        .await
+        .ok_or(Error::NotFound)?;
+    if user.has_role_or_admin(UserRole::EventAdmin)
+        || user.has_role_or_admin(UserRole::TicketInvalidator)
+    {
+        return Ok(HttpResponse::Ok().json(requested_user));
+    } else if user.id == requested_user.id {
+        return Ok(HttpResponse::Ok().json(requested_user));
+    }
+    return Err(Error::Forbidden);
+}
+
 #[get("/users/backend")]
 pub async fn get_backend_users(user: User, state: Data<AppState>) -> Result<HttpResponse, Error> {
     if !user.has_role(UserRole::Admin) {

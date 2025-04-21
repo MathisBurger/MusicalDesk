@@ -18,8 +18,6 @@ const InvalidateView = () => {
       </Button>
       {data === undefined && (
         <BarcodeScannerComponent
-          width={500}
-          height={500}
           onUpdate={(_, result) => {
             if (result) mutate({ qr_content: result.getText() });
             else reset();

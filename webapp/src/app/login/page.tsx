@@ -70,7 +70,7 @@ const LoginPage = () => {
           position: "relative",
           zIndex: 1,
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: { xs: "center", md: "flex-end" },
           backdropFilter: "blur(12px)",
           backgroundColor: "rgba(255 255 255 / 0.2)",
           [theme.getColorSchemeSelector("dark")]: {
@@ -83,8 +83,7 @@ const LoginPage = () => {
             display: "flex",
             flexDirection: "column",
             minHeight: "100dvh",
-            width: "100%",
-            px: 2,
+            width: { xs: "80%", md: "100%" },
           }}
         >
           <Box

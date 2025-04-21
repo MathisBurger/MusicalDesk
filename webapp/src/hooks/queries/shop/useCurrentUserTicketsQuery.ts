@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-export interface UserTicketWithQrCode {
+export interface UserTicket {
   id: number;
   event_id: number;
   event_name: string;
@@ -10,6 +10,9 @@ export interface UserTicketWithQrCode {
   invalidated_at: string | null;
   owner_id: number;
   bought_at: string;
+}
+
+export interface UserTicketWithQrCode extends UserTicket {
   qr_content: string;
 }
 

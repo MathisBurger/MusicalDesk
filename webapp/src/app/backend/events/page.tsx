@@ -1,6 +1,8 @@
 "use client";
 import EventList from "@/components/events/event-list";
+import InvalidateView from "@/components/events/invalidate-view";
 import CreateEventModal from "@/components/events/modal/create-event";
+import TicketByQrCodeView from "@/components/events/ticket-by-qr-view";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import TabLayout from "@/components/wrapper/tab-layout";
 import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
@@ -21,6 +23,7 @@ const EventsPage = () => {
     }
     if (isGranted(currentUser, [UserRole.TicketInvalidator, UserRole.Admin])) {
       tabKeys.push("Invalidate Tickets");
+      tabKeys.push("Check tickets");
     }
     return tabKeys;
   }, [currentUser]);
@@ -52,9 +55,14 @@ const EventsPage = () => {
             UserRole.TicketInvalidator,
             UserRole.Admin,
           ]) && (
-            <TabPanel value={0}>
-              <EventList />
-            </TabPanel>
+            <>
+              <TabPanel value={1}>
+                <InvalidateView />
+              </TabPanel>
+              <TabPanel value={2}>
+                <TicketByQrCodeView />
+              </TabPanel>
+            </>
           )}
         </TabLayout>
         {createEventModalOpen && (

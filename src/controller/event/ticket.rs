@@ -92,11 +92,17 @@ pub async fn invalidate_ticket(
         let ticket = Ticket::get_ticket_by_id(ticket_id, &state.database)
             .await
             .ok_or(Error::NotFound)?;
-        if ticket.owner_id.is_none() {
+        if ticket.owner_id.is_none() || ticket.bought_at.is_none() {
             return Err(Error::BadRequest);
         }
-        let invalidated_ticket = Ticket::invalidate_ticket(ticket.id, &state.database).await;
-        return Ok(HttpResponse::Ok().json(invalidated_ticket));
+        if ticket.invalidated_at.is_some() {
+            return Err(Error::BadRequest);
+        }
+        Ticket::invalidate_ticket(ticket.id, &state.database).await;
+        let user_ticket = UserTicket::get_user_ticket_by_id(ticket.id, &state.database)
+            .await
+            .unwrap();
+        return Ok(HttpResponse::Ok().json(user_ticket));
     }
     return Err(Error::BadRequest);
 }
@@ -111,7 +117,7 @@ pub async fn view_ticket_by_qr_code(
         return Err(Error::Forbidden);
     }
     if let Some(ticket_id) = get_ticket_id_from_qrcode_content(req.qr_content.clone()) {
-        let ticket = Ticket::get_ticket_by_id(ticket_id, &state.database)
+        let ticket = UserTicket::get_user_ticket_by_id(ticket_id, &state.database)
             .await
             .ok_or(Error::NotFound)?;
         return Ok(HttpResponse::Ok().json(ticket));

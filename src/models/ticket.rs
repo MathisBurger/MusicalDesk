@@ -8,7 +8,7 @@ use stripe::CheckoutSessionId;
 
 use super::generic::Error;
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct Ticket {
     pub id: i32,
     pub event_id: i32,

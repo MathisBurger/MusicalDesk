@@ -1,4 +1,7 @@
-import { UserTicketWithQrCode } from "@/hooks/queries/shop/useCurrentUserTicketsQuery";
+import {
+  UserTicket,
+  UserTicketWithQrCode,
+} from "@/hooks/queries/shop/useCurrentUserTicketsQuery";
 import { AspectRatio, Card, Grid, Stack, Typography } from "@mui/joy";
 import AztecCode from "../qr-code";
 import { useMemo } from "react";
@@ -6,11 +9,12 @@ import KvList, { DisplayedData } from "../kv-list";
 import BackButton from "../back-button";
 
 interface TicketDetailsProps {
-  ticket: UserTicketWithQrCode;
+  ticket: UserTicketWithQrCode | UserTicket;
+  hasQrCode?: boolean;
   isShop: boolean;
 }
 
-const TicketDetails = ({ ticket }: TicketDetailsProps) => {
+const TicketDetails = ({ ticket, hasQrCode = true }: TicketDetailsProps) => {
   const displayedData = useMemo<DisplayedData[]>(
     () => [
       {
@@ -33,16 +37,20 @@ const TicketDetails = ({ ticket }: TicketDetailsProps) => {
     <Stack spacing={2}>
       <BackButton />
       <Grid container direction="row" spacing={4} sx={{ marginTop: "2em" }}>
-        <Grid xs={12} md={6}>
-          <Card
-            variant="outlined"
-            sx={{ display: "grid", placeItems: "center" }}
-          >
-            <Stack spacing={2} sx={{ width: "65%" }}>
-              <AztecCode content={ticket.qr_content} />
-            </Stack>
-          </Card>
-        </Grid>
+        {hasQrCode && (
+          <Grid xs={12} md={6}>
+            <Card
+              variant="outlined"
+              sx={{ display: "grid", placeItems: "center" }}
+            >
+              <Stack spacing={2} sx={{ width: "65%" }}>
+                <AztecCode
+                  content={(ticket as UserTicketWithQrCode).qr_content}
+                />
+              </Stack>
+            </Card>
+          </Grid>
+        )}
         <Grid xs={12} md={6}>
           <Card variant="outlined">
             <Stack spacing={2}>

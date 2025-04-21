@@ -1,80 +1,62 @@
 "use client";
-import EntityList, { EntityListRowAction } from "@/components/entity-list";
+import EventList from "@/components/events/event-list";
 import CreateEventModal from "@/components/events/modal/create-event";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
-import useEventsQuery from "@/hooks/queries/event/useEventsQuery";
-import { UserRole } from "@/hooks/useCurrentUser";
+import TabLayout from "@/components/wrapper/tab-layout";
+import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
+import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
-import { Button, Divider, Grid, Stack, Typography } from "@mui/joy";
-import { GridColDef } from "@mui/x-data-grid";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Button, Divider, Grid, Stack, TabPanel, Typography } from "@mui/joy";
+import { useMemo, useState } from "react";
 
 const EventsPage = () => {
   const [createEventModalOpen, setCreateEventModalOpen] =
     useState<boolean>(false);
+  const currentUser = useCurrentUser();
 
-  const router = useRouter();
-
-  const { data, isLoading } = useEventsQuery();
-
-  const cols: GridColDef[] = [
-    {
-      field: "id",
-      headerName: "ID",
-    },
-    {
-      field: "name",
-      headerName: "Name",
-      width: 200,
-    },
-    {
-      field: "price",
-      headerName: "Price",
-      width: 120,
-      valueFormatter: (v) => `${v}€`,
-    },
-    {
-      field: "tax_percentage",
-      headerName: "Tax",
-      valueFormatter: (v) => `${v}%`,
-    },
-    {
-      field: "event_date",
-      headerName: "Event Date",
-      width: 200,
-    },
-  ];
-
-  const rowActions: EntityListRowAction[] = [
-    {
-      name: "Details",
-      color: "primary",
-      onClick: (row) => router.push(`/backend/events/${row.id}`),
-    },
-  ];
+  const tabs = useMemo<string[]>(() => {
+    const tabKeys = [];
+    if (isGranted(currentUser, [UserRole.EventAdmin, UserRole.Admin])) {
+      tabKeys.push("Events");
+    }
+    if (isGranted(currentUser, [UserRole.TicketInvalidator, UserRole.Admin])) {
+      tabKeys.push("Invalidate Tickets");
+    }
+    return tabKeys;
+  }, [currentUser]);
 
   return (
-    <RoleWrapper roles={[UserRole.EventAdmin]}>
+    <RoleWrapper roles={[UserRole.EventAdmin, UserRole.TicketInvalidator]}>
       <Stack spacing={2}>
         <Grid container spacing={4} alignItems="center">
           <Grid>
             <Typography level="h1">Events</Typography>
           </Grid>
-          <Grid>
-            <Button onClick={() => setCreateEventModalOpen(true)}>
-              <Add />
-              &nbsp; Create
-            </Button>
-          </Grid>
+          {isGranted(currentUser, [UserRole.EventAdmin, UserRole.Admin]) && (
+            <Grid>
+              <Button onClick={() => setCreateEventModalOpen(true)}>
+                <Add />
+                &nbsp; Create
+              </Button>
+            </Grid>
+          )}
         </Grid>
         <Divider />
-        <EntityList
-          rows={data ?? []}
-          columns={cols}
-          loading={isLoading}
-          rowActions={rowActions}
-        />
+        <TabLayout tabs={tabs}>
+          {isGranted(currentUser, [UserRole.EventAdmin, UserRole.Admin]) && (
+            <TabPanel value={0}>
+              <EventList />
+            </TabPanel>
+          )}
+          {isGranted(currentUser, [
+            UserRole.TicketInvalidator,
+            UserRole.Admin,
+          ]) && (
+            <TabPanel value={0}>
+              <EventList />
+            </TabPanel>
+          )}
+        </TabLayout>
         {createEventModalOpen && (
           <CreateEventModal onClose={() => setCreateEventModalOpen(false)} />
         )}

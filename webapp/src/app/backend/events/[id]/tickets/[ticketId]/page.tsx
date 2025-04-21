@@ -1,20 +1,21 @@
 "use client";
-import LoadingComponent from "@/components/loading";
 import TicketDetails from "@/components/events/ticket-details";
+import LoadingComponent from "@/components/loading";
 import useUserTicketQuery from "@/hooks/queries/event/useUserTicketQuery";
 import { Alert } from "@mui/joy";
 import { useParams } from "next/navigation";
 
-const MyTicketDetailsPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = useUserTicketQuery(parseInt(id, 10));
+const TicketDetailsPage = () => {
+  const { ticketId } = useParams<{ ticketId: string }>();
+
+  const { data, isLoading } = useUserTicketQuery(parseInt(ticketId, 10));
 
   if (isLoading) {
     return <LoadingComponent />;
   }
 
   if (data) {
-    return <TicketDetails isShop ticket={data} />;
+    return <TicketDetails isShop={false} ticket={data} />;
   }
 
   return (
@@ -24,4 +25,4 @@ const MyTicketDetailsPage = () => {
   );
 };
 
-export default MyTicketDetailsPage;
+export default TicketDetailsPage;

@@ -62,8 +62,12 @@ pub async fn get_user_ticket(
     state: Data<AppState>,
     path: Path<(i32,)>,
 ) -> Result<HttpResponse, Error> {
-    let ticket_option =
-        UserTicket::get_user_ticket_by_id_and_owner(path.0, user.id, &state.database).await;
+    let ticket_option = if user.has_role_or_admin(UserRole::EventAdmin) {
+        UserTicket::get_user_ticket_by_id(path.0, &state.database).await
+    } else {
+        UserTicket::get_user_ticket_by_id_and_owner(path.0, user.id, &state.database).await
+    };
+
     if let Some(ticket) = ticket_option {
         return Ok(HttpResponse::Ok().json(UserTicketWithQrContent::from_user_ticket(&ticket)));
     }

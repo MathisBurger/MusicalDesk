@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@mui/joy";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 export interface DisplayedData {
   title: string;
@@ -14,14 +14,14 @@ const KvList = ({ displayData }: KvListProps) => {
   return (
     <Grid container spacing={3} sx={{ flexGrow: 1 }}>
       {displayData.map((row) => (
-        <>
-          <Grid xs={4} key={row.title}>
+        <React.Fragment key={row.title}>
+          <Grid xs={4}>
             <Typography fontWeight="bold">{row.title}:</Typography>
           </Grid>
           <Grid xs={8} key={row.title + "_value"}>
             {row.value}
           </Grid>
-        </>
+        </React.Fragment>
       ))}
     </Grid>
   );

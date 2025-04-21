@@ -1,20 +1,17 @@
 use actix_web::cookie::time::Duration;
 
+use crate::{
+    models::{generic::Error, user::User},
+    util::jwt::generate_jwt,
+    AppState,
+};
 use actix_web::delete;
-use actix_web::web::Data;
 use actix_web::{
     cookie::{Cookie, SameSite},
     post, web, HttpResponse,
 };
 use bcrypt::verify;
 use serde::Deserialize;
-
-use crate::service::stripe::create_customer;
-use crate::{
-    models::{generic::Error, user::User},
-    util::jwt::generate_jwt,
-    AppState,
-};
 
 #[derive(Deserialize, Clone)]
 struct LoginRequest {

@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use chrono::{Duration, Utc};
+use chrono::Utc;
 use cron::Schedule;
 use sqlx::{Pool, Postgres};
 use tokio::time::sleep;

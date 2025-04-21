@@ -1,11 +1,8 @@
 use hmac::{Hmac, Mac};
-use image::{DynamicImage, ImageBuffer, Luma};
+use image::{DynamicImage, Luma};
 use jwt::{SignWithKey, VerifyWithKey};
 use sha2::Sha256;
-use std::{
-    collections::BTreeMap,
-    io::{Bytes, Cursor, Read},
-};
+use std::{collections::BTreeMap, io::Cursor};
 
 use crate::models::ticket::UserTicket;
 
@@ -34,6 +31,7 @@ pub fn get_ticket_id_from_qrcode_content(content: String) -> Option<i32> {
     return None;
 }
 
+#[allow(dead_code)] // Will be used later if we have apple and google wallet support
 pub fn generate_qr_code_image(content: String) -> Vec<u8> {
     let code = qrcode::QrCode::new(content.as_bytes()).unwrap();
     let image = code.render::<Luma<u8>>().build();

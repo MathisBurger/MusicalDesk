@@ -3,11 +3,7 @@ use crate::{
     models::{generic::Error, ticket::UserTicket, user::User},
     AppState,
 };
-use actix_web::{
-    get,
-    web::{Data, Path},
-    HttpResponse,
-};
+use actix_web::{get, web::Data, HttpResponse};
 
 #[get("/shop/tickets/current")]
 pub async fn get_current_user_tickets(

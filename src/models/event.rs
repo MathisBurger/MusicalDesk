@@ -19,6 +19,7 @@ pub struct Event {
     pub active_from: Option<DateTime<Utc>>,
     pub active_until: Option<DateTime<Utc>>,
     #[serde(skip_serializing)]
+    // Check where this is used
     pub product_id: Option<String>,
     #[serde(skip_serializing)]
     pub price_id: Option<String>,

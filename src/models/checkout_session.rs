@@ -7,6 +7,7 @@ use super::generic::Error;
 #[derive(Clone)]
 pub struct DbCheckoutSession {
     pub session_id: String,
+    // TODO: Check where these fields are needed.
     pub active_until: DateTime<Utc>,
     pub session_secret: String,
 }

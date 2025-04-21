@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use sqlx::Pool;
 use sqlx::Postgres;
 
-use super::generic::Error;
+use crate::models::generic::Error;
 
 #[derive(Clone)]
 pub struct DbCheckoutSession {

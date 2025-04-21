@@ -8,8 +8,8 @@ use actix_web::{
 use crate::{
     models::{
         generic::{Error, UserRole},
-        member::Member,
-        membership_paid::MembershipPaid,
+        membership::member::Member,
+        membership::membership_paid::MembershipPaid,
         user::User,
     },
     AppState,

@@ -7,8 +7,8 @@ use serde::Deserialize;
 
 use crate::{
     models::{
+        event::ticket::{ShoppingCartItem, Ticket},
         generic::Error,
-        ticket::{ShoppingCartItem, Ticket},
         user::User,
     },
     AppState,

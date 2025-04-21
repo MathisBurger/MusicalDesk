@@ -5,7 +5,7 @@ use cron::Schedule;
 use sqlx::{Pool, Postgres};
 use tokio::time::sleep;
 
-use crate::models::checkout_session::DbCheckoutSession;
+use crate::models::event::checkout_session::DbCheckoutSession;
 
 pub async fn session_cleanup_cron_scheduler(db: &Pool<Postgres>) {
     let expression = "0 * * * * *";

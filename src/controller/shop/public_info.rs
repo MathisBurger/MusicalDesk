@@ -7,7 +7,7 @@ use futures::future::join_all;
 use serde::Serialize;
 
 use crate::{
-    models::{event::Event, generic::Error, ticket::Ticket},
+    models::{event::event::Event, event::ticket::Ticket, generic::Error},
     AppState,
 };
 

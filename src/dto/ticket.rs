@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::Serialize;
 
-use crate::{models::ticket::UserTicket, util::qrcode::generate_qrcode_jwt};
+use crate::{models::event::ticket::UserTicket, util::qrcode::generate_qrcode_jwt};
 
 #[derive(Serialize)]
 pub struct UserTicketWithQrContent {

@@ -1,7 +1,7 @@
 use super::EventRequest;
 use crate::{
     models::{
-        event::Event,
+        event::event::Event,
         generic::{Error, UserRole},
         user::User,
     },

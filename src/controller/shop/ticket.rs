@@ -1,6 +1,6 @@
 use crate::{
     dto::ticket::UserTicketWithQrContent,
-    models::{generic::Error, ticket::UserTicket, user::User},
+    models::{event::ticket::UserTicket, generic::Error, user::User},
     AppState,
 };
 use actix_web::{get, web::Data, HttpResponse};

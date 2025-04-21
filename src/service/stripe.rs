@@ -8,7 +8,9 @@ use stripe::{
     CustomerId, IdOrCreate, Price, PriceId, Product, ProductId, UpdatePrice, UpdateProduct,
 };
 
-use crate::models::{event::Event, generic::Error, ticket::ShoppingCartItem, user::User};
+use crate::models::{
+    event::event::Event, event::ticket::ShoppingCartItem, generic::Error, user::User,
+};
 
 pub async fn generate_checkout(
     user: &User,

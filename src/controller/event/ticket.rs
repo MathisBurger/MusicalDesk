@@ -9,8 +9,8 @@ use serde::Deserialize;
 use crate::{
     dto::ticket::UserTicketWithQrContent,
     models::{
+        event::ticket::{Ticket, UserTicket},
         generic::{Error, UserRole},
-        ticket::{Ticket, UserTicket},
         user::User,
     },
     util::qrcode::get_ticket_id_from_qrcode_content,

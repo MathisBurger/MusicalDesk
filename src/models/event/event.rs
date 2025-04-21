@@ -1,12 +1,11 @@
 use crate::controller::event::EventRequest;
+use crate::models::generic::Error;
 use chrono::DateTime;
 use chrono::Utc;
 use serde::Serialize;
 use sqlx::Pool;
 use sqlx::Postgres;
 use stripe::Product;
-
-use super::generic::Error;
 
 #[derive(Serialize, Clone)]
 pub struct Event {

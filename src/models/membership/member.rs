@@ -2,9 +2,7 @@ use chrono::{serde::ts_seconds_option, DateTime, Utc};
 use serde::Serialize;
 use sqlx::{Pool, Postgres};
 
-use crate::controller::membership::MemberRequest;
-
-use super::generic::Error;
+use crate::{controller::membership::MemberRequest, models::generic::Error};
 
 #[derive(Serialize)]
 pub struct Member {

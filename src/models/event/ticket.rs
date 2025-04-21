@@ -6,7 +6,7 @@ use sqlx::Pool;
 use sqlx::Postgres;
 use stripe::CheckoutSessionId;
 
-use super::generic::Error;
+use crate::models::generic::Error;
 
 #[derive(Serialize, Debug)]
 pub struct Ticket {

@@ -4,7 +4,7 @@ use sqlx::{types::BigDecimal, Pool, Postgres};
 
 use crate::controller::membership::CreateMembershipPaymentRequest;
 
-use super::{generic::Error, member::Member};
+use super::{super::generic::Error, member::Member};
 
 #[derive(Serialize)]
 pub struct MembershipPaid {

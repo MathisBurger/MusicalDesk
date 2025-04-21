@@ -4,7 +4,7 @@ use jwt::{SignWithKey, VerifyWithKey};
 use sha2::Sha256;
 use std::{collections::BTreeMap, io::Cursor};
 
-use crate::models::ticket::UserTicket;
+use crate::models::event::ticket::UserTicket;
 
 pub fn generate_qrcode_jwt(ticket: &UserTicket) -> String {
     let secret = std::env::var("QR_SECRET").unwrap_or("secret".to_string());

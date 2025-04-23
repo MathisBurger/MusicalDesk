@@ -1,5 +1,8 @@
 use actix_web::{http::StatusCode, HttpResponse, ResponseError};
 use serde::Serialize;
+use sqlx::{postgres::PgRow, query, query_as, FromRow, Postgres};
+use sqlx::{Encode, PgPool, Type};
+use sqlx::{QueryBuilder, Row};
 use std::error::Error as ErrorTrait;
 use thiserror::Error;
 
@@ -12,6 +15,7 @@ pub enum UserRole {
     Default,
     ShopCustomer,
     TicketInvalidator,
+    Accountant,
 }
 
 pub const BACKEND_ROLES: [UserRole; 3] =
@@ -26,6 +30,7 @@ impl ToString for UserRole {
             Self::EventAdmin => "event_admin".to_string(),
             Self::ShopCustomer => "shop_customer".to_string(),
             Self::TicketInvalidator => "ticket_invalidator".to_string(),
+            Self::Accountant => "accountant".to_string(),
         }
     }
 }
@@ -38,6 +43,7 @@ impl TryFrom<&String> for UserRole {
             "event_admin" => Ok(Self::EventAdmin),
             "shop_customer" => Ok(Self::ShopCustomer),
             "ticket_invalidator" => Ok(Self::TicketInvalidator),
+            "accountant" => Ok(Self::Accountant),
             _ => Err(Error::BadRequest),
         }
     }
@@ -89,5 +95,71 @@ impl ResponseError for Error {
 impl From<Box<dyn ErrorTrait>> for Error {
     fn from(v: Box<dyn ErrorTrait>) -> Self {
         Self::InternalServerError { source: v }
+    }
+}
+
+pub struct Paginated<T> {
+    pub results: Vec<T>,
+    pub total: i64,
+}
+
+impl<T> Paginated<T>
+where
+    T: for<'r> FromRow<'r, PgRow> + Send + Unpin,
+{
+    pub async fn create_paginated_query<U>(
+        select: &str,
+        table: &str,
+        where_clause: Option<&str>,
+        page: i32,
+        page_size: i32,
+        params: Vec<U>,
+        db: &PgPool,
+    ) -> Self
+    where
+        U: Encode<'static, sqlx::Postgres> + Type<sqlx::Postgres> + Clone + Send + Sync + 'static,
+    {
+        // Build the base query with optional where clause
+        let base_query = match where_clause {
+            Some(clause) => format!("FROM {} WHERE {}", table, clause),
+            None => format!("FROM {}", table),
+        };
+
+        // Create the select SQL query with LIMIT and OFFSET
+        let select_sql = format!(
+            "SELECT {} {} LIMIT {} OFFSET {}",
+            select,
+            base_query,
+            page_size,
+            page_size * page
+        );
+
+        // Create the count query to get the total number of rows
+        let count_sql = format!("SELECT COUNT(*) AS count {}", base_query);
+
+        // Create query objects
+        let mut select_query = query_as::<sqlx::Postgres, T>(&select_sql);
+        let mut count_query = query(&count_sql);
+
+        // Bind parameters to the queries
+        for param in &params {
+            select_query = select_query.bind(param.clone());
+            count_query = count_query.bind(param.clone());
+        }
+
+        // Execute the select query
+        let results = select_query
+            .fetch_all(db)
+            .await
+            .expect("Cannot execute select");
+
+        // Execute the count query
+        let count_row: PgRow = count_query.fetch_one(db).await.expect("Cannot fetch count");
+
+        // Extract the total count from the count query
+        let total: i64 = count_row.get("count");
+
+        // Return the paginated result
+        Paginated { results, total }
     }
 }

@@ -1,6 +1,6 @@
 use actix_web::{http::StatusCode, HttpResponse, ResponseError};
 use serde::Serialize;
-use sqlx::{postgres::PgRow, query, query_as, FromRow, Postgres};
+use sqlx::{postgres::PgRow, FromRow, Postgres};
 use sqlx::{Encode, PgPool, Type};
 use sqlx::{QueryBuilder, Row};
 use std::error::Error as ErrorTrait;
@@ -98,6 +98,7 @@ impl From<Box<dyn ErrorTrait>> for Error {
     }
 }
 
+#[derive(Serialize)]
 pub struct Paginated<T> {
     pub results: Vec<T>,
     pub total: i64,
@@ -119,47 +120,43 @@ where
     where
         U: Encode<'static, sqlx::Postgres> + Type<sqlx::Postgres> + Clone + Send + Sync + 'static,
     {
-        // Build the base query with optional where clause
-        let base_query = match where_clause {
-            Some(clause) => format!("FROM {} WHERE {}", table, clause),
-            None => format!("FROM {}", table),
-        };
+        let mut query_builder =
+            QueryBuilder::<Postgres>::new(format!("SELECT {} FROM {}", select, table));
+        if let Some(clause) = where_clause {
+            query_builder.push(" WHERE ").push(clause);
+        }
+        query_builder
+            .push(" LIMIT ")
+            .push_bind(page_size)
+            .push(" OFFSET ")
+            .push_bind(page_size * page);
 
-        // Create the select SQL query with LIMIT and OFFSET
-        let select_sql = format!(
-            "SELECT {} {} LIMIT {} OFFSET {}",
-            select,
-            base_query,
-            page_size,
-            page_size * page
-        );
-
-        // Create the count query to get the total number of rows
-        let count_sql = format!("SELECT COUNT(*) AS count {}", base_query);
-
-        // Create query objects
-        let mut select_query = query_as::<sqlx::Postgres, T>(&select_sql);
-        let mut count_query = query(&count_sql);
-
-        // Bind parameters to the queries
-        for param in &params {
-            select_query = select_query.bind(param.clone());
-            count_query = count_query.bind(param.clone());
+        let mut count_builder =
+            QueryBuilder::<Postgres>::new(format!("SELECT COUNT(*) AS count FROM {}", table));
+        if let Some(clause) = where_clause {
+            count_builder.push(" WHERE ").push(clause);
         }
 
-        // Execute the select query
-        let results = select_query
+        // Add parameters to both queries
+        for param in params.iter() {
+            query_builder.push_bind(param.clone());
+            count_builder.push_bind(param.clone());
+        }
+
+        let results = query_builder
+            .build_query_as::<T>()
             .fetch_all(db)
             .await
             .expect("Cannot execute select");
 
-        // Execute the count query
-        let count_row: PgRow = count_query.fetch_one(db).await.expect("Cannot fetch count");
+        let count_row: PgRow = count_builder
+            .build()
+            .fetch_one(db)
+            .await
+            .expect("Cannot fetch count");
 
-        // Extract the total count from the count query
         let total: i64 = count_row.get("count");
 
-        // Return the paginated result
         Paginated { results, total }
     }
 }

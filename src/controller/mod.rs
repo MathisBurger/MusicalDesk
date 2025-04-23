@@ -1,12 +1,20 @@
 use actix_web::web::ServiceConfig;
+use serde::Deserialize;
 
 pub mod auth;
 mod default;
 pub mod event;
+pub mod expense;
 mod image;
 pub mod membership;
 pub mod shop;
 pub mod user;
+
+#[derive(Deserialize)]
+pub(crate) struct PaginationQuery {
+    pub page: i32,
+    pub page_size: i32,
+}
 
 pub fn init_controllers(cfg: &mut ServiceConfig) {
     cfg.service(default::default)
@@ -25,4 +33,5 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
     membership::init_controllers(cfg);
     shop::init_controllers(cfg);
     event::init_controllers(cfg);
+    expense::init_controllers(cfg);
 }

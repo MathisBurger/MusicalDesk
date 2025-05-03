@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Member } from "../queries/useMembersQuery";
+import { Member } from "../../queries/membership/useMembersQuery";
 
 export interface CreateMemberRequest {
   first_name: string;

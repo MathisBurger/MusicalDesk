@@ -7,11 +7,13 @@ use serde::Deserialize;
 
 use crate::{
     controller::PaginationQuery,
+    dto::transaction::TransactionDto,
     models::{
         expense::{account::Account, transaction::Transaction},
-        generic::{Error, UserRole},
+        generic::{Error, Paginated, UserRole},
         user::User,
     },
+    serialize::serialize_many,
     AppState,
 };
 
@@ -56,7 +58,12 @@ pub async fn get_account_transactions(
         &state.database,
     )
     .await;
-    Ok(HttpResponse::Ok().json(transactions))
+
+    let result: Paginated<TransactionDto> = Paginated {
+        results: serialize_many(transactions.results, &state.database).await,
+        total: transactions.total,
+    };
+    Ok(HttpResponse::Ok().json(result))
 }
 
 #[derive(Deserialize)]

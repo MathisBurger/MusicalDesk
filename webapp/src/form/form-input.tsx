@@ -1,5 +1,6 @@
 import { InfoOutlined } from "@mui/icons-material";
 import {
+  Checkbox,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -35,6 +36,8 @@ const mapType = (type?: string): string => {
     case "datetime-iso":
     case "datetime-utc":
       return "datetime-local";
+    case "boolean":
+      return "checkbox";
   }
   return type ?? "text";
 };
@@ -79,14 +82,25 @@ const FormInput = ({
       disabled={disabled}
     >
       {label && <FormLabel>{label}</FormLabel>}
-      <Input
-        type={mapType(type)}
-        name={name}
-        defaultValue={defaultValueOverride ?? ""}
-        endDecorator={endDecorator}
-        disabled={disabled}
-        sx={sx}
-      />
+      {mapType(type) === "checkbox" ? (
+        <Checkbox
+          defaultChecked={
+            (defaultValueOverride as boolean | null | undefined) ?? false
+          }
+          name={name}
+          disabled={disabled}
+          sx={sx}
+        />
+      ) : (
+        <Input
+          type={mapType(type)}
+          name={name}
+          defaultValue={(defaultValueOverride as string) ?? ""}
+          endDecorator={endDecorator}
+          disabled={disabled}
+          sx={sx}
+        />
+      )}
       {error && (
         <FormHelperText>
           <InfoOutlined />

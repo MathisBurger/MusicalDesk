@@ -16,10 +16,11 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BusinessIcon from "@mui/icons-material/Business";
 import ColorSchemeToggle from "./color-scheme-toggle";
 import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
-import { Event, SupervisedUserCircle } from "@mui/icons-material";
+import { Event, Money, SupervisedUserCircle } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import RoleWrapper from "./wrapper/role-wrapper";
 import useLogout from "@/hooks/useLogout";
+import NestedListToggler from "./nested-list-toggler";
 
 function openSidebar() {
   if (typeof window !== "undefined") {
@@ -172,6 +173,21 @@ export default function Sidebar() {
                   <Typography level="title-sm">Users</Typography>
                 </ListItemContent>
               </ListItemButton>
+            </ListItem>
+          </RoleWrapper>
+          <RoleWrapper roles={[UserRole.Accountant]} hideAlert>
+            <ListItem nested>
+              <NestedListToggler title="Expenses" icon={<Money />}>
+                <ListItem>
+                  <ListItemButton
+                    onClick={() => router.push("/backend/expenses/accounts")}
+                  >
+                    <ListItemContent>
+                      <Typography level="title-sm">Accounts</Typography>
+                    </ListItemContent>
+                  </ListItemButton>
+                </ListItem>
+              </NestedListToggler>
             </ListItem>
           </RoleWrapper>
         </List>

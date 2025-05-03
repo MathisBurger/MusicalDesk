@@ -1,3 +1,4 @@
+"use client";
 import { createContext, useContext } from "react";
 
 export enum UserRole {
@@ -6,6 +7,7 @@ export enum UserRole {
   EventAdmin = "event_admin",
   ShopCustomer = "shop_customer",
   TicketInvalidator = "ticket_invalidator",
+  Accountant = "accountant",
 }
 
 export interface User {

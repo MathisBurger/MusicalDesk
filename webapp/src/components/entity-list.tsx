@@ -32,6 +32,12 @@ interface EntityListProps {
   rowActions?: EntityListRowAction[];
   rows: DataGridProps["rows"];
   loading: boolean;
+  pageSize?: number;
+  page?: number;
+  setPageSize?: (pageSize: number) => void;
+  setPage?: (page: number) => void;
+  paginationMode?: DataGridProps["paginationMode"];
+  rowCount?: number;
 }
 
 const setFlexPropertyIfAllowed = (def: GridColDef): GridColDef => {
@@ -76,6 +82,12 @@ const EntityList = ({
   rows,
   loading,
   rowActions,
+  page,
+  pageSize,
+  setPage,
+  setPageSize,
+  paginationMode,
+  rowCount,
 }: EntityListProps) => {
   const { mode } = useColorScheme();
 
@@ -144,6 +156,17 @@ const EntityList = ({
         columns={colDefs}
         loading={loading}
         slots={{ toolbar: GridToolbar }}
+        paginationModel={page && pageSize ? { pageSize, page } : undefined}
+        paginationMode={paginationMode}
+        rowCount={rowCount}
+        onPaginationModelChange={
+          setPage && setPageSize
+            ? (model) => {
+                setPage(model.page);
+                setPageSize(model.pageSize);
+              }
+            : undefined
+        }
         slotProps={{
           loadingOverlay: {
             variant: "linear-progress",

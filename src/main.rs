@@ -15,6 +15,7 @@ use sqlx::{Pool, Postgres};
 mod controller;
 mod dto;
 mod models;
+mod serialize;
 mod service;
 mod session;
 mod util;

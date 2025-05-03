@@ -76,7 +76,7 @@ const useForm = <T extends object>({
     if (explicitTypes && explicitTypes[key]) {
       return explicitTypes[key];
     }
-    if (defaultValues && defaultValues[key]) {
+    if (defaultValues && key in defaultValues) {
       return typeof defaultValues[key];
     }
     return "text";

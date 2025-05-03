@@ -41,6 +41,9 @@ export const transformValue = (
     if (typehint === "array") {
       return JSON.parse(value);
     }
+    if (typehint === "boolean") {
+      return `${value}` === "on";
+    }
   }
 
   if ((defaultValue === null || defaultValue === undefined) && value === "") {
@@ -51,6 +54,9 @@ export const transformValue = (
   }
   if (typeof defaultValue === "number") {
     return isNaN(Number(value)) ? null : Number(value);
+  }
+  if (typeof defaultValue === "boolean") {
+    return `${value}` === "on";
   }
   return value;
 };

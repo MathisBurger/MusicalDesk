@@ -6,7 +6,14 @@ export interface FormDefinition extends HTMLFormElement {
 }
 
 /** All possible value types a form entry can have */
-export type FormValue = string | number | null | undefined | Date | unknown[];
+export type FormValue =
+  | string
+  | number
+  | null
+  | undefined
+  | Date
+  | unknown[]
+  | boolean;
 
 /** The type a form data object must implement to be used and valid */
 export type FormType<T> = Record<keyof T, FormValue>;
@@ -29,6 +36,7 @@ type Types =
   | "datetime-iso"
   | "datetime-utc"
   | "password"
+  | "boolean"
   | "array";
 
 /** Definition of possible typehints for input fields. */

@@ -120,36 +120,38 @@ where
     where
         U: Encode<'static, sqlx::Postgres> + Type<sqlx::Postgres> + Clone + Send + Sync + 'static,
     {
-        let mut query_builder =
-            QueryBuilder::<Postgres>::new(format!("SELECT {} FROM {}", select, table));
+        let mut query = format!("SELECT {} FROM {}", select, table);
         if let Some(clause) = where_clause {
-            query_builder.push(" WHERE ").push(clause);
+            query = format!("{} WHERE {}", query, clause);
         }
+        /*query = format!("{} LIMIT ${} OFFSET ${}", query, params.len()+1, params.len()+2);
         query_builder
+            .push(" LIMIT ")
+            .push_bind(page_size)
+            .push(" OFFSET ")
+            .push_bind(page_size * page);*/
+
+        let mut count_query = format!("SELECT COUNT(*) AS count FROM {}", table);
+        if let Some(clause) = where_clause {
+            count_query = format!("{} WHERE {}", count_query, clause);
+        }
+
+        let mut select_qb = Self::convert_to_query_builder(query, params.clone());
+        select_qb
             .push(" LIMIT ")
             .push_bind(page_size)
             .push(" OFFSET ")
             .push_bind(page_size * page);
 
-        let mut count_builder =
-            QueryBuilder::<Postgres>::new(format!("SELECT COUNT(*) AS count FROM {}", table));
-        if let Some(clause) = where_clause {
-            count_builder.push(" WHERE ").push(clause);
-        }
+        let mut count_qb = Self::convert_to_query_builder(count_query, params);
 
-        // Add parameters to both queries
-        for param in params.iter() {
-            query_builder.push_bind(param.clone());
-            count_builder.push_bind(param.clone());
-        }
-
-        let results = query_builder
+        let results = select_qb
             .build_query_as::<T>()
             .fetch_all(db)
             .await
             .expect("Cannot execute select");
 
-        let count_row: PgRow = count_builder
+        let count_row: PgRow = count_qb
             .build()
             .fetch_one(db)
             .await
@@ -158,5 +160,23 @@ where
         let total: i64 = count_row.get("count");
 
         Paginated { results, total }
+    }
+
+    fn convert_to_query_builder<U>(query: String, params: Vec<U>) -> QueryBuilder<'static, Postgres>
+    where
+        U: Encode<'static, sqlx::Postgres> + Type<sqlx::Postgres> + Clone + Send + Sync + 'static,
+    {
+        let split: Vec<&str> = query.split("$").collect();
+        let mut qb = QueryBuilder::new(split.get(0).unwrap().clone());
+        for index in 1..split.len() {
+            let statement = split.get(index).unwrap();
+            let statement_split = statement.split_once(" ").unwrap_or((statement, ""));
+            let param_index: usize = statement_split.0.parse().unwrap();
+            let param = params.get(param_index - 1).unwrap().clone();
+            qb.push_bind(param);
+            qb.push(format!(" {}", statement_split.1));
+        }
+
+        qb
     }
 }

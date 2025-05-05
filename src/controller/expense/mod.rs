@@ -11,6 +11,5 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(account::get_account_transactions)
         .service(category::get_categories)
         .service(category::create_category)
-        .service(category::update_category)
-        .service(category::delete_category);
+        .service(category::update_category);
 }

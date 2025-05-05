@@ -1,9 +1,13 @@
 "use client";
-import { Transaction } from "@/hooks/queries/expense/useAccountTransactionsQuery";
+import {
+  MinimalCategory,
+  Transaction,
+} from "@/hooks/queries/expense/useAccountTransactionsQuery";
 import { Chip } from "@mui/material";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 import EntityList from "../entity-list";
+import CategoryChip from "./category-chip";
 
 interface TransactionsListProps {
   transactions: Transaction[];
@@ -65,15 +69,7 @@ const TransactionsList = ({
       field: "category",
       headerName: "Category",
       renderCell: ({ value }: GridRenderCellParams) =>
-        value ? (
-          <Chip
-            onClick={() =>
-              router.push(`/backend/expenses/categories/${value.id}`)
-            }
-            sx={{ background: `#${value.hex_color}`, color: "white" }}
-            label={value.name}
-          />
-        ) : null,
+        value ? <CategoryChip value={value as MinimalCategory} /> : null,
     },
     {
       field: "is_money_transactions",

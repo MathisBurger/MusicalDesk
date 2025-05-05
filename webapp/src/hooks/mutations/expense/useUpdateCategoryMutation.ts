@@ -1,4 +1,4 @@
-import { Account } from "@/hooks/queries/expense/useAccountsQuery";
+import { Category } from "@/hooks/queries/expense/useCategoriesQuery";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface UpdateCategoryRequest {
@@ -9,7 +9,7 @@ export interface UpdateCategoryRequest {
 const updateCategory = async (
   id: number,
   data: UpdateCategoryRequest,
-): Promise<Account | null> => {
+): Promise<Category | null> => {
   const result = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/expense/categories/${id}`,
     {
@@ -26,7 +26,7 @@ const updateCategory = async (
   if (!result.ok) {
     return null;
   }
-  return (await result.json()) as Account;
+  return (await result.json()) as Category;
 };
 
 const useUpdateCategoryMutation = (id: number) => {

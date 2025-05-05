@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS expense_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    hex_color VARCHAR(6) NOT NULL,
+    hex_color VARCHAR(7) NOT NULL,
     is_income BOOLEAN NOT NULL
 );
 

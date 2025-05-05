@@ -1,17 +1,17 @@
 import { Account } from "@/hooks/queries/expense/useAccountsQuery";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export interface UpdateCategoryRequest {
+export interface CreateCategoryRequest {
   name: string;
   hex_color: string;
+  is_income: boolean;
 }
 
-const updateCategory = async (
-  id: number,
-  data: UpdateCategoryRequest,
+const createCategory = async (
+  data: CreateCategoryRequest,
 ): Promise<Account | null> => {
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/expense/categories/${id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/expense/categories`,
     {
       method: "POST",
       mode: "cors",
@@ -29,15 +29,15 @@ const updateCategory = async (
   return (await result.json()) as Account;
 };
 
-const useUpdateCategoryMutation = (id: number) => {
+const useCreateCategoryMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateCategoryRequest) => updateCategory(id, data),
+    mutationFn: createCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["expenseCategories"] });
     },
   });
 };
 
-export default useUpdateCategoryMutation;
+export default useCreateCategoryMutation;

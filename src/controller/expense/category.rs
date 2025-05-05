@@ -63,16 +63,3 @@ pub async fn update_category(
         .ok_or(Error::NotFound)?;
     Ok(HttpResponse::Ok().json(category))
 }
-
-#[post("/expense/categories/{id}/delete")]
-pub async fn delete_category(
-    user: User,
-    state: Data<AppState>,
-    path: Path<(i32,)>,
-) -> Result<HttpResponse, Error> {
-    if !user.has_role_or_admin(UserRole::Accountant) {
-        return Err(Error::Forbidden);
-    }
-    Category::delete(path.0, &state.database).await?;
-    Ok(HttpResponse::Ok().finish())
-}

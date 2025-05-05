@@ -37,7 +37,8 @@ type Types =
   | "datetime-utc"
   | "password"
   | "boolean"
-  | "array";
+  | "array"
+  | "color";
 
 /** Definition of possible typehints for input fields. */
 export type ExplicitTypeHints<T> = Partial<Record<keyof T, Types>>;

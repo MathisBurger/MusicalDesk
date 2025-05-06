@@ -1,14 +1,17 @@
 use crate::{
+    controller::PaginationQuery,
+    dto::transaction::TransactionDto,
     models::{
-        expense::category::Category,
-        generic::{Error, UserRole},
+        expense::{category::Category, transaction::Transaction},
+        generic::{Error, Paginated, UserRole},
         user::User,
     },
+    serialize::serialize_many,
     AppState,
 };
 use actix_web::{
     get, post,
-    web::{Data, Json, Path},
+    web::{Data, Json, Path, Query},
     HttpResponse,
 };
 use serde::Deserialize;
@@ -20,6 +23,46 @@ pub async fn get_categories(user: User, state: Data<AppState>) -> Result<HttpRes
     }
     let categories = Category::find_all(&state.database).await;
     Ok(HttpResponse::Ok().json(categories))
+}
+
+#[get("/expense/categories/{id}")]
+pub async fn get_category(
+    user: User,
+    state: Data<AppState>,
+    path: Path<(i32,)>,
+) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::Accountant) {
+        return Err(Error::Forbidden);
+    }
+    let category = Category::find_by_id(path.0, &state.database)
+        .await
+        .ok_or(Error::NotFound)?;
+    Ok(HttpResponse::Ok().json(category))
+}
+
+#[get("/expense/categories/{id}/transactions")]
+pub async fn get_category_transactions(
+    user: User,
+    state: Data<AppState>,
+    path: Path<(i32,)>,
+    query: Query<PaginationQuery>,
+) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::Accountant) {
+        return Err(Error::Forbidden);
+    }
+    let transactions = Transaction::get_category_transactions_paginated(
+        path.0,
+        query.page,
+        query.page_size,
+        &state.database,
+    )
+    .await;
+
+    let result: Paginated<TransactionDto> = Paginated {
+        results: serialize_many(transactions.results, &state.database).await,
+        total: transactions.total,
+    };
+    Ok(HttpResponse::Ok().json(result))
 }
 
 #[derive(Deserialize)]

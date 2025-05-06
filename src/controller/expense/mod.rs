@@ -10,6 +10,8 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(account::update_account)
         .service(account::get_account_transactions)
         .service(category::get_categories)
+        .service(category::get_category)
+        .service(category::get_category_transactions)
         .service(category::create_category)
         .service(category::update_category);
 }

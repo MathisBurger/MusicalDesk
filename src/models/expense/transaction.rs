@@ -34,4 +34,22 @@ impl Transaction {
         )
         .await
     }
+
+    pub async fn get_category_transactions_paginated(
+        category_id: i32,
+        page: i32,
+        page_size: i32,
+        db: &Pool<Postgres>,
+    ) -> Paginated<Transaction> {
+        Paginated::create_paginated_query(
+            "*",
+            "expense_transactions",
+            Some("category_id = $1"),
+            page,
+            page_size,
+            vec![category_id],
+            db,
+        )
+        .await
+    }
 }

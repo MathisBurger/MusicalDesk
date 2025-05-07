@@ -4,6 +4,7 @@ use actix_web::{
     HttpRequest, HttpResponse,
 };
 use chrono::{DateTime, Duration, Utc};
+use log::error;
 use serde::Serialize;
 use stripe::CheckoutSessionStatus;
 
@@ -38,6 +39,7 @@ pub async fn create_shopping_cart_payment_session(
     let shopping_cart =
         ShoppingCartItem::get_personal_shopping_cart(user.id, &state.database).await;
     if shopping_cart.len() == 0 {
+        error!(target: "shop", "Checkout BadRequest: Empty shopping cart");
         return Err(Error::BadRequest);
     }
     let expires_at: DateTime<Utc> = Utc::now() + Duration::minutes(30);
@@ -68,7 +70,14 @@ pub async fn create_shopping_cart_payment_session(
         session_secret,
         &state.database,
     )
-    .await?;
+    .await
+    .map_err(|x| {
+        error!(
+            target: "shop",
+            "Checkout BadRequest: Cannot create checkout session",
+        );
+        x
+    })?;
 
     User::update_stripe_checkout_session_reference(user.id, &checkout_session.id, &state.database)
         .await;

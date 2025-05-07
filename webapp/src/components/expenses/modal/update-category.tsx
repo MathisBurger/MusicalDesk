@@ -2,7 +2,11 @@ import useForm from "@/form/useForm";
 import useUpdateAccountMutation, {
   UpdateAccountRequest,
 } from "@/hooks/mutations/expense/useUpdateAccountMutation";
+import useUpdateCategoryMutation, {
+  UpdateCategoryRequest,
+} from "@/hooks/mutations/expense/useUpdateCategoryMutation";
 import { Account } from "@/hooks/queries/expense/useAccountsQuery";
+import { Category } from "@/hooks/queries/expense/useCategoriesQuery";
 import useAlert from "@/hooks/useAlert";
 import {
   Button,
@@ -15,40 +19,44 @@ import {
   Stack,
 } from "@mui/joy";
 
-interface UpdateAccountModalProps {
+interface UpdateCategoryModalProps {
   onClose: () => void;
-  account: Account;
+  category: Category;
 }
 
-const UpdateAccountModal = ({ onClose, account }: UpdateAccountModalProps) => {
-  const { mutateAsync: updateAccount, isPending } = useUpdateAccountMutation(
-    account.id,
+const UpdateCategoryModal = ({
+  onClose,
+  category,
+}: UpdateCategoryModalProps) => {
+  const { mutateAsync: updateCategory, isPending } = useUpdateCategoryMutation(
+    category.id,
   );
   const { displayAlert, showAlert } = useAlert();
 
-  const form = useForm<UpdateAccountRequest>({
+  const form = useForm<UpdateCategoryRequest>({
     defaultValues: {
-      name: account.name,
-      owner_name: account.owner_name,
-      iban: account.iban,
+      name: category.name,
+      hex_color: category.hex_color,
     },
     labels: {
       name: "Name",
-      owner_name: "Name des Besitzers",
-      iban: "IBAN",
+      hex_color: "Farbe",
     },
-    required: ["name", "owner_name", "iban"],
+    required: ["name", "hex_color"],
+    explicitTypes: {
+      hex_color: "color",
+    },
   });
 
-  const submit = async (req: UpdateAccountRequest) => {
-    const result = await updateAccount(req);
+  const submit = async (req: UpdateCategoryRequest) => {
+    const result = await updateCategory(req);
     if (result) {
       onClose();
       return;
     }
     showAlert({
       color: "danger",
-      content: "Cannot update account",
+      content: "Cannot update category",
       duration: 1500,
     });
   };
@@ -57,7 +65,7 @@ const UpdateAccountModal = ({ onClose, account }: UpdateAccountModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Update account</DialogTitle>
+        <DialogTitle>Update category</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -79,4 +87,4 @@ const UpdateAccountModal = ({ onClose, account }: UpdateAccountModalProps) => {
   );
 };
 
-export default UpdateAccountModal;
+export default UpdateCategoryModal;

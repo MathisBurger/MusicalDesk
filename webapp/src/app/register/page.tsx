@@ -99,7 +99,7 @@ const LoginPage = () => {
                     type="password"
                   />
                   <Button type="submit" fullWidth disabled={isPending}>
-                    Sign in
+                    Sign up
                   </Button>
                 </Stack>
               </form>

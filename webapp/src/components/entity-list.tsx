@@ -136,6 +136,9 @@ const EntityList = ({
             backgroundImage: "none !important",
             border: mode === "dark" ? "2px solid #303030" : undefined,
           },
+          elevation8: {
+            zIndex: "9999 !important",
+          },
         },
       },
     },

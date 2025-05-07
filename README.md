@@ -17,6 +17,7 @@ MVP Planning:
 - [x] Add option to frontend to invalidate tickets and see their status
 - [ ] Expense management (With categories, Images of bills, etc.)
 - [ ] Annual finance reports
+- [ ] Move all frontend API types into typings folder
 - [ ] Backend code documentation
 - [ ] Extend user information (firstName, lastName, function, etc.)
 - [ ] Set reference in ticket in which payment it has been bought

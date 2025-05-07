@@ -1,5 +1,5 @@
 "use client";
-import EntityList from "@/components/entity-list";
+import EntityList, { EntityListRowAction } from "@/components/entity-list";
 import CategoryChip from "@/components/expenses/category-chip";
 import CreateCategoryModal from "@/components/expenses/modal/create-category";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
@@ -11,10 +11,12 @@ import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Stack, Typography } from "@mui/joy";
 import { GridColDef } from "@mui/x-data-grid";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const CategoriesPage = () => {
   const currentUser = useCurrentUser();
+  const router = useRouter();
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
   const { data, isLoading } = useCategoriesQuery();
@@ -42,6 +44,14 @@ const CategoriesPage = () => {
     },
   ];
 
+  const rowActions: EntityListRowAction[] = [
+    {
+      name: "Details",
+      onClick: (row) => router.push(`/backend/expenses/categories/${row.id}`),
+      color: "primary",
+    },
+  ];
+
   return (
     <RoleWrapper roles={[UserRole.Accountant]}>
       <Stack spacing={2}>
@@ -58,7 +68,12 @@ const CategoriesPage = () => {
             </Grid>
           )}
         </Grid>
-        <EntityList columns={cols} rows={data ?? []} loading={isLoading} />
+        <EntityList
+          columns={cols}
+          rows={data ?? []}
+          loading={isLoading}
+          rowActions={rowActions}
+        />
       </Stack>
       {createModalOpen && (
         <CreateCategoryModal onClose={() => setCreateModalOpen(false)} />

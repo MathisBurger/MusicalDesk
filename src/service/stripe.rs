@@ -1,7 +1,7 @@
+use log::error;
 use std::str::FromStr;
 
 use chrono::{DateTime, Utc};
-use log::error;
 use stripe::{
     CheckoutSession, CheckoutSessionId, CheckoutSessionMode, CreateCheckoutSession,
     CreateCheckoutSessionLineItems, CreateCustomer, CreatePrice, CreateProduct, Currency, Customer,
@@ -41,7 +41,11 @@ pub async fn generate_checkout(
     CheckoutSession::create(&client, create_checkout)
         .await
         .map_err(|_x| {
-            println!("{}", _x.to_string());
+            error!(
+                target: "shop",
+                "Checkout BadRequest: Cannot create checkout session: {}",
+                _x.to_string()
+            );
             Error::BadRequest
         })
 }
@@ -113,6 +117,7 @@ pub async fn create_customer(user: &User) -> Result<Customer, Error> {
 pub async fn get_customer(user: &User) -> Result<Customer, Error> {
     let client = get_client();
     if user.customer_id.is_none() {
+        error!(target: "shop", "Current user has no customer_id");
         return Err(Error::BadRequest);
     }
     let customer_id = CustomerId::from_str(user.customer_id.clone().unwrap().as_str())
@@ -120,7 +125,7 @@ pub async fn get_customer(user: &User) -> Result<Customer, Error> {
     Customer::retrieve(&client, &customer_id, &[])
         .await
         .map_err(|e| {
-            error!(target: "stripe", "{}", e.to_string());
+            error!(target: "shop", "{}", e.to_string());
             Error::BadRequest
         })
 }

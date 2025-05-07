@@ -35,7 +35,7 @@ const useUpdateCategoryMutation = (id: number) => {
   return useMutation({
     mutationFn: (data: UpdateCategoryRequest) => updateCategory(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["expenseCategories"] });
+      queryClient.invalidateQueries({ queryKey: ["expenseCategories", id] });
     },
   });
 };

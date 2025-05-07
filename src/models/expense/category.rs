@@ -24,11 +24,15 @@ impl Category {
         .unwrap()
     }
 
-    pub async fn find_all(db: &PgPool) -> Vec<Category> {
-        sqlx::query_as!(Category, "SELECT * FROM expense_categories")
-            .fetch_all(db)
-            .await
-            .unwrap()
+    pub async fn find_all(search: Option<String>, db: &PgPool) -> Vec<Category> {
+        sqlx::query_as!(
+            Category,
+            "SELECT * FROM expense_categories WHERE name LIKE $1 ORDER BY id",
+            format!("%{}%", search.unwrap_or("".to_string()))
+        )
+        .fetch_all(db)
+        .await
+        .unwrap()
     }
 
     pub async fn create(req: &CreateCategoryRequest, db: &PgPool) -> Category {

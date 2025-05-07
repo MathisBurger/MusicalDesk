@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS expense_categories (
 
 CREATE TABLE IF NOT EXISTS expense_budgets (
     id SERIAL NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
     category_id INTEGER NOT NULL REFERENCES expense_categories (id),
     start_date TIMESTAMP
     WITH

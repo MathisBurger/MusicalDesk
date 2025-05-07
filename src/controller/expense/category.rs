@@ -16,12 +16,21 @@ use actix_web::{
 };
 use serde::Deserialize;
 
+#[derive(Deserialize)]
+pub struct SearchQuery {
+    pub search: Option<String>,
+}
+
 #[get("/expense/categories")]
-pub async fn get_categories(user: User, state: Data<AppState>) -> Result<HttpResponse, Error> {
+pub async fn get_categories(
+    user: User,
+    state: Data<AppState>,
+    query: Query<SearchQuery>,
+) -> Result<HttpResponse, Error> {
     if !user.has_role_or_admin(UserRole::Accountant) {
         return Err(Error::Forbidden);
     }
-    let categories = Category::find_all(&state.database).await;
+    let categories = Category::find_all(query.search.clone(), &state.database).await;
     Ok(HttpResponse::Ok().json(categories))
 }
 

@@ -39,15 +39,20 @@ CREATE TABLE IF NOT EXISTS expense_transactions (
         is_money_transaction BOOLEAN NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS expenses (
+CREATE TABLE IF NOT EXISTS expense_expenses (
     id SERIAL NOT NULL PRIMARY KEY,
     expense_transaction_id INTEGER REFERENCES expense_transactions (id),
     balancing_transaction_id INTEGER REFERENCES expense_transactions (id),
     name VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    budget_id INTEGER REFERENCES expense_budgets (id),
     is_request BOOLEAN NOT NULL,
     total_amount INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS expense_join_expense_budget (
+    budget_id INTEGER NOT NULL REFERENCES expense_budgets (id),
+    expense_id INTEGER NOT NULL REFERENCES expense_expenses (id),
+    PRIMARY KEY (budget_id, expense_id)
 );
 
 CREATE TABLE IF NOT EXISTS expense_images (

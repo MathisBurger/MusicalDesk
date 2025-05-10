@@ -1,9 +1,12 @@
 use crate::{
+    controller::PaginationQuery,
+    dto::expense::ExpenseDto,
     models::{
-        expense::budget::Budget,
-        generic::{Error, UserRole},
+        expense::{budget::Budget, expense::Expense},
+        generic::{Error, Paginated, UserRole},
         user::User,
     },
+    serialize::serialize_many,
     AppState,
 };
 use actix_web::{
@@ -69,6 +72,46 @@ pub async fn get_budget(
     Ok(HttpResponse::Ok().json(budget))
 }
 
-pub async fn update_budget() {}
+#[derive(Deserialize)]
+pub struct UpdateBudgetRequest {
+    pub name: String,
+    pub budget: i32,
+}
 
-pub async fn get_budget_expenses() {}
+#[post("/expense/budgets/{id}")]
+pub async fn update_budget(
+    user: User,
+    state: Data<AppState>,
+    path: Path<(i32,)>,
+    req: Json<UpdateBudgetRequest>,
+) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::Accountant) {
+        return Err(Error::Forbidden);
+    }
+    let budget = Budget::update(path.0, &req, &state.database)
+        .await
+        .ok_or(Error::NotFound)?;
+    Ok(HttpResponse::Ok().json(budget))
+}
+
+#[get("/expense/budgets/{id}/expenses")]
+pub async fn get_budget_expenses(
+    user: User,
+    state: Data<AppState>,
+    path: Path<(i32,)>,
+    query: Query<PaginationQuery>,
+) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::Accountant) {
+        return Err(Error::Forbidden);
+    }
+    let result =
+        Expense::find_for_budget_paginated(path.0, query.page, query.page_size, &state.database)
+            .await;
+
+    let serialized: Paginated<ExpenseDto> = Paginated {
+        total: result.total,
+        results: serialize_many(result.results, &state.database).await,
+    };
+
+    Ok(HttpResponse::Ok().json(serialized))
+}

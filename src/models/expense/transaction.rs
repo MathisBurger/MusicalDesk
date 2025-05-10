@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde::Serialize;
-use sqlx::{prelude::FromRow, Pool, Postgres};
+use sqlx::{prelude::FromRow, PgPool, Pool, Postgres};
 
 use crate::models::generic::Paginated;
 
@@ -17,6 +17,17 @@ pub struct Transaction {
 }
 
 impl Transaction {
+    pub async fn find_by_id(id: i32, db: &PgPool) -> Option<Transaction> {
+        sqlx::query_as!(
+            Transaction,
+            "SELECT * FROM expense_transactions WHERE id = $1",
+            id
+        )
+        .fetch_optional(db)
+        .await
+        .unwrap()
+    }
+
     pub async fn get_account_transactions_paginated(
         account_id: i32,
         page: i32,

@@ -11,7 +11,9 @@ where
     fn find_in_serializer_cache(
         cache: &mut HashMap<String, serde_json::Value>,
         key: String,
-    ) -> Option<serde_json::Value>;
+    ) -> Option<serde_json::Value> {
+        cache.get(&key).cloned()
+    }
     async fn serialize_from(
         cache: &mut HashMap<String, serde_json::Value>,
         input: &T,

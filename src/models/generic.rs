@@ -124,12 +124,6 @@ where
         if let Some(clause) = where_clause {
             query = format!("{} WHERE {}", query, clause);
         }
-        /*query = format!("{} LIMIT ${} OFFSET ${}", query, params.len()+1, params.len()+2);
-        query_builder
-            .push(" LIMIT ")
-            .push_bind(page_size)
-            .push(" OFFSET ")
-            .push_bind(page_size * page);*/
 
         let mut count_query = format!("SELECT COUNT(*) AS count FROM {}", table);
         if let Some(clause) = where_clause {

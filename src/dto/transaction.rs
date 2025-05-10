@@ -22,16 +22,6 @@ pub struct TransactionDto {
 }
 
 impl Serializer<Transaction> for TransactionDto {
-    fn find_in_serializer_cache(
-        cache: &mut HashMap<String, serde_json::Value>,
-        key: String,
-    ) -> Option<serde_json::Value> {
-        if cache.contains_key(&key) {
-            return Some(cache.get(&key).unwrap().clone());
-        }
-        None
-    }
-
     async fn serialize_from(
         cache: &mut HashMap<String, serde_json::Value>,
         input: &Transaction,

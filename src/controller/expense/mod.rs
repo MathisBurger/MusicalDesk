@@ -14,5 +14,10 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(category::get_category)
         .service(category::get_category_transactions)
         .service(category::create_category)
-        .service(category::update_category);
+        .service(category::update_category)
+        .service(budget::create_budget)
+        .service(budget::get_all_budgets)
+        .service(budget::get_budget)
+        .service(budget::update_budget)
+        .service(budget::get_budget_expenses);
 }

@@ -3,7 +3,7 @@ use image::codecs::farbfeld;
 use serde::Serialize;
 use sqlx::PgPool;
 
-use crate::controller::expense::budget::CreateBudgetRequest;
+use crate::controller::expense::budget::{CreateBudgetRequest, UpdateBudgetRequest};
 
 #[derive(Serialize)]
 pub struct Budget {
@@ -49,5 +49,18 @@ impl Budget {
             .fetch_one(db)
             .await
             .unwrap()
+    }
+
+    pub async fn update(id: i32, req: &UpdateBudgetRequest, db: &PgPool) -> Option<Budget> {
+        sqlx::query_as!(
+            Budget,
+            "UPDATE expense_budgets SET name = $1, budget = $2 WHERE id = $3 RETURNING *",
+            req.name,
+            req.budget,
+            id
+        )
+        .fetch_optional(db)
+        .await
+        .unwrap()
     }
 }

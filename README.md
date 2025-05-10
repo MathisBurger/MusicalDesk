@@ -21,11 +21,11 @@ MVP Planning:
 - [ ] Eliminate all warnings
 - [ ] Backend code documentation
 - [ ] Extend user information (firstName, lastName, function, etc.)
-- [ ] Set reference in ticket in which payment it has been bought
-- [ ] Add useful dashboard
+- [ ] Add useful dashboard (financial data, latest events and how many tickets left, member count and total yearly income through memberships)
 - [ ] Add frontend translations
 - [ ] Make translation language configurable in user settings
 - [ ] Handle cascade in database
+- [ ] Add good README file
 
 
 ## Application architecture decisions

@@ -1,5 +1,5 @@
+import { Account } from "@/types/api/expense";
 import { useQuery } from "@tanstack/react-query";
-import { Account } from "./useAccountsQuery";
 
 const queryAccount = async (id: number): Promise<Account | null> => {
   const result = await fetch(

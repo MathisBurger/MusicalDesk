@@ -1,9 +1,5 @@
+import { RegisterRequest } from "@/types/api/event";
 import { useMutation } from "@tanstack/react-query";
-
-export interface RegisterRequest {
-  email: string;
-  password: string;
-}
 
 const registerFunction = async (creds: RegisterRequest): Promise<boolean> => {
   const result = await fetch(

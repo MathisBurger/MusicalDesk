@@ -1,14 +1,5 @@
+import { EventRequest } from "@/types/api/event";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface EventRequest {
-  name: string | null;
-  price: number | null;
-  tax_percentage: number;
-  image_id: number;
-  event_date: string | null;
-  active_from: string | null;
-  active_until: string | null;
-}
 
 const createEvent = async (data: EventRequest): Promise<Event | null> => {
   const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events`, {

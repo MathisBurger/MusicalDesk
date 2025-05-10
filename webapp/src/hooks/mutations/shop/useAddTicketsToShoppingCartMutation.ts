@@ -1,10 +1,5 @@
-import { Ticket } from "@/hooks/queries/useEventTicketsQuery";
+import { ShoppingCartRequest, Ticket } from "@/types/api/event";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface ShoppingCartRequest {
-  event_id: number;
-  quantity: number;
-}
 
 const addToCart = async (data: ShoppingCartRequest): Promise<Ticket[]> => {
   const result = await fetch(

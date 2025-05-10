@@ -1,12 +1,6 @@
 import { Account } from "@/hooks/queries/expense/useAccountsQuery";
+import { CreateAccountRequest } from "@/types/api/expense";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface CreateAccountRequest {
-  name: string;
-  owner_name: string;
-  iban: string;
-  is_tracking_account: boolean;
-}
 
 const createAccount = async (
   data: CreateAccountRequest,

@@ -1,9 +1,5 @@
+import { CreateTicketsRequest } from "@/types/api/event";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface CreateTicketsRequest {
-  valid_until: string;
-  quantity: number;
-}
 
 const createTickets = async (
   eventId: number,

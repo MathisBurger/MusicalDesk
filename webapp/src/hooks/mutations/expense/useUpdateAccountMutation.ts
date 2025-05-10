@@ -1,11 +1,6 @@
 import { Account } from "@/hooks/queries/expense/useAccountsQuery";
+import { UpdateAccountRequest } from "@/types/api/expense";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface UpdateAccountRequest {
-  name: string;
-  owner_name: string;
-  iban: string;
-}
 
 const updateAccount = async (
   id: number,

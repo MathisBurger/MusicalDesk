@@ -1,8 +1,5 @@
+import { PaymentCheckoutResponse } from "@/types/api/event";
 import { useMutation } from "@tanstack/react-query";
-
-export interface PaymentCheckoutResponse {
-  checkout_uri: string;
-}
 
 const checkout = async (): Promise<PaymentCheckoutResponse | null> => {
   const result = await fetch(

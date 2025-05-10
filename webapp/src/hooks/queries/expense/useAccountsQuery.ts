@@ -1,12 +1,5 @@
+import { Account } from "@/types/api/expense";
 import { useQuery } from "@tanstack/react-query";
-
-export interface Account {
-  id: number;
-  name: string;
-  owner_name: string;
-  iban: string;
-  is_tracking_account: boolean;
-}
 
 const accountsQuery = async (): Promise<Account[]> => {
   const result = await fetch(

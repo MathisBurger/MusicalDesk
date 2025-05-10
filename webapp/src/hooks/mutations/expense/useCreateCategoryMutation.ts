@@ -1,11 +1,6 @@
 import { Account } from "@/hooks/queries/expense/useAccountsQuery";
+import { CreateCategoryRequest } from "@/types/api/expense";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface CreateCategoryRequest {
-  name: string;
-  hex_color: string;
-  is_income: boolean;
-}
 
 const createCategory = async (
   data: CreateCategoryRequest,

@@ -1,9 +1,6 @@
 import { UserTicket } from "@/hooks/queries/shop/useCurrentUserTicketsQuery";
+import { QrCodeRequest } from "@/types/api/event";
 import { useMutation } from "@tanstack/react-query";
-
-export interface QrCodeRequest {
-  qr_content: string;
-}
 
 const invalidate = async (
   requestData: QrCodeRequest,

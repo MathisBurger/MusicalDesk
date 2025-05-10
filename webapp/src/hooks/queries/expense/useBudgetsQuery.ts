@@ -1,15 +1,5 @@
+import { Budget } from "@/types/api/expense";
 import { useQuery } from "@tanstack/react-query";
-import { MinimalCategory } from "./useAccountTransactionsQuery";
-
-export interface Budget {
-  id: number;
-  name: string;
-  category: MinimalCategory;
-  start_date: string;
-  end_date: string;
-  budget: number;
-  spent: number;
-}
 
 const budgetsQuery = async (): Promise<Budget[]> => {
   const result = await fetch(

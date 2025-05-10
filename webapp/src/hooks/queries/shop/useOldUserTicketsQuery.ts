@@ -1,5 +1,5 @@
+import { UserTicketWithQrCode } from "@/types/api/event";
 import { useQuery } from "@tanstack/react-query";
-import { UserTicketWithQrCode } from "./useCurrentUserTicketsQuery";
 
 const queryTickets = async (): Promise<UserTicketWithQrCode[]> => {
   const result = await fetch(

@@ -2,10 +2,9 @@
 import BackButton from "@/components/back-button";
 import FormInput from "@/form/form-input";
 import useForm from "@/form/useForm";
-import useRegisterCustomerAccountMutation, {
-  RegisterRequest,
-} from "@/hooks/mutations/shop/useRegisterCustomerAccountMutation";
+import useRegisterCustomerAccountMutation from "@/hooks/mutations/shop/useRegisterCustomerAccountMutation";
 import useAlert from "@/hooks/useAlert";
+import { RegisterRequest } from "@/types/api/event";
 import { Box, Button, Stack, Typography } from "@mui/joy";
 import { useRouter } from "next/navigation";
 

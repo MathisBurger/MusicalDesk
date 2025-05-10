@@ -1,9 +1,8 @@
 import FormInput from "@/form/form-input";
 import useForm from "@/form/useForm";
-import { EventRequest } from "@/hooks/mutations/event/useCreateEventMutation";
 import useUpdateEventMutation from "@/hooks/mutations/event/useUpdateEventMutation";
-import { Event } from "@/hooks/queries/event/useEventsQuery";
 import useAlert from "@/hooks/useAlert";
+import { Event, EventRequest } from "@/types/api/event";
 import {
   Button,
   DialogActions,

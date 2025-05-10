@@ -1,12 +1,5 @@
+import { Ticket } from "@/types/api/event";
 import { useQuery } from "@tanstack/react-query";
-
-export interface Ticket {
-  id: number;
-  event_id: number;
-  valid_until: Date;
-  invalidated: boolean;
-  invalidated_at: Date | null;
-}
 
 const queryTickets = async (eventId: number): Promise<Ticket[]> => {
   const result = await fetch(

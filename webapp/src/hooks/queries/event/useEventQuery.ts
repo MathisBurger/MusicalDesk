@@ -1,5 +1,5 @@
+import { Event } from "@/types/api/event";
 import { useQuery } from "@tanstack/react-query";
-import { Event } from "./useEventsQuery";
 
 const queryEvent = async (id: number): Promise<Event | null> => {
   const result = await fetch(

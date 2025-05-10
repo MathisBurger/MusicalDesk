@@ -1,30 +1,6 @@
+import { Transaction } from "@/types/api/expense";
+import { Paginated } from "@/types/api/generic";
 import { useQuery } from "@tanstack/react-query";
-
-export interface MinimalAccount {
-  id: number;
-  name: string;
-}
-
-export interface MinimalCategory {
-  id: number;
-  name: string;
-  hex_color: string;
-}
-
-export interface Transaction {
-  id: number;
-  amount: number;
-  from_account: MinimalAccount;
-  to_account: MinimalAccount;
-  timestamp: string | Date;
-  category?: MinimalCategory;
-  is_money_transaction: boolean;
-}
-
-export interface Paginated<T> {
-  total: number;
-  results: T[];
-}
 
 const transactionsQuery = async (
   id: number,

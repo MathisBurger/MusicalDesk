@@ -1,10 +1,5 @@
+import { ShopEvent } from "@/types/api/event";
 import { useQuery } from "@tanstack/react-query";
-import { Event } from "../useEventsQuery";
-
-export interface ShopEvent {
-  event: Event;
-  tickets_left: number;
-}
 
 const queryEvent = async (id: number): Promise<ShopEvent | null> => {
   const result = await fetch(

@@ -1,13 +1,6 @@
 import { Budget } from "@/hooks/queries/expense/useBudgetsQuery";
+import { CreateBudgetRequest } from "@/types/api/expense";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface CreateBudgetRequest {
-  name: string;
-  category_id: number;
-  start_date: string;
-  end_date: string;
-  budget: number;
-}
 
 const createBudget = async (
   data: CreateBudgetRequest,

@@ -1,13 +1,5 @@
+import { ShoppingCartItem } from "@/types/api/event";
 import { useQuery } from "@tanstack/react-query";
-
-export interface ShoppingCartItem {
-  event_id: number;
-  image_id: number;
-  name: string;
-  min_reserved_until: Date | string;
-  count: number;
-  total_price: number;
-}
 
 const queryShoppingCart = async (): Promise<ShoppingCartItem[]> => {
   const result = await fetch(

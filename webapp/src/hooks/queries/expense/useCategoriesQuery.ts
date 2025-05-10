@@ -1,11 +1,5 @@
+import { Category } from "@/types/api/expense";
 import { useQuery } from "@tanstack/react-query";
-
-export interface Category {
-  id: number;
-  name: string;
-  hex_color: string;
-  is_income: boolean;
-}
 
 const categoriesQuery = async (): Promise<Category[]> => {
   const result = await fetch(

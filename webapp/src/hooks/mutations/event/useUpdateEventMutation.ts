@@ -1,5 +1,5 @@
+import { EventRequest } from "@/types/api/event";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { EventRequest } from "./useCreateEventMutation";
 
 const updateEvent = async (
   data: EventRequest,

@@ -1,5 +1,5 @@
+import { Category } from "@/types/api/expense";
 import { useQuery } from "@tanstack/react-query";
-import { Category } from "./useCategoriesQuery";
 
 const queryCategory = async (id: number): Promise<Category | null> => {
   const result = await fetch(

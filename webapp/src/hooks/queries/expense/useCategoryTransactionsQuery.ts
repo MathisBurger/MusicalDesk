@@ -1,5 +1,6 @@
+import { Transaction } from "@/types/api/expense";
+import { Paginated } from "@/types/api/generic";
 import { useQuery } from "@tanstack/react-query";
-import { Paginated, Transaction } from "./useAccountTransactionsQuery";
 
 const transactionsQuery = async (
   id: number,

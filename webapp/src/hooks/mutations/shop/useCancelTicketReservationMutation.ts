@@ -1,4 +1,4 @@
-import { Ticket } from "@/hooks/queries/useEventTicketsQuery";
+import { Ticket } from "@/types/api/event";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const cancelReservation = async (eventId: number): Promise<Ticket[]> => {

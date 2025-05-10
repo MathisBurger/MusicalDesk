@@ -1,10 +1,6 @@
 import { Category } from "@/hooks/queries/expense/useCategoriesQuery";
+import { UpdateCategoryRequest } from "@/types/api/expense";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface UpdateCategoryRequest {
-  name: string;
-  hex_color: string;
-}
 
 const updateCategory = async (
   id: number,

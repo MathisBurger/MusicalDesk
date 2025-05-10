@@ -1,5 +1,5 @@
+import { PaymentCheckoutResponse } from "@/types/api/event";
 import { useQuery } from "@tanstack/react-query";
-import { PaymentCheckoutResponse } from "@/hooks/mutations/shop/useCheckoutMutation";
 
 const queryCheckout = async (): Promise<PaymentCheckoutResponse | null> => {
   const result = await fetch(

@@ -1,20 +1,5 @@
+import { UserTicketWithQrCode } from "@/types/api/event";
 import { useQuery } from "@tanstack/react-query";
-
-export interface UserTicket {
-  id: number;
-  event_id: number;
-  event_name: string;
-  event_image_id: number;
-  valid_until: string;
-  invalidated: boolean;
-  invalidated_at: string | null;
-  owner_id: number;
-  bought_at: string;
-}
-
-export interface UserTicketWithQrCode extends UserTicket {
-  qr_content: string;
-}
 
 const queryTickets = async (): Promise<UserTicketWithQrCode[]> => {
   const result = await fetch(

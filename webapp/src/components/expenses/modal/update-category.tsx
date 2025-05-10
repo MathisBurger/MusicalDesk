@@ -1,9 +1,7 @@
 import useForm from "@/form/useForm";
-import useUpdateCategoryMutation, {
-  UpdateCategoryRequest,
-} from "@/hooks/mutations/expense/useUpdateCategoryMutation";
-import { Category } from "@/hooks/queries/expense/useCategoriesQuery";
+import useUpdateCategoryMutation from "@/hooks/mutations/expense/useUpdateCategoryMutation";
 import useAlert from "@/hooks/useAlert";
+import { Category, UpdateCategoryRequest } from "@/types/api/expense";
 import {
   Button,
   DialogActions,

@@ -1,5 +1,6 @@
 "use client";
-import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import {
   ButtonGroup,

@@ -3,7 +3,7 @@ import EntityList, { EntityListRowAction } from "@/components/entity-list";
 import CreateBackendUserModal from "@/components/user/create-modal";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useBackendUsersQuery from "@/hooks/queries/user/useBackendUsersQuery";
-import { UserRole } from "@/hooks/useCurrentUser";
+import { UserRole } from "@/types/api/user";
 import { Add } from "@mui/icons-material";
 import {
   Button,

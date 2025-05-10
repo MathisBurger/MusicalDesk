@@ -3,10 +3,10 @@ import EntityList, { EntityListRowAction } from "@/components/entity-list";
 import CategoryChip from "@/components/expenses/category-chip";
 import CreateCategoryModal from "@/components/expenses/modal/create-category";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
-import useCategoriesQuery, {
-  Category,
-} from "@/hooks/queries/expense/useCategoriesQuery";
-import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
+import useCategoriesQuery from "@/hooks/queries/expense/useCategoriesQuery";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { Category } from "@/types/api/expense";
+import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Stack, Typography } from "@mui/joy";

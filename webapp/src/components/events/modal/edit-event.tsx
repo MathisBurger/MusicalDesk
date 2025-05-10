@@ -43,7 +43,6 @@ const EditEventModal = ({ onClose, event }: CreateEventModalProps) => {
   const form = useForm<EventRequest>({
     defaultValues: {
       ...event,
-      id: undefined,
       event_date: new Date(event.event_date),
       active_from: event.active_from ? new Date(event.active_from) : null,
       active_until: event.active_until ? new Date(event.active_until) : null,

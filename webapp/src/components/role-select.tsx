@@ -1,6 +1,5 @@
-import { UserRole } from "@/hooks/useCurrentUser";
-import { Chip, Option, Select, SelectOption, Stack } from "@mui/joy";
-import { ReactNode } from "react";
+import { UserRole } from "@/types/api/user";
+import { Option, Select } from "@mui/joy";
 
 interface RoleSelectProps {
   name: string;
@@ -10,20 +9,7 @@ interface RoleSelectProps {
 
 const RoleSelect = ({ name, multiple, defaultValue }: RoleSelectProps) => {
   return (
-    <Select
-      name={name}
-      multiple={multiple}
-      defaultValue={defaultValue}
-      renderValue={(options: SelectOption<string>[]): ReactNode => (
-        <Stack spacing={1} direction="row">
-          {options.map((role) => (
-            <Chip color="primary" variant="soft" key={role.value}>
-              {role.label}
-            </Chip>
-          ))}
-        </Stack>
-      )}
-    >
+    <Select name={name} multiple={multiple} defaultValue={defaultValue}>
       {Object.values(UserRole).map((role) => (
         <Option value={role} key={role}>
           {role}

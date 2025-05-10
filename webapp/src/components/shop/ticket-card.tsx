@@ -1,7 +1,7 @@
-import { UserTicketWithQrCode } from "@/hooks/queries/shop/useCurrentUserTicketsQuery";
 import { Button, Card, Typography } from "@mui/joy";
 import QrCode from "../qr-code";
 import { useRouter } from "next/navigation";
+import { UserTicketWithQrCode } from "@/types/api/event";
 
 interface TicketCardProps {
   ticket: UserTicketWithQrCode;

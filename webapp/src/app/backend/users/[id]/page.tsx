@@ -7,7 +7,7 @@ import UpdateBackendUserModal from "@/components/user/update-modal";
 import UpdateBackendUserPasswordModal from "@/components/user/update-password-modal";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useBackendUserQuery from "@/hooks/queries/user/useBackendUserQuery";
-import { UserRole } from "@/hooks/useCurrentUser";
+import { UserRole } from "@/types/api/user";
 import { Button, Card, Chip, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";

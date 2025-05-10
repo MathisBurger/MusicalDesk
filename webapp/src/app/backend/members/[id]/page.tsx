@@ -7,7 +7,7 @@ import EditMemberModal from "@/components/members/modal/edit-member";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useMemberQuery from "@/hooks/queries/membership/useMemberQuery";
 import useUserPaidMembershipsQuery from "@/hooks/queries/membership/useUserPaidMemberships";
-import { UserRole } from "@/hooks/useCurrentUser";
+import { UserRole } from "@/types/api/user";
 import { Button, Card, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { GridColDef } from "@mui/x-data-grid";
 import { useParams } from "next/navigation";

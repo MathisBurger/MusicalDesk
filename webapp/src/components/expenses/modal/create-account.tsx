@@ -1,8 +1,7 @@
 import useForm from "@/form/useForm";
-import useCreateAccountMutation, {
-  CreateAccountRequest,
-} from "@/hooks/mutations/expense/useCreateAccountMutation";
+import useCreateAccountMutation from "@/hooks/mutations/expense/useCreateAccountMutation";
 import useAlert from "@/hooks/useAlert";
+import { CreateAccountRequest } from "@/types/api/expense";
 import {
   Button,
   DialogActions,

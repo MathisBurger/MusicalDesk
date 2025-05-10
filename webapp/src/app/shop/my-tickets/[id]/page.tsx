@@ -4,6 +4,8 @@ import TicketDetails from "@/components/events/ticket-details";
 import useUserTicketQuery from "@/hooks/queries/event/useUserTicketQuery";
 import { Alert } from "@mui/joy";
 import { useParams } from "next/navigation";
+import RoleWrapper from "@/components/wrapper/role-wrapper";
+import { UserRole } from "@/types/api/user";
 
 const MyTicketDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,13 +16,19 @@ const MyTicketDetailsPage = () => {
   }
 
   if (data) {
-    return <TicketDetails isShop ticket={data} />;
+    return (
+      <RoleWrapper roles={[UserRole.ShopCustomer]}>
+        <TicketDetails isShop ticket={data} />
+      </RoleWrapper>
+    );
   }
 
   return (
-    <Alert variant="soft" size="lg" color="danger">
-      Ticket not found
-    </Alert>
+    <RoleWrapper roles={[UserRole.ShopCustomer]}>
+      <Alert variant="soft" size="lg" color="danger">
+        Ticket not found
+      </Alert>
+    </RoleWrapper>
   );
 };
 

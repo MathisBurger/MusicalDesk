@@ -1,4 +1,5 @@
-import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import { Alert } from "@mui/joy";
 import { PropsWithChildren } from "react";

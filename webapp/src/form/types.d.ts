@@ -19,9 +19,8 @@ export type FormValue =
 export type FormType<T> = Record<keyof T, FormValue>;
 
 /** Definition of rules for form data validation */
-export type FormValidationRules<T> = Record<
-  keyof T,
-  (v: FormValue) => string | null
+export type FormValidationRules<T> = Partial<
+  Record<keyof T, (v: FormValue) => string | null>
 >;
 
 /** Definition of possible form labels object */

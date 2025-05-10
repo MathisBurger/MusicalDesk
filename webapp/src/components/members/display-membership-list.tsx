@@ -1,9 +1,9 @@
 "use client";
-import { Member } from "@/hooks/queries/membership/useMembersQuery";
 import EntityList, { EntityListRowAction } from "../entity-list";
 import { GridColDef } from "@mui/x-data-grid";
 import usePayMembershipMutation from "@/hooks/mutations/membership/usePayMembershipMutation";
 import { useRouter } from "next/navigation";
+import { Member } from "@/types/api/membership";
 
 interface DisplayMembershipListProps {
   members: Member[];

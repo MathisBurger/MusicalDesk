@@ -8,7 +8,7 @@ import LoadingComponent from "@/components/loading";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useCategoryQuery from "@/hooks/queries/expense/useCategoryQuery";
 import useCategoryTransactionsQuery from "@/hooks/queries/expense/useCategoryTransactionsQuery";
-import { UserRole } from "@/hooks/useCurrentUser";
+import { UserRole } from "@/types/api/user";
 import { Check, X } from "@mui/icons-material";
 import { Button, Card, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { useParams } from "next/navigation";

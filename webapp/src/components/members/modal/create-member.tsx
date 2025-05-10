@@ -2,10 +2,9 @@
 import FormInput from "@/form/form-input";
 import { FormValue } from "@/form/types";
 import useForm from "@/form/useForm";
-import useCreateMemberMutation, {
-  CreateMemberRequest,
-} from "@/hooks/mutations/membership/useCreateMemberMutation";
+import useCreateMemberMutation from "@/hooks/mutations/membership/useCreateMemberMutation";
 import useAlert from "@/hooks/useAlert";
+import { CreateMemberRequest } from "@/types/api/membership";
 import {
   Button,
   DialogActions,

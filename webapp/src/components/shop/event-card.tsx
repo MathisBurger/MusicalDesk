@@ -1,4 +1,4 @@
-import { ShopEvent } from "@/hooks/queries/shop/useShopEventQuery";
+import { ShopEvent } from "@/types/api/event";
 import {
   AspectRatio,
   Button,

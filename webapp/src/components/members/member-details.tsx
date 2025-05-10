@@ -1,8 +1,8 @@
-import { Member } from "@/hooks/queries/membership/useMembersQuery";
 import LoadingComponent from "../loading";
 import { Card, Typography } from "@mui/joy";
 import { useMemo } from "react";
 import KvList, { DisplayedData } from "../kv-list";
+import { Member } from "@/types/api/membership";
 
 interface MemberDetailsProps {
   loading: boolean;

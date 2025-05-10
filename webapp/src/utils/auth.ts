@@ -1,4 +1,4 @@
-import { User, UserRole } from "@/hooks/useCurrentUser";
+import { User, UserRole } from "@/types/api/user";
 
 /**
  * Checks if a user is granted to perform an action

@@ -15,12 +15,13 @@ import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BusinessIcon from "@mui/icons-material/Business";
 import ColorSchemeToggle from "./color-scheme-toggle";
-import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/hooks/useCurrentUser";
 import { Event, Money, SupervisedUserCircle } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import RoleWrapper from "./wrapper/role-wrapper";
 import useLogout from "@/hooks/useLogout";
 import NestedListToggler from "./nested-list-toggler";
+import { UserRole } from "@/types/api/user";
 
 function openSidebar() {
   if (typeof window !== "undefined") {

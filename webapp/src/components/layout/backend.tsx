@@ -1,10 +1,11 @@
-import { CurrentUserContext, User } from "@/hooks/useCurrentUser";
+import { CurrentUserContext } from "@/hooks/useCurrentUser";
 import { Box, CssBaseline, CssVarsProvider } from "@mui/joy";
 import { PropsWithChildren } from "react";
 import Sidebar from "../sidebar";
 import Header from "../header";
 import ContentWrapper from "../wrapper/content-wrapper";
 import useTheme from "@/hooks/useTheme";
+import { User } from "@/types/api/user";
 
 interface BackendLayoutProps {
   currentUser: User | null;

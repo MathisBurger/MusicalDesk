@@ -8,7 +8,7 @@ import { RegisterRequest } from "@/types/api/event";
 import { Box, Button, Stack, Typography } from "@mui/joy";
 import { useRouter } from "next/navigation";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const { mutateAsync, isPending } = useRegisterCustomerAccountMutation();
   const { displayAlert, showAlert } = useAlert();
   const router = useRouter();
@@ -132,4 +132,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

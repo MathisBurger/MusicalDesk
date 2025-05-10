@@ -1,8 +1,9 @@
-import { CurrentUserContext, User } from "@/hooks/useCurrentUser";
+import { CurrentUserContext } from "@/hooks/useCurrentUser";
 import { Container, CssBaseline, CssVarsProvider } from "@mui/joy";
 import { PropsWithChildren } from "react";
 import ShopHeader from "../shop/header";
 import useTheme from "@/hooks/useTheme";
+import { User } from "@/types/api/user";
 
 interface ShopLayoutProps {
   currentUser: User | null;

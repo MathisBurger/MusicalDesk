@@ -1,9 +1,7 @@
 import useForm from "@/form/useForm";
-import useUpdateAccountMutation, {
-  UpdateAccountRequest,
-} from "@/hooks/mutations/expense/useUpdateAccountMutation";
-import { Account } from "@/hooks/queries/expense/useAccountsQuery";
+import useUpdateAccountMutation from "@/hooks/mutations/expense/useUpdateAccountMutation";
 import useAlert from "@/hooks/useAlert";
+import { Account, UpdateAccountRequest } from "@/types/api/expense";
 import {
   Button,
   DialogActions,

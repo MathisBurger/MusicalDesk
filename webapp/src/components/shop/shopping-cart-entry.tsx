@@ -1,5 +1,5 @@
 import useCancelTicketReservationMutation from "@/hooks/mutations/shop/useCancelTicketReservationMutation";
-import { ShoppingCartItem } from "@/hooks/queries/shop/useShoppingCartQuery";
+import { ShoppingCartItem } from "@/types/api/event";
 import { AspectRatio, Button, Grid, Typography } from "@mui/joy";
 import { Card } from "@mui/joy";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";

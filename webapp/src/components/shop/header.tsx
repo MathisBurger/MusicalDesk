@@ -1,6 +1,7 @@
 import useShoppingCartQuery from "@/hooks/queries/shop/useShoppingCartQuery";
-import useCurrentUser, { UserRole } from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/hooks/useCurrentUser";
 import useLogout from "@/hooks/useLogout";
+import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import {
   LanguageRounded,

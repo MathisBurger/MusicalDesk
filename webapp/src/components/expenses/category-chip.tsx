@@ -1,6 +1,5 @@
 "use client";
-import { MinimalCategory } from "@/hooks/queries/expense/useAccountTransactionsQuery";
-import { Category } from "@/hooks/queries/expense/useCategoriesQuery";
+import { Category, MinimalCategory } from "@/types/api/expense";
 import { CssVarsProvider, extendTheme } from "@mui/joy";
 import { Chip } from "@mui/joy";
 import { useRouter } from "next/navigation";

@@ -9,7 +9,7 @@ import useMembersQuery from "@/hooks/queries/membership/useMembersQuery";
 import DisplayMemberList from "@/components/members/display-member-list";
 import useMembersLeftQuery from "@/hooks/queries/membership/useMembersLeftQuery";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
-import { UserRole } from "@/hooks/useCurrentUser";
+import { UserRole } from "@/types/api/user";
 
 const MembersPage = () => {
   const [createMemberModalOpen, setCreateMemberModalOpen] =

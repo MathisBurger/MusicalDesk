@@ -1,11 +1,11 @@
 "use client";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { User } from "@/hooks/useCurrentUser";
 import useUserSelfQuery from "@/hooks/queries/user/useUserSelfQuery";
 import LoadingComponent from "../loading";
 import BackendLayout from "../layout/backend";
 import ShopLayout from "../layout/shop";
+import { User } from "@/types/api/user";
 
 const LayoutAuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
   const pathname = usePathname();

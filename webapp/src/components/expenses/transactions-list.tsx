@@ -1,13 +1,10 @@
 "use client";
-import {
-  MinimalCategory,
-  Transaction,
-} from "@/hooks/queries/expense/useAccountTransactionsQuery";
 import { Chip } from "@mui/material";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 import EntityList from "../entity-list";
 import CategoryChip from "./category-chip";
+import { MinimalCategory, Transaction } from "@/types/api/expense";
 
 interface TransactionsListProps {
   transactions: Transaction[];

@@ -1,8 +1,6 @@
 import FormInput from "@/form/form-input";
 import useForm from "@/form/useForm";
-import useCreateBackendUserMutation, {
-  CreateBackendUserRequest,
-} from "@/hooks/mutations/user/useCreateBackendUserMutation";
+import useCreateBackendUserMutation from "@/hooks/mutations/user/useCreateBackendUserMutation";
 import {
   Button,
   DialogActions,
@@ -17,6 +15,7 @@ import RoleSelect from "../role-select";
 import WrappedInput from "@/form/wrapped-input";
 import useAlert from "@/hooks/useAlert";
 import { useRouter } from "next/navigation";
+import { CreateBackendUserRequest } from "@/types/api/user";
 
 interface CreateBackendUserModal {
   onClose: () => void;

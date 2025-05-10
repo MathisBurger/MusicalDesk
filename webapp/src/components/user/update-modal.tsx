@@ -12,10 +12,8 @@ import {
 import RoleSelect from "../role-select";
 import WrappedInput from "@/form/wrapped-input";
 import useAlert from "@/hooks/useAlert";
-import useUpdateBackendUserMutation, {
-  UpdateBackendUserRequest,
-} from "@/hooks/mutations/user/useUpdateBackendUserMutation";
-import { User, UserRole } from "@/hooks/useCurrentUser";
+import useUpdateBackendUserMutation from "@/hooks/mutations/user/useUpdateBackendUserMutation";
+import { UpdateBackendUserRequest, User, UserRole } from "@/types/api/user";
 
 interface UpdateBackendUserModalProps {
   onClose: () => void;

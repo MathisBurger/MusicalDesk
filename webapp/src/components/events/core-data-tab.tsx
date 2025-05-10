@@ -1,7 +1,7 @@
-import { Event } from "@/hooks/queries/event/useEventsQuery";
 import { Card, Grid, Typography } from "@mui/joy";
 import { useMemo } from "react";
 import KvList, { DisplayedData } from "../kv-list";
+import { Event } from "@/types/api/event";
 
 interface CoreDataTabProps {
   event: Event;

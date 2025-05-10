@@ -1,8 +1,7 @@
 import useForm from "@/form/useForm";
-import useCreateCategoryMutation, {
-  CreateCategoryRequest,
-} from "@/hooks/mutations/expense/useCreateCategoryMutation";
+import useCreateCategoryMutation from "@/hooks/mutations/expense/useCreateCategoryMutation";
 import useAlert from "@/hooks/useAlert";
+import { CreateCategoryRequest } from "@/types/api/expense";
 import {
   Button,
   DialogActions,

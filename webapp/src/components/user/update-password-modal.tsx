@@ -10,10 +10,8 @@ import {
   Stack,
 } from "@mui/joy";
 import useAlert from "@/hooks/useAlert";
-import { User } from "@/hooks/useCurrentUser";
-import useUpdateBackendUserPasswordMutation, {
-  UpdateBackendUserPasswordRequest,
-} from "@/hooks/mutations/user/useUpdateBackendUserPasswordMutation";
+import useUpdateBackendUserPasswordMutation from "@/hooks/mutations/user/useUpdateBackendUserPasswordMutation";
+import { UpdateBackendUserPasswordRequest, User } from "@/types/api/user";
 
 interface UpdateBackendUserPasswordModalProps {
   onClose: () => void;

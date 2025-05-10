@@ -1,7 +1,3 @@
-import {
-  UserTicket,
-  UserTicketWithQrCode,
-} from "@/hooks/queries/shop/useCurrentUserTicketsQuery";
 import { AspectRatio, Card, Grid, Stack, Typography } from "@mui/joy";
 import AztecCode from "../qr-code";
 import { useMemo } from "react";
@@ -9,6 +5,7 @@ import KvList, { DisplayedData } from "../kv-list";
 import BackButton from "../back-button";
 import useUserQuery from "@/hooks/queries/user/useUserQuery";
 import LoadingComponent from "../loading";
+import { UserTicket, UserTicketWithQrCode } from "@/types/api/event";
 
 interface TicketDetailsProps {
   ticket: UserTicketWithQrCode | UserTicket;

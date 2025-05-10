@@ -25,6 +25,7 @@ MVP Planning:
 - [ ] Add frontend translations
 - [ ] Make translation language configurable in user settings
 - [ ] Handle cascade in database
+- [ ] GitHub issues marked with MVP
 - [ ] Add good README file
 
 

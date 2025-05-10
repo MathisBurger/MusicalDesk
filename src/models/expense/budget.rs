@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde::Serialize;
-use sqlx::PgPool;
+use sqlx::{postgres::PgRow, PgPool, Row};
 
 use crate::controller::expense::budget::{CreateBudgetRequest, UpdateBudgetRequest};
 
@@ -41,6 +41,15 @@ impl Budget {
             .fetch_optional(db)
             .await
             .unwrap()
+    }
+
+    pub async fn budget_spent(id: i32, db: &PgPool) -> i64 {
+        let row = sqlx::query!("SELECT SUM(e.total_amount) AS total FROM expense_join_expense_budget m JOIN expense_expenses e ON m.expense_id = e.id WHERE m.budget_id = $1", id)
+            .fetch_one(db)
+            .await
+            .unwrap();
+        let total: i64 = row.total.unwrap_or(0);
+        total
     }
 
     pub async fn create(req: &CreateBudgetRequest, db: &PgPool) -> Budget {

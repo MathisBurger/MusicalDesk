@@ -14,6 +14,7 @@ pub struct BudgetDto {
     pub start_date: DateTime<Utc>,
     pub end_date: DateTime<Utc>,
     pub budget: i32,
+    pub spent: i64,
 }
 
 impl SerializerHelper for BudgetDto {}
@@ -26,6 +27,8 @@ impl Serializer<Budget> for BudgetDto {
     ) -> Self {
         let category = Self::get_category(cache, input.category_id, db).await;
 
+        let spent = Budget::budget_spent(input.id, db).await;
+
         BudgetDto {
             id: input.id,
             name: input.name.clone(),
@@ -33,6 +36,7 @@ impl Serializer<Budget> for BudgetDto {
             start_date: input.start_date,
             end_date: input.end_date,
             budget: input.budget,
+            spent,
         }
     }
 }

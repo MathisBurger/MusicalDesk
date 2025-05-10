@@ -1,12 +1,12 @@
 use crate::{
     controller::PaginationQuery,
-    dto::expense::ExpenseDto,
+    dto::{budget::BudgetDto, expense::ExpenseDto},
     models::{
         expense::{budget::Budget, expense::Expense},
         generic::{Error, Paginated, UserRole},
         user::User,
     },
-    serialize::serialize_many,
+    serialize::{serialize_many, serialize_one},
     AppState,
 };
 use actix_web::{
@@ -32,7 +32,8 @@ pub async fn get_all_budgets(
         return Err(Error::Forbidden);
     }
     let budgets = Budget::find_all(query.active, &state.database).await;
-    Ok(HttpResponse::Ok().json(budgets))
+    let result: Vec<BudgetDto> = serialize_many(budgets, &state.database).await;
+    Ok(HttpResponse::Ok().json(result))
 }
 
 #[derive(Deserialize)]
@@ -53,7 +54,11 @@ pub async fn create_budget(
     if !user.has_role_or_admin(UserRole::Accountant) {
         return Err(Error::Forbidden);
     }
-    let budget = Budget::create(&req, &state.database).await;
+    let budget: BudgetDto = serialize_one(
+        &Budget::create(&req, &state.database).await,
+        &state.database,
+    )
+    .await;
     Ok(HttpResponse::Ok().json(budget))
 }
 
@@ -69,7 +74,9 @@ pub async fn get_budget(
     let budget = Budget::find_by_id(path.0, &state.database)
         .await
         .ok_or(Error::NotFound)?;
-    Ok(HttpResponse::Ok().json(budget))
+
+    let result: BudgetDto = serialize_one(&budget, &state.database).await;
+    Ok(HttpResponse::Ok().json(result))
 }
 
 #[derive(Deserialize)]
@@ -91,7 +98,9 @@ pub async fn update_budget(
     let budget = Budget::update(path.0, &req, &state.database)
         .await
         .ok_or(Error::NotFound)?;
-    Ok(HttpResponse::Ok().json(budget))
+
+    let result: BudgetDto = serialize_one(&budget, &state.database).await;
+    Ok(HttpResponse::Ok().json(result))
 }
 
 #[get("/expense/budgets/{id}/expenses")]

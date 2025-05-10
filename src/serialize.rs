@@ -8,12 +8,6 @@ where
     T: Serialize,
     Self: Serialize,
 {
-    fn find_in_serializer_cache(
-        cache: &mut HashMap<String, serde_json::Value>,
-        key: String,
-    ) -> Option<serde_json::Value> {
-        cache.get(&key).cloned()
-    }
     async fn serialize_from(
         cache: &mut HashMap<String, serde_json::Value>,
         input: &T,
@@ -32,4 +26,13 @@ where
         results.push(K::serialize_from(&mut cache, &item, db).await);
     }
     results
+}
+
+pub async fn serialize_one<T, K>(input: &T, db: &PgPool) -> K
+where
+    T: Serialize,
+    K: Serializer<T>,
+{
+    let mut cache: HashMap<String, serde_json::Value> = HashMap::new();
+    K::serialize_from(&mut cache, input, db).await
 }

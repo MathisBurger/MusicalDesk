@@ -1,5 +1,4 @@
 use chrono::{DateTime, Utc};
-use image::codecs::farbfeld;
 use serde::Serialize;
 use sqlx::PgPool;
 

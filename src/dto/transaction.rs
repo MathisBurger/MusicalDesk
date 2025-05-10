@@ -9,6 +9,8 @@ use crate::{
     serialize::Serializer,
 };
 
+use super::SerializerHelper;
+
 #[derive(Serialize)]
 pub struct TransactionDto {
     pub id: i32,
@@ -21,48 +23,18 @@ pub struct TransactionDto {
     pub is_money_transaction: bool,
 }
 
+impl SerializerHelper for TransactionDto {}
+
 impl Serializer<Transaction> for TransactionDto {
     async fn serialize_from(
         cache: &mut HashMap<String, serde_json::Value>,
         input: &Transaction,
         db: &sqlx::PgPool,
     ) -> Self {
-        let from_account = match Self::find_in_serializer_cache(
-            cache,
-            format!("account_{}", input.from_account_id),
-        ) {
-            Some(account) => account,
-            None => serde_json::to_value(
-                Account::get_account_by_id(input.from_account_id, db)
-                    .await
-                    .unwrap(),
-            )
-            .unwrap(),
-        };
+        let from_account = Self::get_account(cache, input.from_account_id, db).await;
+        let to_account = Self::get_account(cache, input.to_account_id, db).await;
 
-        let to_account =
-            match Self::find_in_serializer_cache(cache, format!("account_{}", input.to_account_id))
-            {
-                Some(account) => account,
-                None => serde_json::to_value(
-                    Account::get_account_by_id(input.to_account_id, db)
-                        .await
-                        .unwrap(),
-                )
-                .unwrap(),
-            };
-
-        let category = match input.category_id {
-            None => None,
-            Some(category_id) => {
-                match Self::find_in_serializer_cache(cache, format!("category_{}", category_id)) {
-                    Some(x) => Some(x),
-                    None => Some(
-                        to_value(Category::find_by_id(category_id, db).await.unwrap()).unwrap(),
-                    ),
-                }
-            }
-        };
+        let category = Self::get_category_option(cache, input.category_id, db).await;
 
         TransactionDto {
             id: input.id,

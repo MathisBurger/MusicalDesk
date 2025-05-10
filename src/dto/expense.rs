@@ -1,13 +1,9 @@
 use serde::Serialize;
-use serde_json::{to_value, Value};
-use sqlx::PgPool;
+use serde_json::Value;
 
-use crate::{
-    models::expense::{expense::Expense, transaction::Transaction},
-    serialize::Serializer,
-};
+use crate::{models::expense::expense::Expense, serialize::Serializer};
 
-use super::{transaction::TransactionDto, SerializerHelper};
+use super::SerializerHelper;
 
 #[derive(Serialize)]
 pub struct ExpenseDto {

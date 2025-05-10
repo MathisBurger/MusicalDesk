@@ -36,6 +36,11 @@ export interface CreateBudgetRequest {
   budget: number;
 }
 
+export interface UpdateBudgetRequest {
+  name: string;
+  budget: number;
+}
+
 export interface Budget {
   id: number;
   name: string;
@@ -82,4 +87,16 @@ export interface Transaction {
   timestamp: string | Date;
   category?: MinimalCategory;
   is_money_transaction: boolean;
+}
+
+// EXPENSE
+
+export interface Expense {
+  id: number;
+  expense_transaction: Transaction;
+  balancing_transaction: Transaction;
+  name: string;
+  description: string;
+  is_request: boolean;
+  total_amount: number;
 }

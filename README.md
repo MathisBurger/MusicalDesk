@@ -18,6 +18,7 @@ MVP Planning:
 - [ ] Expense management (With categories, Images of bills, etc.)
 - [ ] Annual finance reports
 - [x] Move all frontend API types into typings folder
+- [ ] Eliminate all warnings
 - [ ] Backend code documentation
 - [ ] Extend user information (firstName, lastName, function, etc.)
 - [ ] Set reference in ticket in which payment it has been bought

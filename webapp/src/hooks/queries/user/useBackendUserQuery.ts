@@ -1,5 +1,5 @@
+import { User } from "@/types/api/user";
 import { useQuery } from "@tanstack/react-query";
-import { User } from "../../useCurrentUser";
 
 const userQuery = async (id: number): Promise<User | null> => {
   const result = await fetch(

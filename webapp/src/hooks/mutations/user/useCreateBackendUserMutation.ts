@@ -1,11 +1,5 @@
-import { User, UserRole } from "@/hooks/useCurrentUser";
+import { CreateBackendUserRequest, User } from "@/types/api/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface CreateBackendUserRequest {
-  username: string;
-  password: string;
-  roles: UserRole[];
-}
 
 const createUser = async (
   data: CreateBackendUserRequest,

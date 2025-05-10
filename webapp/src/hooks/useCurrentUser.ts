@@ -1,20 +1,6 @@
 "use client";
+import { User } from "@/types/api/user";
 import { createContext, useContext } from "react";
-
-export enum UserRole {
-  Admin = "admin",
-  MemberAdmin = "member_admin",
-  EventAdmin = "event_admin",
-  ShopCustomer = "shop_customer",
-  TicketInvalidator = "ticket_invalidator",
-  Accountant = "accountant",
-}
-
-export interface User {
-  id: number;
-  username: string;
-  roles: UserRole[];
-}
 
 export const CurrentUserContext = createContext<User | null>(null);
 

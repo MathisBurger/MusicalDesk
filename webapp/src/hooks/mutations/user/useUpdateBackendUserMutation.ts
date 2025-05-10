@@ -1,9 +1,5 @@
-import { User, UserRole } from "@/hooks/useCurrentUser";
+import { UpdateBackendUserRequest, User } from "@/types/api/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface UpdateBackendUserRequest {
-  roles: UserRole[];
-}
 
 const updateUser = async (
   data: UpdateBackendUserRequest,

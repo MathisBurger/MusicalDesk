@@ -1,9 +1,5 @@
-import { User } from "@/hooks/useCurrentUser";
+import { UpdateBackendUserPasswordRequest, User } from "@/types/api/user";
 import { useMutation } from "@tanstack/react-query";
-
-export interface UpdateBackendUserPasswordRequest {
-  password: string;
-}
 
 const updateUser = async (
   data: UpdateBackendUserPasswordRequest,

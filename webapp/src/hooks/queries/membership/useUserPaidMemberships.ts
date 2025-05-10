@@ -1,10 +1,5 @@
+import { MembershipPaid } from "@/types/api/membership";
 import { useQuery } from "@tanstack/react-query";
-
-export interface MembershipPaid {
-  year: number;
-  member_id: number;
-  paid_at: Date;
-}
 
 const membershipsQuery = async (
   member_id: number,

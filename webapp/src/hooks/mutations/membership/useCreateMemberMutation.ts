@@ -1,17 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Member } from "../../queries/membership/useMembersQuery";
-
-export interface CreateMemberRequest {
-  first_name: string;
-  last_name: string;
-  email: string | null;
-  street: string | null;
-  house_nr: string | null;
-  zip: string | null;
-  city: string | null;
-  iban: string | null;
-  membership_fee: number | null;
-}
+import { CreateMemberRequest } from "@/types/api/membership";
 
 const createMember = async (
   data: CreateMemberRequest,

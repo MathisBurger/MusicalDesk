@@ -1,17 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Member } from "../queries/useMembersQuery";
-
-export interface EditMemberRequest {
-  first_name: string;
-  last_name: string;
-  email: string | null;
-  street: string | null;
-  house_nr: string | null;
-  zip: string | null;
-  city: string | null;
-  iban: string | null;
-  membership_fee: number | null;
-}
+import { EditMemberRequest, Member } from "@/types/api/membership";
 
 const editMember = async (
   data: EditMemberRequest & { id: number },

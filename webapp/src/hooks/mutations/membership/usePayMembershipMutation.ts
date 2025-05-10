@@ -1,16 +1,6 @@
+import { MembershipPaid } from "@/hooks/queries/membership/useUserPaidMemberships";
+import { CreateMemberPaymentRequest } from "@/types/api/membership";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface CreateMemberPaymentRequest {
-  year: number;
-  member_id: number;
-  paid_at: string;
-}
-
-export interface MembershipPaid {
-  year: number;
-  member_id: number;
-  paid_at: string;
-}
 
 const payMembership = async (
   data: CreateMemberPaymentRequest,

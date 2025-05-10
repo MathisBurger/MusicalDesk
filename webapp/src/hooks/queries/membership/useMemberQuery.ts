@@ -1,5 +1,5 @@
+import { Member } from "@/types/api/membership";
 import { useQuery } from "@tanstack/react-query";
-import { Member } from "./useMembersQuery";
 
 const queryMember = async (id: number): Promise<Member | null> => {
   const result = await fetch(

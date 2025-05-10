@@ -1,12 +1,5 @@
+import { Image } from "@/types/api/generic";
 import { useMutation } from "@tanstack/react-query";
-
-export interface Image {
-  id: number;
-  name: string;
-  local_file_name: string;
-  private: boolean;
-  required_roles: string[];
-}
 
 const uploadFile = async (data: FormData): Promise<Image | null> => {
   const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/images`, {

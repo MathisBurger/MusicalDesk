@@ -1,5 +1,5 @@
+import { Member } from "@/types/api/membership";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Member } from "../queries/useMembersQuery";
 
 const leaveMember = async (memberId: number): Promise<Member | null> => {
   const result = await fetch(

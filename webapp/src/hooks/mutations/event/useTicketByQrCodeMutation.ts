@@ -1,5 +1,4 @@
-import { UserTicket } from "@/hooks/queries/shop/useCurrentUserTicketsQuery";
-import { QrCodeRequest } from "@/types/api/event";
+import { QrCodeRequest, UserTicket } from "@/types/api/event";
 import { useMutation } from "@tanstack/react-query";
 
 const getTicket = async (

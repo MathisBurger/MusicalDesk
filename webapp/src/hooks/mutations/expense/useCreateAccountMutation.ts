@@ -1,5 +1,4 @@
-import { Account } from "@/hooks/queries/expense/useAccountsQuery";
-import { CreateAccountRequest } from "@/types/api/expense";
+import { Account, CreateAccountRequest } from "@/types/api/expense";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const createAccount = async (

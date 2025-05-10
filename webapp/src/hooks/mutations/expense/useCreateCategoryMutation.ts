@@ -1,10 +1,9 @@
-import { Account } from "@/hooks/queries/expense/useAccountsQuery";
-import { CreateCategoryRequest } from "@/types/api/expense";
+import { Category, CreateCategoryRequest } from "@/types/api/expense";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const createCategory = async (
   data: CreateCategoryRequest,
-): Promise<Account | null> => {
+): Promise<Category | null> => {
   const result = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/expense/categories`,
     {
@@ -21,7 +20,7 @@ const createCategory = async (
   if (!result.ok) {
     return null;
   }
-  return (await result.json()) as Account;
+  return (await result.json()) as Category;
 };
 
 const useCreateCategoryMutation = () => {

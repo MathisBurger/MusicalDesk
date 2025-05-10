@@ -1,5 +1,4 @@
-import { Category } from "@/hooks/queries/expense/useCategoriesQuery";
-import { UpdateCategoryRequest } from "@/types/api/expense";
+import { Category, UpdateCategoryRequest } from "@/types/api/expense";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const updateCategory = async (

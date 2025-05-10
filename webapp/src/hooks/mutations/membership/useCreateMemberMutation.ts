@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Member } from "../../queries/membership/useMembersQuery";
-import { CreateMemberRequest } from "@/types/api/membership";
+import { CreateMemberRequest, Member } from "@/types/api/membership";
 
 const createMember = async (
   data: CreateMemberRequest,

@@ -1,5 +1,7 @@
-import { MembershipPaid } from "@/hooks/queries/membership/useUserPaidMemberships";
-import { CreateMemberPaymentRequest } from "@/types/api/membership";
+import {
+  CreateMemberPaymentRequest,
+  MembershipPaid,
+} from "@/types/api/membership";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const payMembership = async (

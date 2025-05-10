@@ -30,7 +30,7 @@ const EditMemberModal = ({
   const { mutateAsync, isPending } = useEditMemberMutation(memberId);
   const { showAlert, displayAlert } = useAlert();
   const form = useForm<EditMemberRequest>({
-    defaultValues: { ...member, id: undefined },
+    defaultValues: { ...member },
     labels: {
       first_name: "First Name",
       last_name: "Last Name",

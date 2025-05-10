@@ -1,5 +1,4 @@
-import { Budget } from "@/hooks/queries/expense/useBudgetsQuery";
-import { CreateBudgetRequest } from "@/types/api/expense";
+import { Budget, CreateBudgetRequest } from "@/types/api/expense";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const createBudget = async (

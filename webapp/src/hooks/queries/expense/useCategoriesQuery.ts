@@ -1,9 +1,11 @@
 import { Category } from "@/types/api/expense";
 import { useQuery } from "@tanstack/react-query";
 
-const categoriesQuery = async (): Promise<Category[]> => {
+const categoriesQuery = async (
+  search: string | undefined = undefined,
+): Promise<Category[]> => {
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/expense/categories`,
+    `${process.env.NEXT_PUBLIC_API_URL}/expense/categories${search ? `?search=${search}` : ""}`,
     {
       credentials: "include",
       mode: "cors",
@@ -18,7 +20,10 @@ const categoriesQuery = async (): Promise<Category[]> => {
   return [];
 };
 
-const useCategoriesQuery = () =>
-  useQuery({ queryFn: categoriesQuery, queryKey: ["expenseCategories"] });
+const useCategoriesQuery = (search: string | undefined = undefined) =>
+  useQuery({
+    queryFn: () => categoriesQuery(search),
+    queryKey: ["expenseCategories", search],
+  });
 
 export default useCategoriesQuery;

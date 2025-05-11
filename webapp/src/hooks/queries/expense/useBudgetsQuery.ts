@@ -1,9 +1,9 @@
 import { Budget } from "@/types/api/expense";
 import { useQuery } from "@tanstack/react-query";
 
-const budgetsQuery = async (): Promise<Budget[]> => {
+const budgetsQuery = async (active: boolean): Promise<Budget[]> => {
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/expense/budgets`,
+    `${process.env.NEXT_PUBLIC_API_URL}/expense/budgets?active=${active}`,
     {
       credentials: "include",
       mode: "cors",
@@ -18,7 +18,10 @@ const budgetsQuery = async (): Promise<Budget[]> => {
   return [];
 };
 
-const useBudgetsQuery = () =>
-  useQuery({ queryFn: budgetsQuery, queryKey: ["expenseBudgets"] });
+const useBudgetsQuery = (active: boolean) =>
+  useQuery({
+    queryFn: () => budgetsQuery(active),
+    queryKey: ["expenseBudgets", active],
+  });
 
 export default useBudgetsQuery;

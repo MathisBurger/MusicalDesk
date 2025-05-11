@@ -1,3 +1,4 @@
+"use client";
 import { Alert, AlertProps } from "@mui/joy";
 import { ReactNode, useState } from "react";
 

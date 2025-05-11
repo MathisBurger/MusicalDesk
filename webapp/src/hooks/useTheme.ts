@@ -16,6 +16,13 @@ const theme = extendTheme({
         },
       },
     },
+    JoyAutocomplete: {
+      styleOverrides: {
+        listbox: {
+          zIndex: 9998,
+        },
+      },
+    },
     JoyMenu: {
       styleOverrides: {
         root: {

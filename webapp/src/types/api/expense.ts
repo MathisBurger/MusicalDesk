@@ -89,6 +89,15 @@ export interface Transaction {
   is_money_transaction: boolean;
 }
 
+export interface CreateTransactionRequest {
+  amount: number;
+  from_account_id: number;
+  to_account_id: number;
+  timestamp: string | Date;
+  category_id?: number;
+  is_money_transaction: boolean;
+}
+
 // EXPENSE
 
 export interface Expense {

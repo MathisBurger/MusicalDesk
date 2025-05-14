@@ -19,6 +19,7 @@ export interface Account {
   owner_name: string;
   iban: string;
   is_tracking_account: boolean;
+  balance: number;
 }
 
 export interface MinimalAccount {

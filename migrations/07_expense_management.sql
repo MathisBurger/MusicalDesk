@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS expense_accounts (
     name VARCHAR(255) NOT NULL,
     owner_name VARCHAR(255) NOT NULL,
     iban VARCHAR(255) NOT NULL,
-    is_tracking_account BOOLEAN NOT NULL
+    is_tracking_account BOOLEAN NOT NULL,
+    balance INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS expense_transactions (

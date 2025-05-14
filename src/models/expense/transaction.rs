@@ -95,9 +95,29 @@ impl Transaction {
     }
 
     pub async fn create(req: &TransactionRequest, db: &PgPool) -> Transaction {
-        sqlx::query_as!(Transaction, "INSERT INTO expense_transactions (amount, from_account_id, to_account_id, timestamp, name, category_id, is_money_transaction) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", req.amount, req.from_account_id, req.to_account_id, Utc::now(), req.name, req.category_id, req.is_money_transaction)
-            .fetch_one(db)
+        let mut tx: sqlx::Transaction<'_, Postgres> = db.begin().await.unwrap();
+        sqlx::query!(
+            "UPDATE expense_accounts SET balance = balance - $1 WHERE id = $2",
+            req.amount,
+            req.from_account_id
+        )
+        .execute(&mut *tx)
+        .await
+        .unwrap();
+        sqlx::query!(
+            "UPDATE expense_accounts SET balance = balance + $1 WHERE id = $2",
+            req.amount,
+            req.to_account_id
+        )
+        .execute(&mut *tx)
+        .await
+        .unwrap();
+        let res = sqlx::query_as!(Transaction, "INSERT INTO expense_transactions (amount, from_account_id, to_account_id, timestamp, name, category_id, is_money_transaction) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", req.amount, req.from_account_id, req.to_account_id, Utc::now(), req.name, req.category_id, req.is_money_transaction)
+            .fetch_one(&mut *tx)
             .await
-            .unwrap()
+            .unwrap();
+
+        tx.commit().await.expect("Cannot create transaction");
+        res
     }
 }

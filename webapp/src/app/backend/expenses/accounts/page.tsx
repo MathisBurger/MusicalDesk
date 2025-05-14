@@ -40,6 +40,12 @@ const AccountsPage = () => {
       width: 200,
     },
     {
+      field: "balance",
+      headerName: "Balance",
+      width: 200,
+      valueFormatter: (value) => `${(value ?? 0) / 100}€`,
+    },
+    {
       field: "is_tracking_account",
       headerName: "Tracking Account",
       width: 150,

@@ -10,6 +10,7 @@ pub struct Account {
     pub owner_name: String,
     pub iban: String,
     pub is_tracking_account: bool,
+    pub balance: i32,
 }
 
 impl Account {
@@ -42,7 +43,7 @@ impl Account {
     }
 
     pub async fn create_account(req: &CreateAccountRequest, db: &Pool<Postgres>) -> Account {
-        query_as!(Account, "INSERT INTO expense_accounts (name, owner_name, iban, is_tracking_account) VALUES ($1, $2, $3, $4) RETURNING *", req.name, req.owner_name, req.iban, req.is_tracking_account)
+        query_as!(Account, "INSERT INTO expense_accounts (name, owner_name, iban, is_tracking_account, balance) VALUES ($1, $2, $3, $4, $5) RETURNING *", req.name, req.owner_name, req.iban, req.is_tracking_account, 0)
             .fetch_one(db)
             .await.expect("Cannot create account")
     }

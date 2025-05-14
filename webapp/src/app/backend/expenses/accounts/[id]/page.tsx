@@ -41,6 +41,10 @@ const AccountDetailsPage = () => {
         value: accountData?.iban,
       },
       {
+        title: "Balance",
+        value: `${(accountData?.balance ?? 0) / 100}€`,
+      },
+      {
         title: "Tracking Account",
         value: accountData?.is_tracking_account ? <Check /> : <Clear />,
       },

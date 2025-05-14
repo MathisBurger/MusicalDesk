@@ -11,6 +11,11 @@ pub mod shop;
 pub mod user;
 
 #[derive(Deserialize)]
+pub struct SearchQuery {
+    pub search: Option<String>,
+}
+
+#[derive(Deserialize)]
 pub(crate) struct PaginationQuery {
     pub page: i32,
     pub page_size: i32,

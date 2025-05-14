@@ -1,12 +1,5 @@
-use actix_web::{
-    get,
-    web::{Data, Json, Path, Query},
-};
-use actix_web::{post, HttpResponse};
-use serde::Deserialize;
-
 use crate::{
-    controller::PaginationQuery,
+    controller::{PaginationQuery, SearchQuery},
     dto::transaction::TransactionDto,
     models::{
         expense::{account::Account, transaction::Transaction},
@@ -16,13 +9,23 @@ use crate::{
     serialize::serialize_many,
     AppState,
 };
+use actix_web::{
+    get,
+    web::{Data, Json, Path, Query},
+};
+use actix_web::{post, HttpResponse};
+use serde::Deserialize;
 
 #[get("/expense/accounts")]
-pub async fn get_accounts(user: User, state: Data<AppState>) -> Result<HttpResponse, Error> {
+pub async fn get_accounts(
+    user: User,
+    state: Data<AppState>,
+    query: Query<SearchQuery>,
+) -> Result<HttpResponse, Error> {
     if !user.has_role_or_admin(UserRole::Accountant) {
         return Err(Error::Forbidden);
     }
-    let accounts = Account::get_accounts(&state.database).await;
+    let accounts = Account::get_accounts(query.search.clone(), &state.database).await;
     Ok(HttpResponse::Ok().json(accounts))
 }
 

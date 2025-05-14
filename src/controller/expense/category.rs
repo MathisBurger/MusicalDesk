@@ -1,5 +1,5 @@
 use crate::{
-    controller::PaginationQuery,
+    controller::{PaginationQuery, SearchQuery},
     dto::transaction::TransactionDto,
     models::{
         expense::{category::Category, transaction::Transaction},
@@ -15,11 +15,6 @@ use actix_web::{
     HttpResponse,
 };
 use serde::Deserialize;
-
-#[derive(Deserialize)]
-pub struct SearchQuery {
-    pub search: Option<String>,
-}
 
 #[get("/expense/categories")]
 pub async fn get_categories(

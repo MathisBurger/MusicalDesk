@@ -49,12 +49,12 @@ const BudgetsPage = () => {
     {
       field: "budget",
       headerName: "Budget",
-      valueFormatter: (value) => `${value}€`,
+      valueFormatter: (value) => `${(value ?? 0) / 100}€`,
     },
     {
       field: "spent",
       headerName: "Spent",
-      valueFormatter: (value) => `${value}€`,
+      valueFormatter: (value) => `${(value ?? 0) / 100}€`,
     },
   ];
 

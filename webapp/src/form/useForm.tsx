@@ -70,7 +70,7 @@ const useForm = <T extends object>({
   const onInvalid = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // @ts-expect-error ignore
-    setErrors({ [`${e.target.name}`]: "This value is required" });
+    setErrors({ [`${e.target.name}`]: e.target.validationMessage });
   };
 
   const getFormType = (key: keyof T) => {

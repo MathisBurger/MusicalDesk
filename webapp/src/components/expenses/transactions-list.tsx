@@ -39,7 +39,7 @@ const TransactionsList = ({
     {
       field: "amount",
       headerName: "Amount",
-      valueFormatter: (value) => `${value}€`,
+      valueFormatter: (value) => `${(value ?? 0) / 100}€`,
     },
     {
       field: "name",

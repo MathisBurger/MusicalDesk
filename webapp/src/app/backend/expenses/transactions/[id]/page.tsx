@@ -29,7 +29,7 @@ const TransactionPage = () => {
       },
       {
         title: "Amount",
-        value: `${data?.amount ?? 0}€`,
+        value: `${(data?.amount ?? 0) / 100}€`,
       },
       {
         title: "From account",

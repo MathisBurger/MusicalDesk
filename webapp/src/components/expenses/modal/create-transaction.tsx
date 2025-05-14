@@ -52,7 +52,10 @@ const CreateTransactionModal = ({
   });
 
   const submit = async (req: CreateTransactionRequest) => {
-    const result = await createTransaction(req);
+    const result = await createTransaction({
+      ...req,
+      amount: req.amount * 100,
+    });
     if (result) {
       onClose();
       return;

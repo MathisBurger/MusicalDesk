@@ -42,6 +42,7 @@ const ExpensesList = ({
     {
       field: "total_amount",
       headerName: "Total amount",
+      valueFormatter: (value) => `${(value ?? 0) / 100}€`,
     },
     {
       field: "expense_transaction",

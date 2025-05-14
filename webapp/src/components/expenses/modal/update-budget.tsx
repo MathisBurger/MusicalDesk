@@ -27,17 +27,20 @@ const UpdateBudgetModal = ({ onClose, budget }: UpdateBudgetModalProps) => {
   const form = useForm<UpdateBudgetRequest>({
     defaultValues: {
       name: budget.name,
-      budget: budget.budget,
+      budget: budget.budget / 100,
     },
     labels: {
       name: "Name",
       budget: "Budget",
     },
     required: ["name", "budget"],
+    explicitTypes: {
+      budget: "number",
+    },
   });
 
   const submit = async (req: UpdateBudgetRequest) => {
-    const result = await updateBudget(req);
+    const result = await updateBudget({ ...req, budget: req.budget * 100 });
     if (result) {
       onClose();
       return;

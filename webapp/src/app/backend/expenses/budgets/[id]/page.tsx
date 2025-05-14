@@ -47,11 +47,11 @@ const BudgetDetailsPage = () => {
       },
       {
         title: "Budget",
-        value: `${budgetData?.budget}€`,
+        value: `${(budgetData?.budget ?? 0) / 100}€`,
       },
       {
         title: "Spent",
-        value: `${budgetData?.spent}€`,
+        value: `${(budgetData?.spent ?? 0) / 100}€`,
       },
     ],
     [budgetData],

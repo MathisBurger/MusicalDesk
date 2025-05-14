@@ -21,6 +21,7 @@ export interface FormInputProps {
   endDecorator?: InputProps["endDecorator"];
   disabled?: boolean;
   sx?: InputProps["sx"];
+  slotProps?: InputProps["slotProps"];
 }
 
 /**
@@ -49,6 +50,19 @@ const padNum = (num: number): string => {
   return `${num}`;
 };
 
+const parseSlotProps = (
+  type?: string,
+  slotProps?: InputProps["slotProps"],
+): InputProps["slotProps"] => {
+  if (type === "number") {
+    if (slotProps) {
+      return { ...slotProps, input: { ...slotProps.input, step: 0.01 } };
+    }
+    return { input: { step: 0.01 } };
+  }
+  return slotProps;
+};
+
 /**
  * The form input component that renders MUI form control with input and error
  */
@@ -62,6 +76,7 @@ const FormInput = ({
   endDecorator,
   disabled,
   sx,
+  slotProps,
 }: FormInputProps) => {
   const defaultValueOverride = useMemo<Exclude<FormValue, Date>>(() => {
     if (defaultValue instanceof Date) {
@@ -98,6 +113,7 @@ const FormInput = ({
           defaultValue={(defaultValueOverride as string) ?? ""}
           endDecorator={endDecorator}
           disabled={disabled}
+          slotProps={parseSlotProps(type, slotProps)}
           sx={sx}
         />
       )}

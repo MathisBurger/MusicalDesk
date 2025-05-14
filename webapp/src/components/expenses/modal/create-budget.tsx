@@ -45,7 +45,7 @@ const CreateBudgetModal = ({ onClose }: CreateBudgetModalProps) => {
   });
 
   const submit = async (req: CreateBudgetRequest) => {
-    const result = await createBudget(req);
+    const result = await createBudget({ ...req, budget: req.budget * 100 });
     if (result) {
       onClose();
       return;

@@ -25,7 +25,7 @@ impl Expense {
             "e.*",
             "expense_expenses e JOIN expense_join_expense_budget j",
             Some("j.budget_id = $1"),
-            None,
+            Some("timestamp DESC"),
             page,
             page_size,
             vec![budget_id],

@@ -46,7 +46,7 @@ impl Transaction {
         Paginated::create_paginated_query::<i32>(
             "*",
             "expense_transactions",
-            None,
+            Some("ORDER BY expense_transactions.timestamp DESC"),
             page,
             page_size,
             vec![],

@@ -44,10 +44,18 @@ const AccountsPage = () => {
       headerName: "Balance",
       width: 200,
       valueFormatter: (value) => `${(value ?? 0) / 100}€`,
+      renderCell: ({ row }) =>
+        row.is_deposit_account ? "unknown" : row.balance,
     },
     {
       field: "is_tracking_account",
       headerName: "Tracking Account",
+      width: 150,
+      type: "boolean",
+    },
+    {
+      field: "is_deposit_account",
+      headerName: "Deposit Account",
       width: 150,
       type: "boolean",
     },

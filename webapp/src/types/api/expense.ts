@@ -5,6 +5,7 @@ export interface CreateAccountRequest {
   owner_name: string;
   iban: string;
   is_tracking_account: boolean;
+  is_deposit_account: boolean;
 }
 
 export interface UpdateAccountRequest {
@@ -19,6 +20,7 @@ export interface Account {
   owner_name: string;
   iban: string;
   is_tracking_account: boolean;
+  is_deposit_account: boolean;
   balance: number;
 }
 

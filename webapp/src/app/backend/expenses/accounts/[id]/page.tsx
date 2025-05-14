@@ -42,11 +42,17 @@ const AccountDetailsPage = () => {
       },
       {
         title: "Balance",
-        value: `${(accountData?.balance ?? 0) / 100}€`,
+        value: accountData?.is_deposit_account
+          ? "unknown"
+          : `${(accountData?.balance ?? 0) / 100}€`,
       },
       {
         title: "Tracking Account",
         value: accountData?.is_tracking_account ? <Check /> : <Clear />,
+      },
+      {
+        title: "Deposit Account",
+        value: accountData?.is_deposit_account ? <Check /> : <Clear />,
       },
     ],
     [accountData],

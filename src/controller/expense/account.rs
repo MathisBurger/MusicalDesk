@@ -75,6 +75,7 @@ pub struct CreateAccountRequest {
     pub owner_name: String,
     pub iban: String,
     pub is_tracking_account: bool,
+    pub is_deposit_account: bool,
 }
 
 #[post("/expense/accounts")]

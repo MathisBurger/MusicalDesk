@@ -27,12 +27,14 @@ const CreateAccountModal = ({ onClose }: CreateAccountModalProps) => {
       owner_name: "",
       iban: "",
       is_tracking_account: false,
+      is_deposit_account: false,
     },
     labels: {
       name: "Name",
       owner_name: "Name des Besitzers",
       iban: "IBAN",
       is_tracking_account: "Tracking Account?",
+      is_deposit_account: "Deposit Account?",
     },
     required: ["name", "owner_name", "iban"],
   });

@@ -116,7 +116,7 @@ const EntityList = ({
       return columns.map(setFlexPropertyIfAllowed).concat([actions]);
     }
 
-    return columns;
+    return columns.map(setFlexPropertyIfAllowed);
   }, [filteredRowActions, columns]);
 
   const muiTheme = createTheme({

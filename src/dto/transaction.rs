@@ -2,12 +2,8 @@ use std::collections::HashMap;
 
 use chrono::{DateTime, Utc};
 use serde::Serialize;
-use serde_json::to_value;
 
-use crate::{
-    models::expense::{account::Account, category::Category, transaction::Transaction},
-    serialize::Serializer,
-};
+use crate::{models::expense::transaction::Transaction, serialize::Serializer};
 
 use super::SerializerHelper;
 

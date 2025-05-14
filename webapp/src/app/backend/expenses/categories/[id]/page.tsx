@@ -9,7 +9,7 @@ import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useCategoryQuery from "@/hooks/queries/expense/useCategoryQuery";
 import useCategoryTransactionsQuery from "@/hooks/queries/expense/useCategoryTransactionsQuery";
 import { UserRole } from "@/types/api/user";
-import { Check, X } from "@mui/icons-material";
+import { Check, Clear } from "@mui/icons-material";
 import { Button, Card, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -37,7 +37,7 @@ const CategoryPage = () => {
       },
       {
         title: "Income category",
-        value: categoryData?.is_income ? <Check /> : <X />,
+        value: categoryData?.is_income ? <Check /> : <Clear />,
       },
     ],
     [categoryData],

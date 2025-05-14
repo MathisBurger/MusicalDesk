@@ -2,7 +2,9 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow, PgPool, Pool, Postgres};
 
-use crate::models::generic::Paginated;
+use crate::models::generic::{Error, Paginated};
+
+use super::account::Account;
 
 #[derive(Deserialize)]
 pub struct TransactionRequest {
@@ -94,30 +96,40 @@ impl Transaction {
         .await
     }
 
-    pub async fn create(req: &TransactionRequest, db: &PgPool) -> Transaction {
+    pub async fn create(req: &TransactionRequest, db: &PgPool) -> Result<Transaction, Error> {
         let mut tx: sqlx::Transaction<'_, Postgres> = db.begin().await.unwrap();
-        sqlx::query!(
-            "UPDATE expense_accounts SET balance = balance - $1 WHERE id = $2",
-            req.amount,
-            req.from_account_id
-        )
-        .execute(&mut *tx)
-        .await
-        .unwrap();
-        sqlx::query!(
-            "UPDATE expense_accounts SET balance = balance + $1 WHERE id = $2",
-            req.amount,
-            req.to_account_id
-        )
-        .execute(&mut *tx)
-        .await
-        .unwrap();
+        let from_account = Account::get_account_by_id(req.from_account_id, db)
+            .await
+            .ok_or(Error::NotFound)?;
+        if !from_account.is_deposit_account {
+            sqlx::query!(
+                "UPDATE expense_accounts SET balance = balance - $1 WHERE id = $2",
+                req.amount,
+                req.from_account_id
+            )
+            .execute(&mut *tx)
+            .await
+            .unwrap();
+        }
+        let to_account = Account::get_account_by_id(req.to_account_id, db)
+            .await
+            .ok_or(Error::NotFound)?;
+        if !to_account.is_deposit_account {
+            sqlx::query!(
+                "UPDATE expense_accounts SET balance = balance + $1 WHERE id = $2",
+                req.amount,
+                req.to_account_id
+            )
+            .execute(&mut *tx)
+            .await
+            .unwrap();
+        }
         let res = sqlx::query_as!(Transaction, "INSERT INTO expense_transactions (amount, from_account_id, to_account_id, timestamp, name, category_id, is_money_transaction) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", req.amount, req.from_account_id, req.to_account_id, Utc::now(), req.name, req.category_id, req.is_money_transaction)
             .fetch_one(&mut *tx)
             .await
             .unwrap();
 
         tx.commit().await.expect("Cannot create transaction");
-        res
+        Ok(res)
     }
 }

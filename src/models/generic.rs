@@ -142,7 +142,6 @@ where
             .push_bind(page_size * page);
 
         let mut count_qb = Self::convert_to_query_builder(count_query, params);
-
         let results = select_qb
             .build_query_as::<T>()
             .fetch_all(db)

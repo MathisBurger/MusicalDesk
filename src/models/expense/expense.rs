@@ -23,9 +23,9 @@ impl Expense {
     ) -> Paginated<Expense> {
         Paginated::create_paginated_query(
             "e.*",
-            "expense_expenses e JOIN expense_join_expense_budget j",
+            "expense_expenses e JOIN expense_join_expense_budget j ON j.expense_id = e.id",
             Some("j.budget_id = $1"),
-            Some("timestamp DESC"),
+            Some("id DESC"),
             page,
             page_size,
             vec![budget_id],

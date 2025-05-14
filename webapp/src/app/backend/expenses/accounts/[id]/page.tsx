@@ -8,7 +8,7 @@ import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useAccountQuery from "@/hooks/queries/expense/useAccountQuery";
 import useAccountTransactionsQuery from "@/hooks/queries/expense/useAccountTransactionsQuery";
 import { UserRole } from "@/types/api/user";
-import { Check, X } from "@mui/icons-material";
+import { Check, Clear } from "@mui/icons-material";
 import { Button, Card, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -42,7 +42,7 @@ const AccountDetailsPage = () => {
       },
       {
         title: "Tracking Account",
-        value: accountData?.is_tracking_account ? <Check /> : <X />,
+        value: accountData?.is_tracking_account ? <Check /> : <Clear />,
       },
     ],
     [accountData],

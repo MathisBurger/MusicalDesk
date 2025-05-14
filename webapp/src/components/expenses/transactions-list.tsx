@@ -2,9 +2,14 @@
 import { Chip } from "@mui/material";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
-import EntityList from "../entity-list";
+import EntityList, { EntityListRowAction } from "../entity-list";
 import CategoryChip from "./category-chip";
-import { MinimalCategory, Transaction } from "@/types/api/expense";
+import {
+  MinimalAccount,
+  MinimalCategory,
+  Transaction,
+} from "@/types/api/expense";
+import AccountChip from "./account-chip";
 
 interface TransactionsListProps {
   transactions: Transaction[];
@@ -37,23 +42,21 @@ const TransactionsList = ({
       headerName: "Amount",
     },
     {
+      field: "name",
+      headerName: "Name",
+    },
+    {
       field: "from_account",
       headerName: "From (Account)",
       renderCell: ({ value }: GridRenderCellParams) => (
-        <Chip
-          onClick={() => router.push(`/backend/expenses/accounts/${value.id}`)}
-          label={value.name}
-        />
+        <AccountChip account={value as MinimalAccount} />
       ),
     },
     {
       field: "to_account",
       headerName: "To (Account)",
       renderCell: ({ value }: GridRenderCellParams) => (
-        <Chip
-          onClick={() => router.push(`/backend/expenses/accounts/${value.id}`)}
-          label={value.name}
-        />
+        <AccountChip account={value as MinimalAccount} />
       ),
     },
     {
@@ -75,6 +78,14 @@ const TransactionsList = ({
     },
   ];
 
+  const rowActions: EntityListRowAction[] = [
+    {
+      name: "Details",
+      onClick: (row) => router.push(`/backend/expenses/transactions/${row.id}`),
+      color: "primary",
+    },
+  ];
+
   return (
     <EntityList
       columns={cols}
@@ -86,6 +97,7 @@ const TransactionsList = ({
       setPageSize={setPageSize}
       paginationMode="server"
       rowCount={rowCount}
+      rowActions={rowActions}
     />
   );
 };

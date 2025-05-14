@@ -84,6 +84,7 @@ export interface Transaction {
   amount: number;
   from_account: MinimalAccount;
   to_account: MinimalAccount;
+  name: string;
   timestamp: string | Date;
   category?: MinimalCategory;
   is_money_transaction: boolean;
@@ -93,6 +94,7 @@ export interface CreateTransactionRequest {
   amount: number;
   from_account_id: number;
   to_account_id: number;
+  name: string;
   timestamp: string | Date;
   category_id?: number;
   is_money_transaction: boolean;

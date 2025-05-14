@@ -95,7 +95,6 @@ export interface CreateTransactionRequest {
   from_account_id: number;
   to_account_id: number;
   name: string;
-  timestamp: string | Date;
   category_id?: number;
   is_money_transaction: boolean;
 }

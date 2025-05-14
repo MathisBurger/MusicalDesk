@@ -1,4 +1,5 @@
 "use client";
+import CreateTransactionModal from "@/components/expenses/modal/create-transaction";
 import TransactionsList from "@/components/expenses/transactions-list";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useTransactionsQuery from "@/hooks/queries/expense/useTransactionsQuery";
@@ -42,6 +43,12 @@ const TransactionsPage = () => {
           pageSize={pageSize}
           setPageSize={setPageSize}
         />
+        {createModalOpen && (
+          <CreateTransactionModal
+            pageSize={pageSize}
+            onClose={() => setCreateModalOpen(false)}
+          />
+        )}
       </Stack>
     </RoleWrapper>
   );

@@ -1,11 +1,11 @@
 "use client";
 import { FormInputProps } from "@/form/form-input";
-import useCategoriesQuery from "@/hooks/queries/expense/useCategoriesQuery";
+import useAccountsQuery from "@/hooks/queries/expense/useAccountsQuery";
 import { Autocomplete, FormControl, FormLabel } from "@mui/joy";
 import { useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
 
-const CategorySelect = ({
+const AccountSelect = ({
   name,
   label,
   required,
@@ -20,7 +20,7 @@ const CategorySelect = ({
   }>(null);
   const [debounced] = useDebounce(search, 1000);
 
-  const { data, isLoading } = useCategoriesQuery(debounced);
+  const { data, isLoading } = useAccountsQuery(debounced);
 
   const options = useMemo(
     () =>
@@ -35,15 +35,13 @@ const CategorySelect = ({
       disabled={disabled}
     >
       {label && <FormLabel>{label}</FormLabel>}
-      {selected?.key && (
-        <input
-          name={name}
-          value={selected?.key}
-          style={{ display: "none" }}
-          required={required}
-          readOnly
-        />
-      )}
+      <input
+        name={name}
+        value={selected?.key ?? -1}
+        style={{ display: "none" }}
+        required={required}
+        readOnly
+      />
       <Autocomplete
         loading={isLoading}
         getOptionLabel={(option) => option.title}
@@ -58,4 +56,4 @@ const CategorySelect = ({
   );
 };
 
-export default CategorySelect;
+export default AccountSelect;

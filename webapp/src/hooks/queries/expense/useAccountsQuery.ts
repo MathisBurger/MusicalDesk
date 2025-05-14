@@ -1,9 +1,11 @@
 import { Account } from "@/types/api/expense";
 import { useQuery } from "@tanstack/react-query";
 
-const accountsQuery = async (): Promise<Account[]> => {
+const accountsQuery = async (
+  search: string | undefined = undefined,
+): Promise<Account[]> => {
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/expense/accounts`,
+    `${process.env.NEXT_PUBLIC_API_URL}/expense/accounts${search ? `?search=${search}` : ""}`,
     {
       credentials: "include",
       mode: "cors",
@@ -18,7 +20,10 @@ const accountsQuery = async (): Promise<Account[]> => {
   return [];
 };
 
-const useAccountsQuery = () =>
-  useQuery({ queryFn: accountsQuery, queryKey: ["expenseAccounts"] });
+const useAccountsQuery = (search: string | undefined = undefined) =>
+  useQuery({
+    queryFn: () => accountsQuery(search),
+    queryKey: ["expenseAccounts", search],
+  });
 
 export default useAccountsQuery;

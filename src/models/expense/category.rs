@@ -25,14 +25,24 @@ impl Category {
     }
 
     pub async fn find_all(search: Option<String>, db: &PgPool) -> Vec<Category> {
-        sqlx::query_as!(
-            Category,
-            "SELECT * FROM expense_categories WHERE name LIKE $1 ORDER BY id",
-            format!("%{}%", search.unwrap_or("".to_string()))
-        )
-        .fetch_all(db)
-        .await
-        .unwrap()
+        let matched = match search {
+            Some(s) => {
+                sqlx::query_as!(
+                    Category,
+                    "SELECT * FROM expense_categories WHERE name LIKE $1 ORDER BY id",
+                    format!("%{}%", s)
+                )
+                .fetch_all(db)
+                .await
+            }
+            None => {
+                sqlx::query_as!(Category, "SELECT * FROM expense_categories ORDER BY id")
+                    .fetch_all(db)
+                    .await
+            }
+        };
+
+        matched.expect("Cannot get all categories")
     }
 
     pub async fn create(req: &CreateCategoryRequest, db: &PgPool) -> Category {

@@ -14,14 +14,24 @@ pub struct Account {
 
 impl Account {
     pub async fn get_accounts(search: Option<String>, db: &Pool<Postgres>) -> Vec<Account> {
-        query_as!(
-            Account,
-            "SELECT * FROM expense_accounts WHERE name LIKE $1 ORDER BY id",
-            search.unwrap_or("".to_string())
-        )
-        .fetch_all(db)
-        .await
-        .expect("Cannot get all accounts")
+        let matched = match search {
+            Some(s) => {
+                query_as!(
+                    Account,
+                    "SELECT * FROM expense_accounts WHERE name LIKE $1 ORDER BY id",
+                    format!("%{}%", s)
+                )
+                .fetch_all(db)
+                .await
+            }
+            None => {
+                query_as!(Account, "SELECT * FROM expense_accounts ORDER BY id")
+                    .fetch_all(db)
+                    .await
+            }
+        };
+
+        matched.expect("Cannot get all accounts")
     }
 
     pub async fn get_account_by_id(id: i32, db: &Pool<Postgres>) -> Option<Account> {

@@ -1,5 +1,4 @@
 "use client";
-import { Chip } from "@mui/material";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 import EntityList, { EntityListRowAction } from "../entity-list";
@@ -40,6 +39,7 @@ const TransactionsList = ({
     {
       field: "amount",
       headerName: "Amount",
+      valueFormatter: (value) => `${value}€`,
     },
     {
       field: "name",
@@ -62,8 +62,6 @@ const TransactionsList = ({
     {
       field: "timestamp",
       headerName: "Timestamp",
-      type: "dateTime",
-      valueGetter: ({ value }) => new Date(value),
     },
     {
       field: "category",
@@ -72,7 +70,7 @@ const TransactionsList = ({
         value ? <CategoryChip value={value as MinimalCategory} /> : null,
     },
     {
-      field: "is_money_transactions",
+      field: "is_money_transaction",
       headerName: "Money transaction?",
       type: "boolean",
     },

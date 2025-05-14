@@ -30,7 +30,7 @@ const useCreateTransactionMutation = (pageSize: number) => {
     mutationFn: createTransaction,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["expenseTransactions", pageSize],
+        queryKey: ["expenseTransactions", 0, pageSize],
       });
     },
   });

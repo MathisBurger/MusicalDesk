@@ -2,7 +2,6 @@
 import BackButton from "@/components/back-button";
 import CategoryChip from "@/components/expenses/category-chip";
 import ExpensesList from "@/components/expenses/expenses-list";
-import UpdateAccountModal from "@/components/expenses/modal/update-account";
 import UpdateBudgetModal from "@/components/expenses/modal/update-budget";
 import KvList, { DisplayedData } from "@/components/kv-list";
 import LoadingComponent from "@/components/loading";

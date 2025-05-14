@@ -112,6 +112,7 @@ where
         select: &str,
         table: &str,
         where_clause: Option<&str>,
+        order_by: Option<&str>,
         page: i32,
         page_size: i32,
         params: Vec<U>,
@@ -131,6 +132,9 @@ where
         }
 
         let mut select_qb = Self::convert_to_query_builder(query, params.clone());
+        if let Some(order_by_real) = order_by {
+            select_qb.push(format!(" ORDER BY {}", order_by_real));
+        }
         select_qb
             .push(" LIMIT ")
             .push_bind(page_size)

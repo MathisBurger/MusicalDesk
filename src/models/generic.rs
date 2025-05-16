@@ -16,6 +16,7 @@ pub enum UserRole {
     ShopCustomer,
     TicketInvalidator,
     Accountant,
+    ExpenseRequestor,
 }
 
 pub const BACKEND_ROLES: [UserRole; 3] =
@@ -31,6 +32,7 @@ impl ToString for UserRole {
             Self::ShopCustomer => "shop_customer".to_string(),
             Self::TicketInvalidator => "ticket_invalidator".to_string(),
             Self::Accountant => "accountant".to_string(),
+            Self::ExpenseRequestor => "expense_requestor".to_string(),
         }
     }
 }
@@ -44,6 +46,7 @@ impl TryFrom<&String> for UserRole {
             "shop_customer" => Ok(Self::ShopCustomer),
             "ticket_invalidator" => Ok(Self::TicketInvalidator),
             "accountant" => Ok(Self::Accountant),
+            "expense_requestor" => Ok(Self::ExpenseRequestor),
             _ => Err(Error::BadRequest),
         }
     }

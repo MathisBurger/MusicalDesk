@@ -1,7 +1,23 @@
 use serde::Serialize;
 use sqlx::{prelude::FromRow, PgPool};
 
-use crate::models::generic::Paginated;
+use crate::{controller::expense::expense::ExpenseRequest, models::generic::Paginated};
+
+pub enum ExpenseStatus {
+    REQUEST,
+    DENIED,
+    ACCEPTED,
+}
+
+impl ExpenseStatus {
+    pub fn to_string(&self) -> String {
+        match self {
+            ExpenseStatus::REQUEST => "REQUEST".to_string(),
+            ExpenseStatus::DENIED => "DENIED".to_string(),
+            ExpenseStatus::ACCEPTED => "ACCEPTED".to_string(),
+        }
+    }
+}
 
 #[derive(Serialize, FromRow)]
 pub struct Expense {
@@ -32,5 +48,18 @@ impl Expense {
             db,
         )
         .await
+    }
+
+    pub async fn create(req: &ExpenseRequest, db: &PgPool) -> Expense {
+        sqlx::query_as!(Expense, "INSERT INTO expense_expenses (name, description, status, total_amount) VALUES ($1, $2, $3, $4) RETURNING *", req.name, req.description, ExpenseStatus::REQUEST.to_string(), req.total_amount)
+            .fetch_one(db)
+            .await.unwrap()
+    }
+
+    pub async fn update(id: i32, req: &ExpenseRequest, db: &PgPool) -> Option<Expense> {
+        sqlx::query_as!(Expense, "UPDATE expense_expenses SET name = $1, description = $2, total_amount = $3 WHERE id = $4 RETURNING *", req.name, req.description, req.total_amount, id)
+            .fetch_optional(db)
+            .await
+            .unwrap()
     }
 }

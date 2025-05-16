@@ -25,4 +25,5 @@ export enum UserRole {
   ShopCustomer = "shop_customer",
   TicketInvalidator = "ticket_invalidator",
   Accountant = "accountant",
+  ExpenseRequestor = "expense_requestor",
 }

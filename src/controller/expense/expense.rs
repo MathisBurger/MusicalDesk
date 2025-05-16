@@ -45,12 +45,14 @@ pub async fn update_expense(
     req: Json<ExpenseRequest>,
     path: Path<(i32,)>,
 ) -> Result<HttpResponse, Error> {
-    if !user.has_role_or_admin(UserRole::ExpenseRequestor) {
-        return Err(Error::Forbidden);
-    }
     let expense = Expense::update(path.0, &req, &state.database)
         .await
         .ok_or(Error::NotFound)?;
+
+    if !user.has_role_or_admin(UserRole::ExpenseRequestor) || expense.requestor_id != user.id {
+        return Err(Error::Forbidden);
+    }
+
     let response: ExpenseDto = serialize_one(&expense, &state.database).await;
     Ok(HttpResponse::Ok().json(response))
 }

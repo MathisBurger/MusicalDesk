@@ -29,6 +29,10 @@ export type FormLabels<T> = Record<keyof T, string>;
 /** Definition of possible form transformers object */
 export type Transformers<T> = Record<keyof T, (value: FormValue) => FormValue>;
 
+export type ShowFieldConditions<T> = Partial<
+  Record<keyof T, (row: Partial<Record<keyof T, FormValue>>) => boolean>
+>;
+
 type Types =
   | "string"
   | "number"
@@ -45,5 +49,13 @@ export type ExplicitTypeHints<T> = Partial<Record<keyof T, Types>>;
 /** All input props of an form input that are supported by the useForm hook */
 export type SupportedInputProps = Pick<
   FormInputProps,
-  "error" | "label" | "type" | "name" | "required" | "defaultValue"
+  | "error"
+  | "label"
+  | "type"
+  | "name"
+  | "required"
+  | "defaultValue"
+  | "value"
+  | "setValue"
+  | "showField"
 >;

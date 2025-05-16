@@ -3,14 +3,38 @@ use sqlx::{query_as, Pool, Postgres};
 
 use crate::controller::expense::account::{CreateAccountRequest, UpdateAccountRequest};
 
+pub enum AccountType {
+    MONEY,
+    MATERIAL,
+    FLOW,
+    FOREIGN,
+}
+
+impl AccountType {
+    pub fn to_string(&self) -> String {
+        match self {
+            AccountType::MONEY => "MONEY".to_string(),
+            AccountType::MATERIAL => "MATERIAL".to_string(),
+            AccountType::FLOW => "FLOW".to_string(),
+            AccountType::FOREIGN => "FOREIGN".to_string(),
+        }
+    }
+
+    pub fn is_valid(value: &String) -> bool {
+        value == &AccountType::MONEY.to_string()
+            || value == &AccountType::MATERIAL.to_string()
+            || value == &AccountType::FLOW.to_string()
+            || value == &AccountType::FOREIGN.to_string()
+    }
+}
+
 #[derive(Serialize)]
 pub struct Account {
     pub id: i32,
     pub name: String,
     pub owner_name: String,
-    pub iban: String,
-    pub is_tracking_account: bool,
-    pub is_deposit_account: bool,
+    pub iban: Option<String>,
+    pub account_type: String,
     pub balance: i32,
 }
 
@@ -44,7 +68,7 @@ impl Account {
     }
 
     pub async fn create_account(req: &CreateAccountRequest, db: &Pool<Postgres>) -> Account {
-        query_as!(Account, "INSERT INTO expense_accounts (name, owner_name, iban, is_tracking_account, is_deposit_account, balance) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", req.name, req.owner_name, req.iban, req.is_tracking_account, req.is_deposit_account, 0)
+        query_as!(Account, "INSERT INTO expense_accounts (name, owner_name, iban, account_type, balance) VALUES ($1, $2, $3, $4, $5) RETURNING *", req.name, req.owner_name, req.iban, req.account_type, 0)
             .fetch_one(db)
             .await.expect("Cannot create account")
     }

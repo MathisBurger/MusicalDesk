@@ -4,7 +4,7 @@ use sqlx::{prelude::FromRow, PgPool, Pool, Postgres};
 
 use crate::models::generic::{Error, Paginated};
 
-use super::account::Account;
+use super::account::{Account, AccountType};
 
 #[derive(Deserialize)]
 pub struct TransactionRequest {
@@ -101,7 +101,7 @@ impl Transaction {
         let from_account = Account::get_account_by_id(req.from_account_id, db)
             .await
             .ok_or(Error::NotFound)?;
-        if !from_account.is_deposit_account {
+        if from_account.account_type != AccountType::FLOW.to_string() {
             sqlx::query!(
                 "UPDATE expense_accounts SET balance = balance - $1 WHERE id = $2",
                 req.amount,
@@ -114,7 +114,7 @@ impl Transaction {
         let to_account = Account::get_account_by_id(req.to_account_id, db)
             .await
             .ok_or(Error::NotFound)?;
-        if !to_account.is_deposit_account {
+        if to_account.account_type != AccountType::FLOW.to_string() {
             sqlx::query!(
                 "UPDATE expense_accounts SET balance = balance + $1 WHERE id = $2",
                 req.amount,

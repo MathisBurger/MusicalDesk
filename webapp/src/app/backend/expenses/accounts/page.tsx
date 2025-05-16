@@ -4,6 +4,7 @@ import CreateAccountModal from "@/components/expenses/modal/create-account";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useAccountsQuery from "@/hooks/queries/expense/useAccountsQuery";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { AccountType } from "@/types/api/expense";
 import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
@@ -45,19 +46,12 @@ const AccountsPage = () => {
       width: 200,
       valueFormatter: (value) => `${(value ?? 0) / 100}€`,
       renderCell: ({ row }) =>
-        row.is_deposit_account ? "unknown" : row.balance,
+        row.account_type === AccountType.FLOW ? "unknown" : row.balance,
     },
     {
-      field: "is_tracking_account",
-      headerName: "Tracking Account",
+      field: "account_type",
+      headerName: "Account Type",
       width: 150,
-      type: "boolean",
-    },
-    {
-      field: "is_deposit_account",
-      headerName: "Deposit Account",
-      width: 150,
-      type: "boolean",
     },
   ];
 

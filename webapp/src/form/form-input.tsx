@@ -22,6 +22,9 @@ export interface FormInputProps {
   disabled?: boolean;
   sx?: InputProps["sx"];
   slotProps?: InputProps["slotProps"];
+  value?: FormValue;
+  setValue?: (value: FormValue) => void;
+  showField?: boolean;
 }
 
 /**
@@ -77,6 +80,9 @@ const FormInput = ({
   disabled,
   sx,
   slotProps,
+  value,
+  setValue,
+  showField = true,
 }: FormInputProps) => {
   const defaultValueOverride = useMemo<Exclude<FormValue, Date>>(() => {
     if (defaultValue instanceof Date) {
@@ -89,6 +95,10 @@ const FormInput = ({
     }
     return defaultValue;
   }, [defaultValue, type]);
+
+  if (!showField) {
+    return null;
+  }
 
   return (
     <FormControl
@@ -105,6 +115,8 @@ const FormInput = ({
           name={name}
           disabled={disabled}
           sx={sx}
+          checked={value === true}
+          onChange={setValue ? (e) => setValue(e.target.checked) : undefined}
         />
       ) : (
         <Input
@@ -115,6 +127,8 @@ const FormInput = ({
           disabled={disabled}
           slotProps={parseSlotProps(type, slotProps)}
           sx={sx}
+          value={typeof value === "number" ? value : `${value}`}
+          onChange={setValue ? (e) => setValue(e.target.value) : undefined}
         />
       )}
       {error && (

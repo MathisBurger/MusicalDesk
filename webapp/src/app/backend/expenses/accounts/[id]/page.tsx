@@ -7,8 +7,8 @@ import LoadingComponent from "@/components/loading";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useAccountQuery from "@/hooks/queries/expense/useAccountQuery";
 import useAccountTransactionsQuery from "@/hooks/queries/expense/useAccountTransactionsQuery";
+import { AccountType } from "@/types/api/expense";
 import { UserRole } from "@/types/api/user";
-import { Check, Clear } from "@mui/icons-material";
 import { Button, Card, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -26,8 +26,8 @@ const AccountDetailsPage = () => {
   const { data: transactionsData, isLoading: transactionsLoading } =
     useAccountTransactionsQuery(parseInt(id, 10), page, pageSize);
 
-  const listData = useMemo<DisplayedData[]>(
-    () => [
+  const listData = useMemo<DisplayedData[]>(() => {
+    const fields = [
       {
         title: "Name",
         value: accountData?.name,
@@ -37,26 +37,28 @@ const AccountDetailsPage = () => {
         value: accountData?.owner_name,
       },
       {
+        title: "Balance",
+        value:
+          accountData?.account_type === AccountType.FLOW
+            ? "unknown"
+            : `${(accountData?.balance ?? 0) / 100}€`,
+      },
+      {
+        title: "Account type",
+        value: accountData?.account_type,
+      },
+    ];
+    if (
+      accountData?.account_type === AccountType.MONEY ||
+      accountData?.account_type === AccountType.FOREIGN
+    ) {
+      fields.push({
         title: "IBAN",
         value: accountData?.iban,
-      },
-      {
-        title: "Balance",
-        value: accountData?.is_deposit_account
-          ? "unknown"
-          : `${(accountData?.balance ?? 0) / 100}€`,
-      },
-      {
-        title: "Tracking Account",
-        value: accountData?.is_tracking_account ? <Check /> : <Clear />,
-      },
-      {
-        title: "Deposit Account",
-        value: accountData?.is_deposit_account ? <Check /> : <Clear />,
-      },
-    ],
-    [accountData],
-  );
+      });
+    }
+    return fields;
+  }, [accountData]);
 
   if (accountDataLoading) {
     return <LoadingComponent />;

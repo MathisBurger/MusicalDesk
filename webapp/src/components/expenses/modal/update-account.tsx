@@ -1,7 +1,11 @@
 import useForm from "@/form/useForm";
 import useUpdateAccountMutation from "@/hooks/mutations/expense/useUpdateAccountMutation";
 import useAlert from "@/hooks/useAlert";
-import { Account, UpdateAccountRequest } from "@/types/api/expense";
+import {
+  Account,
+  AccountType,
+  UpdateAccountRequest,
+} from "@/types/api/expense";
 import {
   Button,
   DialogActions,
@@ -36,6 +40,11 @@ const UpdateAccountModal = ({ onClose, account }: UpdateAccountModalProps) => {
       iban: "IBAN",
     },
     required: ["name", "owner_name", "iban"],
+    showFieldConditions: {
+      iban: () =>
+        account.account_type === AccountType.MONEY ||
+        account.account_type === AccountType.FOREIGN,
+    },
   });
 
   const submit = async (req: UpdateAccountRequest) => {

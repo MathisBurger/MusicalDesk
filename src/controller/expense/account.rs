@@ -2,7 +2,10 @@ use crate::{
     controller::{PaginationQuery, SearchQuery},
     dto::transaction::TransactionDto,
     models::{
-        expense::{account::Account, transaction::Transaction},
+        expense::{
+            account::{Account, AccountType},
+            transaction::Transaction,
+        },
         generic::{Error, Paginated, UserRole},
         user::User,
     },
@@ -73,9 +76,8 @@ pub async fn get_account_transactions(
 pub struct CreateAccountRequest {
     pub name: String,
     pub owner_name: String,
-    pub iban: String,
-    pub is_tracking_account: bool,
-    pub is_deposit_account: bool,
+    pub iban: Option<String>,
+    pub account_type: String,
 }
 
 #[post("/expense/accounts")]
@@ -87,6 +89,9 @@ pub async fn create_account(
     if !user.has_role_or_admin(UserRole::Accountant) {
         return Err(Error::Forbidden);
     }
+    if !AccountType::is_valid(&req.account_type) {
+        return Err(Error::BadRequest);
+    }
     let account = Account::create_account(&req, &state.database).await;
     Ok(HttpResponse::Ok().json(account))
 }
@@ -95,7 +100,7 @@ pub async fn create_account(
 pub struct UpdateAccountRequest {
     pub name: String,
     pub owner_name: String,
-    pub iban: String,
+    pub iban: Option<String>,
 }
 
 #[post("/expense/accounts/{id}")]

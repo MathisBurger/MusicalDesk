@@ -1,7 +1,9 @@
+import FormInput from "@/form/form-input";
 import useForm from "@/form/useForm";
+import WrappedInput from "@/form/wrapped-input";
 import useCreateAccountMutation from "@/hooks/mutations/expense/useCreateAccountMutation";
 import useAlert from "@/hooks/useAlert";
-import { CreateAccountRequest } from "@/types/api/expense";
+import { AccountType, CreateAccountRequest } from "@/types/api/expense";
 import {
   Button,
   DialogActions,
@@ -12,6 +14,7 @@ import {
   ModalDialog,
   Stack,
 } from "@mui/joy";
+import AccountTypeSelect from "../account-type-select";
 
 interface CreateAccountModalProps {
   onClose: () => void;
@@ -25,18 +28,26 @@ const CreateAccountModal = ({ onClose }: CreateAccountModalProps) => {
     defaultValues: {
       name: "",
       owner_name: "",
+      account_type: AccountType.FOREIGN,
       iban: "",
-      is_tracking_account: false,
-      is_deposit_account: false,
     },
     labels: {
       name: "Name",
       owner_name: "Name des Besitzers",
       iban: "IBAN",
-      is_tracking_account: "Tracking Account?",
-      is_deposit_account: "Deposit Account?",
+      // Only money and foreign accounts do have a IBAN. We therefore need to remove this field if there is no money or foreign accounts
+      // Implement this functionality in the form hook itself. It should be pretty powerful then
+      account_type: "Account type",
     },
-    required: ["name", "owner_name", "iban"],
+    required: ["name", "owner_name", "iban", "account_type"],
+    explicitTypes: {
+      iban: "string",
+    },
+    showFieldConditions: {
+      iban: (row) =>
+        row.account_type === AccountType.FOREIGN ||
+        row.account_type === AccountType.MONEY,
+    },
   });
 
   const submit = async (req: CreateAccountRequest) => {
@@ -61,7 +72,12 @@ const CreateAccountModal = ({ onClose }: CreateAccountModalProps) => {
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
             <form onSubmit={form.onSubmit(submit)} onInvalid={form.onInvalid}>
-              {form.renderFormBody()}
+              <WrappedInput {...form.getInputProps("account_type")}>
+                <AccountTypeSelect {...form.getInputProps("account_type")} />
+              </WrappedInput>
+              <FormInput {...form.getInputProps("name")} />
+              <FormInput {...form.getInputProps("owner_name")} />
+              <FormInput {...form.getInputProps("iban")} />
               <DialogActions>
                 <Button type="submit" loading={isPending}>
                   Create

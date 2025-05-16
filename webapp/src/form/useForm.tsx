@@ -7,6 +7,7 @@ import {
   FormType,
   FormValidationRules,
   FormValue,
+  ShowFieldConditions,
   SupportedInputProps,
   Transformers,
 } from "./types";
@@ -28,6 +29,8 @@ interface UseFormProps<T> {
   transformers?: Transformers<T>;
   /** All typehints defined */
   explicitTypes?: ExplicitTypeHints<T>;
+  /** All show field conditions */
+  showFieldConditions?: ShowFieldConditions<T>;
 }
 
 // eslint-disable-next-line
@@ -38,8 +41,13 @@ const useForm = <T extends object>({
   required,
   transformers,
   explicitTypes,
+  showFieldConditions,
 }: UseFormProps<FormType<T>>) => {
   const [errors, setErrors] = useState<Record<keyof T, string> | null>(null);
+
+  const [values, setValues] = useState<Partial<Record<keyof T, FormValue>>>({
+    ...defaultValues,
+  });
 
   /**
    * Event listener that can be passed to onSubmit of an HTML form element.
@@ -89,13 +97,22 @@ const useForm = <T extends object>({
    * @returns The input props
    */
   const getInputProps = (key: keyof T): SupportedInputProps => {
+    const defaultValue = defaultValues ? defaultValues[key] : undefined;
+
     return {
       name: key as string,
       label: labels ? labels[key] : undefined,
       required: required ? required.indexOf(key) > -1 : undefined,
       type: getFormType(key),
       error: errors ? errors[key] : undefined,
-      defaultValue: defaultValues ? defaultValues[key] : undefined,
+      defaultValue,
+      value: values[key] ?? defaultValue,
+      setValue: (value: FormValue) => setValues({ ...values, [key]: value }),
+      showField: showFieldConditions
+        ? showFieldConditions[key]
+          ? showFieldConditions[key](values)
+          : true
+        : true,
     };
   };
 

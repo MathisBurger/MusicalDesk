@@ -1,11 +1,18 @@
 // ACCOUNT
+//
+
+export enum AccountType {
+  MONEY = "MONEY",
+  MATERIAL = "MATERIAL",
+  FLOW = "FLOW",
+  FOREIGN = "FOREIGN",
+}
 
 export interface CreateAccountRequest {
   name: string;
   owner_name: string;
-  iban: string;
-  is_tracking_account: boolean;
-  is_deposit_account: boolean;
+  iban?: string;
+  account_type: AccountType;
 }
 
 export interface UpdateAccountRequest {
@@ -19,8 +26,7 @@ export interface Account {
   name: string;
   owner_name: string;
   iban: string;
-  is_tracking_account: boolean;
-  is_deposit_account: boolean;
+  account_type: AccountType;
   balance: number;
 }
 

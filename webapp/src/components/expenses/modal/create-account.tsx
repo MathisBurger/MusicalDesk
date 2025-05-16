@@ -35,8 +35,6 @@ const CreateAccountModal = ({ onClose }: CreateAccountModalProps) => {
       name: "Name",
       owner_name: "Name des Besitzers",
       iban: "IBAN",
-      // Only money and foreign accounts do have a IBAN. We therefore need to remove this field if there is no money or foreign accounts
-      // Implement this functionality in the form hook itself. It should be pretty powerful then
       account_type: "Account type",
     },
     required: ["name", "owner_name", "iban", "account_type"],

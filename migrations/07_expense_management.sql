@@ -46,8 +46,8 @@ CREATE TABLE IF NOT EXISTS expense_expenses (
     balancing_transaction_id INTEGER REFERENCES expense_transactions (id),
     name VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    is_request BOOLEAN NOT NULL,
-    total_amount INTEGER NOT NULL
+    total_amount INTEGER NOT NULL,
+    status VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS expense_join_expense_budget (

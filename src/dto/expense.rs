@@ -12,7 +12,7 @@ pub struct ExpenseDto {
     pub balancing_transaction: Option<Value>,
     pub name: String,
     pub description: String,
-    pub is_request: bool,
+    pub status: String,
     pub total_amount: i32,
 }
 
@@ -35,7 +35,7 @@ impl Serializer<Expense> for ExpenseDto {
             balancing_transaction,
             name: input.name.clone(),
             description: input.description.clone(),
-            is_request: input.is_request,
+            status: input.status.clone(),
             total_amount: input.total_amount,
         }
     }

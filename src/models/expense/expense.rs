@@ -10,7 +10,7 @@ pub struct Expense {
     pub balancing_transaction_id: Option<i32>,
     pub name: String,
     pub description: String,
-    pub is_request: bool,
+    pub status: String,
     pub total_amount: i32,
 }
 

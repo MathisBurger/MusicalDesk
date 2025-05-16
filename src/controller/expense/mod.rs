@@ -3,6 +3,7 @@ use actix_web::web::ServiceConfig;
 pub mod account;
 pub mod budget;
 pub mod category;
+pub mod expense;
 pub mod transaction;
 
 pub fn init_controllers(cfg: &mut ServiceConfig) {

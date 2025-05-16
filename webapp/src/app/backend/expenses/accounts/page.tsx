@@ -44,9 +44,10 @@ const AccountsPage = () => {
       field: "balance",
       headerName: "Balance",
       width: 200,
-      valueFormatter: (value) => `${(value ?? 0) / 100}€`,
       renderCell: ({ row }) =>
-        row.account_type === AccountType.FLOW ? "unknown" : row.balance,
+        row.account_type === AccountType.FLOW
+          ? "unknown"
+          : `${(row.balance ?? 0) / 100}€`,
     },
     {
       field: "account_type",

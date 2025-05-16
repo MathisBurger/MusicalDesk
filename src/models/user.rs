@@ -23,6 +23,7 @@ pub struct User {
     pub email: Option<String>,
     #[serde(skip_serializing)]
     pub customer_id: Option<String>,
+    #[serde(skip_serializing)]
     pub current_checkout_session: Option<String>,
 }
 

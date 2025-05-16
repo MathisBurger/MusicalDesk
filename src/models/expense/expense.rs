@@ -1,7 +1,10 @@
 use serde::Serialize;
 use sqlx::{prelude::FromRow, PgPool};
 
-use crate::{controller::expense::expense::ExpenseRequest, models::generic::Paginated};
+use crate::{
+    controller::expense::expense::ExpenseRequest,
+    models::{generic::Paginated, image::Image, user::User},
+};
 
 pub enum ExpenseStatus {
     REQUEST,
@@ -28,6 +31,7 @@ pub struct Expense {
     pub description: String,
     pub status: String,
     pub total_amount: i32,
+    pub requestor_id: i32,
 }
 
 impl Expense {
@@ -50,8 +54,48 @@ impl Expense {
         .await
     }
 
-    pub async fn create(req: &ExpenseRequest, db: &PgPool) -> Expense {
-        sqlx::query_as!(Expense, "INSERT INTO expense_expenses (name, description, status, total_amount) VALUES ($1, $2, $3, $4) RETURNING *", req.name, req.description, ExpenseStatus::REQUEST.to_string(), req.total_amount)
+    pub async fn find_for_requestor_paginated(
+        requestor_id: i32,
+        page: i32,
+        page_size: i32,
+        db: &PgPool,
+    ) -> Paginated<Expense> {
+        Paginated::create_paginated_query(
+            "*",
+            "expense_expenses",
+            Some("requestor_id = $1"),
+            Some("id DESC"),
+            page,
+            page_size,
+            vec![requestor_id],
+            db,
+        )
+        .await
+    }
+
+    pub async fn find_paginated(page: i32, page_size: i32, db: &PgPool) -> Paginated<Expense> {
+        Paginated::create_paginated_query::<i32>(
+            "*",
+            "expense_expenses",
+            None,
+            Some("id DESC"),
+            page,
+            page_size,
+            vec![],
+            db,
+        )
+        .await
+    }
+
+    pub async fn find_by_id(id: i32, db: &PgPool) -> Option<Expense> {
+        sqlx::query_as!(Expense, "SELECT * FROM expense_expenses WHERE id = $1", id)
+            .fetch_optional(db)
+            .await
+            .unwrap()
+    }
+
+    pub async fn create(req: &ExpenseRequest, user: &User, db: &PgPool) -> Expense {
+        sqlx::query_as!(Expense, "INSERT INTO expense_expenses (name, description, status, total_amount, requestor_id) VALUES ($1, $2, $3, $4, $5) RETURNING *", req.name, req.description, ExpenseStatus::REQUEST.to_string(), req.total_amount, user.id)
             .fetch_one(db)
             .await.unwrap()
     }
@@ -59,6 +103,13 @@ impl Expense {
     pub async fn update(id: i32, req: &ExpenseRequest, db: &PgPool) -> Option<Expense> {
         sqlx::query_as!(Expense, "UPDATE expense_expenses SET name = $1, description = $2, total_amount = $3 WHERE id = $4 RETURNING *", req.name, req.description, req.total_amount, id)
             .fetch_optional(db)
+            .await
+            .unwrap()
+    }
+
+    pub async fn find_images_for_id(id: i32, db: &PgPool) -> Vec<Image> {
+        sqlx::query_as!(Image, "SELECT images.* FROM images JOIN expense_images ex ON ex.image_id = images.id WHERE ex.expense_id = $1", id)
+            .fetch_all(db)
             .await
             .unwrap()
     }

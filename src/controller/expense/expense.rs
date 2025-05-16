@@ -1,18 +1,19 @@
 use actix_web::{
-    post,
-    web::{Data, Json, Path},
+    get, post,
+    web::{Data, Json, Path, Query},
     HttpResponse,
 };
 use serde::Deserialize;
 
 use crate::{
-    dto::expense::ExpenseDto,
+    controller::PaginationQuery,
+    dto::expense::{ExpenseDto, ExpenseWithImagesDto},
     models::{
         expense::expense::Expense,
-        generic::{Error, UserRole},
+        generic::{Error, Paginated, UserRole},
         user::User,
     },
-    serialize::serialize_one,
+    serialize::{serialize_many, serialize_one},
     AppState,
 };
 
@@ -32,7 +33,7 @@ pub async fn request_expense(
     if !user.has_role_or_admin(UserRole::ExpenseRequestor) {
         return Err(Error::Forbidden);
     }
-    let expense = Expense::create(&req, &state.database).await;
+    let expense = Expense::create(&req, &user, &state.database).await;
     let response: ExpenseDto = serialize_one(&expense, &state.database).await;
     Ok(HttpResponse::Ok().json(response))
 }
@@ -54,12 +55,50 @@ pub async fn update_expense(
     Ok(HttpResponse::Ok().json(response))
 }
 
-pub async fn get_expense() {
-    // Gets the expense with all images
+#[get("/expense/expenses/{id}")]
+pub async fn get_expense(
+    user: User,
+    state: Data<AppState>,
+    path: Path<(i32,)>,
+) -> Result<HttpResponse, Error> {
+    let expense = Expense::find_by_id(path.0, &state.database)
+        .await
+        .ok_or(Error::NotFound)?;
+
+    if !(user.has_role_or_admin(UserRole::ExpenseRequestor) && user.id == expense.requestor_id)
+        && !user.has_role_or_admin(UserRole::Accountant)
+    {
+        return Err(Error::Forbidden);
+    }
+
+    let response: ExpenseWithImagesDto = serialize_one(&expense, &state.database).await;
+    Ok(HttpResponse::Ok().json(response))
 }
 
-pub async fn get_expenses() {
-    // Gets all expenses without images
+#[get("/expense/expenses")]
+pub async fn get_expenses(
+    user: User,
+    state: Data<AppState>,
+    query: Query<PaginationQuery>,
+) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::ExpenseRequestor)
+        && !user.has_role_or_admin(UserRole::Accountant)
+    {
+        return Err(Error::Forbidden);
+    }
+
+    let paginated: Paginated<Expense> = if user.has_role_or_admin(UserRole::Accountant) {
+        Expense::find_paginated(query.page, query.page_size, &state.database).await
+    } else {
+        Expense::find_for_requestor_paginated(user.id, query.page, query.page_size, &state.database)
+            .await
+    };
+
+    let results: Paginated<ExpenseDto> = Paginated {
+        results: serialize_many(paginated.results, &state.database).await,
+        total: paginated.total,
+    };
+    Ok(HttpResponse::Ok().json(results))
 }
 
 pub async fn add_images_to_expense() {

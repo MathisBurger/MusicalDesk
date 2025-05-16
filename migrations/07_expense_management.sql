@@ -47,7 +47,8 @@ CREATE TABLE IF NOT EXISTS expense_expenses (
     name VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     total_amount INTEGER NOT NULL,
-    status VARCHAR(255) NOT NULL
+    status VARCHAR(255) NOT NULL,
+    requestor_id INTEGER NOT NULL REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS expense_join_expense_budget (

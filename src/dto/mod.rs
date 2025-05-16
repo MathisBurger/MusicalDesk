@@ -5,7 +5,10 @@ use sqlx::PgPool;
 use transaction::TransactionDto;
 
 use crate::{
-    models::expense::{account::Account, category::Category, transaction::Transaction},
+    models::{
+        expense::{account::Account, category::Category, transaction::Transaction},
+        user::User,
+    },
     serialize::Serializer,
 };
 
@@ -51,6 +54,17 @@ pub trait SerializerHelper {
             Some(account) => account,
             None => serde_json::to_value(Account::get_account_by_id(account_id, db).await.unwrap())
                 .unwrap(),
+        }
+    }
+
+    async fn get_user(
+        cache: &mut std::collections::HashMap<String, Value>,
+        user_id: i32,
+        db: &PgPool,
+    ) -> Value {
+        match Self::find_in_serializer_cache(cache, format!("user_{}", user_id)) {
+            Some(user) => user,
+            None => serde_json::to_value(User::get_by_id(user_id, db).await.unwrap()).unwrap(),
         }
     }
 

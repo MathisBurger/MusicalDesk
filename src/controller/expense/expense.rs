@@ -1,3 +1,4 @@
+use actix_multipart::form::{tempfile::TempFile, MultipartForm};
 use actix_web::{
     get, post,
     web::{Data, Json, Path, Query},
@@ -11,6 +12,7 @@ use crate::{
     models::{
         expense::expense::Expense,
         generic::{Error, Paginated, UserRole},
+        image::Image,
         user::User,
     },
     serialize::{serialize_many, serialize_one},
@@ -103,8 +105,42 @@ pub async fn get_expenses(
     Ok(HttpResponse::Ok().json(results))
 }
 
-pub async fn add_images_to_expense() {
-    // Add images to expense
+#[derive(MultipartForm)]
+struct UploadFileMultipart {
+    #[multipart(limit = "10MB")]
+    pub files: Vec<TempFile>,
+}
+
+#[post("/expense/expenses/{id}/images")]
+pub async fn add_images_to_expense(
+    user: User,
+    state: Data<AppState>,
+    MultipartForm(form): MultipartForm<UploadFileMultipart>,
+    path: Path<(i32,)>,
+) -> Result<HttpResponse, Error> {
+    let expense = Expense::find_by_id(path.0, &state.database)
+        .await
+        .ok_or(Error::NotFound)?;
+
+    if !(user.has_role_or_admin(UserRole::ExpenseRequestor) && user.id == expense.requestor_id)
+        && !user.has_role_or_admin(UserRole::Accountant)
+    {
+        return Err(Error::Forbidden);
+    }
+
+    for file in form.files {
+        let image = Image::create(
+            &file.file_name.clone().unwrap_or("File".to_string()),
+            file,
+            true,
+            Some(vec![UserRole::Accountant.to_string()]),
+            Some(vec![user.id]),
+            &state.database,
+        )
+        .await?;
+        Expense::add_image_to(expense.id, image.id, &state.database).await;
+    }
+    Ok(HttpResponse::Ok().finish())
 }
 
 pub async fn deny_expense() {

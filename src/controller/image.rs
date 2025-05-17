@@ -56,9 +56,10 @@ pub async fn upload_image(
         form.file,
         form.meta.private,
         form.meta.required_roles.clone(),
+        None,
         &state.database,
     )
-    .await;
+    .await?;
     Ok(HttpResponse::Ok().json(image))
 }
 
@@ -87,7 +88,10 @@ pub async fn get_image(
             return get_file(&image, &req);
         }
     }
-    if user.has_role_or_admin(UserRole::Default) {
+    if user.has_role(UserRole::Admin) {
+        return get_file(&image, &req);
+    }
+    if Image::has_access_to(image.id, user.id, &state.database).await {
         return get_file(&image, &req);
     }
     Err(Error::Forbidden)

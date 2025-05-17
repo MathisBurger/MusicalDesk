@@ -113,4 +113,15 @@ impl Expense {
             .await
             .unwrap()
     }
+
+    pub async fn add_image_to(id: i32, image_id: i32, db: &PgPool) {
+        sqlx::query!(
+            "INSERT INTO expense_images (expense_id, image_id) VALUES ($1, $2);",
+            id,
+            image_id
+        )
+        .execute(db)
+        .await
+        .unwrap();
+    }
 }

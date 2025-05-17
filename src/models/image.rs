@@ -3,7 +3,7 @@ use std::{fs::File, io::Read};
 use actix_multipart::form::tempfile::TempFile;
 use serde::Serialize;
 use sha2::{Digest, Sha256};
-use sqlx::{Pool, Postgres};
+use sqlx::{PgPool, Pool, Postgres};
 
 use crate::util::time::unix_timestamp;
 
@@ -24,13 +24,15 @@ impl Image {
         file: TempFile,
         private: bool,
         required_roles: Option<Vec<String>>,
+        image_access: Option<Vec<i32>>,
         db: &Pool<Postgres>,
-    ) -> Image {
+    ) -> Result<Image, Error> {
         let local_path = get_local_filename(&file);
         file.file
             .persist(&local_path)
             .expect("Cannot save file to local storage");
-        sqlx::query_as!(
+        let mut tx = db.begin().await.map_err(|_x| Error::BadRequest)?;
+        let image = sqlx::query_as!(
             Image,
             "INSERT INTO images (name, local_file_name, private, required_roles) VALUES ($1, $2, $3, $4) RETURNING *",
             name,
@@ -38,9 +40,26 @@ impl Image {
             private,
             required_roles.as_deref()
         )
-        .fetch_one(db)
+        .fetch_one(&mut *tx)
         .await
-        .expect("Cannot create image database entry")
+        .expect("Cannot create image database entry");
+
+        if let Some(access_users) = image_access {
+            for user_id in access_users {
+                sqlx::query!(
+                    "INSERT INTO image_access (image_id, user_id) VALUES ($1, $2)",
+                    image.id,
+                    user_id
+                )
+                .execute(&mut *tx)
+                .await
+                .unwrap();
+            }
+        }
+
+        tx.commit().await.map_err(|_x| Error::BadRequest)?;
+
+        Ok(image)
     }
 
     pub async fn find_by_id(id: i32, db: &Pool<Postgres>) -> Result<Image, Error> {
@@ -48,6 +67,19 @@ impl Image {
             .fetch_one(db)
             .await
             .map_err(|_x| Error::NotFound)
+    }
+
+    pub async fn has_access_to(image_id: i32, user_id: i32, db: &PgPool) -> bool {
+        sqlx::query!(
+            "SELECT EXISTS(SELECT * FROM image_access WHERE image_id = $1 AND user_id = $2)",
+            image_id,
+            user_id
+        )
+        .fetch_one(db)
+        .await
+        .unwrap()
+        .exists
+        .unwrap()
     }
 }
 

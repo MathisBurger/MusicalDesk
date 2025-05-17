@@ -79,3 +79,9 @@ CREATE TABLE IF NOT EXISTS expense_reports_transactions (
     transaction_id INTEGER NOT NULL REFERENCES expense_transactions (id),
     PRIMARY KEY (report_id, transaction_id)
 );
+
+CREATE TABLE IF NOT EXISTS image_access (
+    image_id INTEGER NOT NULL REFERENCES images (id),
+    user_id INTEGER NOT NULL REFERENCES users (id),
+    PRIMARY KEY (image_id, user_id)
+);

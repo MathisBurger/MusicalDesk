@@ -24,5 +24,11 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(budget::get_budget_expenses)
         .service(transaction::create_transaction)
         .service(transaction::get_transaction)
-        .service(transaction::get_transactions);
+        .service(transaction::get_transactions)
+        .service(expense::request_expense)
+        .service(expense::update_expense)
+        .service(expense::get_expense)
+        .service(expense::get_expenses)
+        .service(expense::deny_expense)
+        .service(expense::accept_expense);
 }

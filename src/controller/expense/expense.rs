@@ -10,7 +10,11 @@ use crate::{
     controller::PaginationQuery,
     dto::expense::{ExpenseDto, ExpenseWithImagesDto},
     models::{
-        expense::expense::{Expense, ExpenseStatus},
+        expense::{
+            budget::Budget,
+            expense::{Expense, ExpenseStatus},
+            transaction::{Transaction, TransactionRequest},
+        },
         generic::{Error, Paginated, UserRole},
         image::Image,
         user::User,
@@ -47,13 +51,21 @@ pub async fn update_expense(
     req: Json<ExpenseRequest>,
     path: Path<(i32,)>,
 ) -> Result<HttpResponse, Error> {
-    let expense = Expense::update(path.0, &req, &state.database)
+    let mut expense = Expense::find_by_id(path.0, &state.database)
         .await
         .ok_or(Error::NotFound)?;
 
     if !user.has_role_or_admin(UserRole::ExpenseRequestor) || expense.requestor_id != user.id {
         return Err(Error::Forbidden);
     }
+
+    if expense.status != ExpenseStatus::REQUEST.to_string() {
+        return Err(Error::Forbidden);
+    }
+
+    expense = Expense::update(path.0, &req, &state.database)
+        .await
+        .ok_or(Error::NotFound)?;
 
     let response: ExpenseDto = serialize_one(&expense, &state.database).await;
     Ok(HttpResponse::Ok().json(response))
@@ -147,12 +159,109 @@ pub async fn add_images_to_expense(
     Ok(HttpResponse::Ok().finish())
 }
 
-pub async fn deny_expense() {
-    // Set status to denied
+#[post("/expense/expenses/{id}/deny")]
+pub async fn deny_expense(
+    user: User,
+    state: Data<AppState>,
+    path: Path<(i32,)>,
+) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::Accountant) {
+        return Err(Error::Forbidden);
+    }
+
+    let expense = Expense::find_by_id(path.0, &state.database)
+        .await
+        .ok_or(Error::NotFound)?;
+
+    if expense.status != ExpenseStatus::REQUEST.to_string() {
+        return Err(Error::Forbidden);
+    }
+
+    let mut tx = state
+        .database
+        .begin()
+        .await
+        .map_err(|_x| Error::BadRequest)?;
+
+    Expense::set_status(expense.id, ExpenseStatus::DENIED, &mut *tx).await;
+    tx.commit().await.unwrap();
+    Ok(HttpResponse::Ok().finish())
 }
 
-pub async fn accept_expense() {
-    // Set status to accepted
-    // Create both transactions
-    // Add expense to budget
+#[derive(Deserialize)]
+struct ExpenseTransactionRequest {
+    pub amount: i32,
+    pub from_account_id: i32,
+    pub to_account_id: i32,
+    pub category_id: Option<i32>,
+}
+
+#[derive(Deserialize)]
+struct AcceptExpenseRequest {
+    pub expense_transaction: ExpenseTransactionRequest,
+    pub balancing_transaction: ExpenseTransactionRequest,
+}
+
+#[post("/expense/expenses/{id}/accept")]
+pub async fn accept_expense(
+    user: User,
+    state: Data<AppState>,
+    req: Json<AcceptExpenseRequest>,
+    path: Path<(i32,)>,
+) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::Accountant) {
+        return Err(Error::Forbidden);
+    }
+
+    let mut expense = Expense::find_by_id(path.0, &state.database)
+        .await
+        .ok_or(Error::NotFound)?;
+
+    if expense.status != ExpenseStatus::REQUEST.to_string() {
+        return Err(Error::Forbidden);
+    }
+
+    let mut tx = state
+        .database
+        .begin()
+        .await
+        .map_err(|_x| Error::BadRequest)?;
+
+    Expense::set_status(expense.id, ExpenseStatus::ACCEPTED, &mut *tx).await;
+
+    let expense_transaction_req = TransactionRequest {
+        amount: req.expense_transaction.amount,
+        from_account_id: req.expense_transaction.from_account_id,
+        to_account_id: req.expense_transaction.to_account_id,
+        name: format!("[EXPENSE] {}", expense.name),
+        category_id: req.expense_transaction.category_id,
+        is_money_transaction: false,
+    };
+
+    let balancing_transaction_req = &TransactionRequest {
+        amount: req.balancing_transaction.amount,
+        from_account_id: req.balancing_transaction.from_account_id,
+        to_account_id: req.balancing_transaction.to_account_id,
+        name: format!("[BALANCING] {}", expense.name),
+        category_id: req.balancing_transaction.category_id,
+        is_money_transaction: true,
+    };
+
+    expense = Expense::set_transactions(
+        expense.id,
+        Transaction::create(&expense_transaction_req, &mut *tx).await?,
+        Transaction::create(&balancing_transaction_req, &mut *tx).await?,
+        &mut *tx,
+    )
+    .await;
+
+    if let Some(category_id) = req.expense_transaction.category_id {
+        let budget_ids = Budget::find_for_category_active_ids(category_id, &mut *tx).await;
+        Budget::add_expense_to_budgets(expense.id, budget_ids, &mut *tx).await;
+    }
+
+    tx.commit().await.map_err(|_x| Error::BadRequest)?;
+
+    let response: ExpenseDto = serialize_one(&expense, &state.database).await;
+    Ok(HttpResponse::Ok().json(response))
 }

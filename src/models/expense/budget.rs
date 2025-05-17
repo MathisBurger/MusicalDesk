@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde::Serialize;
-use sqlx::{postgres::PgRow, PgPool, Row};
+use sqlx::{Executor, PgPool, Postgres};
 
 use crate::controller::expense::budget::{CreateBudgetRequest, UpdateBudgetRequest};
 
@@ -70,5 +70,42 @@ impl Budget {
         .fetch_optional(db)
         .await
         .unwrap()
+    }
+
+    pub async fn find_for_category_active_ids<'a, E>(category_id: i32, db: &mut E) -> Vec<i32>
+    where
+        for<'c> &'c mut E: Executor<'c, Database = Postgres>,
+    {
+        let rows = sqlx::query!(
+            r#"
+                SELECT id
+                FROM expense_budgets
+                WHERE category_id = $1
+                AND $2 BETWEEN start_date AND end_date
+                "#,
+            category_id,
+            Utc::now()
+        )
+        .fetch_all(&mut *db)
+        .await
+        .unwrap();
+
+        rows.into_iter().map(|row| row.id).collect()
+    }
+
+    pub async fn add_expense_to_budgets<'a, E>(expense_id: i32, budget_ids: Vec<i32>, db: &mut E)
+    where
+        for<'c> &'c mut E: Executor<'c, Database = Postgres>,
+    {
+        for budget_id in budget_ids {
+            sqlx::query!(
+                "INSERT INTO expense_join_expense_budget (expense_id, budget_id) VALUES ($1, $2)",
+                expense_id,
+                budget_id
+            )
+            .execute(&mut *db)
+            .await
+            .unwrap();
+        }
     }
 }

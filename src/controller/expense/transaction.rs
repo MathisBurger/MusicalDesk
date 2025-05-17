@@ -25,8 +25,15 @@ pub async fn create_transaction(
     if !user.has_role_or_admin(UserRole::Accountant) {
         return Err(Error::Forbidden);
     }
-    let transaction = Transaction::create(&req, &state.database).await?;
+    let mut tx = state
+        .database
+        .begin()
+        .await
+        .map_err(|_x| Error::BadRequest)?;
+    let transaction = Transaction::create(&req, &mut *tx).await?;
+    tx.commit().await;
     let result: TransactionDto = serialize_one(&transaction, &state.database).await;
+
     Ok(HttpResponse::Ok().json(result))
 }
 

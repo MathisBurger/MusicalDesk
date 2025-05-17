@@ -1,10 +1,12 @@
 use serde::Serialize;
-use sqlx::{prelude::FromRow, PgPool};
+use sqlx::{prelude::FromRow, Executor, PgPool, Postgres};
 
 use crate::{
     controller::expense::expense::ExpenseRequest,
     models::{generic::Paginated, image::Image, user::User},
 };
+
+use super::transaction::Transaction;
 
 pub enum ExpenseStatus {
     REQUEST,
@@ -103,6 +105,36 @@ impl Expense {
     pub async fn update(id: i32, req: &ExpenseRequest, db: &PgPool) -> Option<Expense> {
         sqlx::query_as!(Expense, "UPDATE expense_expenses SET name = $1, description = $2, total_amount = $3 WHERE id = $4 RETURNING *", req.name, req.description, req.total_amount, id)
             .fetch_optional(db)
+            .await
+            .unwrap()
+    }
+
+    pub async fn set_status<'a, E>(id: i32, status: ExpenseStatus, db: &mut E) -> Expense
+    where
+        for<'c> &'c mut E: Executor<'c, Database = Postgres>,
+    {
+        sqlx::query_as!(
+            Expense,
+            "UPDATE expense_expenses SET status = $1 WHERE id = $2 RETURNING *",
+            status.to_string(),
+            id
+        )
+        .fetch_one(db)
+        .await
+        .unwrap()
+    }
+
+    pub async fn set_transactions<'a, E>(
+        id: i32,
+        expense_transaction: Transaction,
+        balancing_transaction: Transaction,
+        db: &mut E,
+    ) -> Expense
+    where
+        for<'c> &'c mut E: Executor<'c, Database = Postgres>,
+    {
+        sqlx::query_as!(Expense, "UPDATE expense_expenses SET expense_transaction_id = $1, balancing_transaction_id = $2 WHERE id = $3 RETURNING *", expense_transaction.id, balancing_transaction.id, id)
+            .fetch_one(db)
             .await
             .unwrap()
     }

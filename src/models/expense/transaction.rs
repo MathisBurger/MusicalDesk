@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use sqlx::{prelude::FromRow, PgPool, Pool, Postgres};
+use sqlx::{prelude::FromRow, Executor, PgPool, Pool, Postgres};
 
 use crate::models::generic::{Error, Paginated};
 
@@ -96,9 +96,11 @@ impl Transaction {
         .await
     }
 
-    pub async fn create(req: &TransactionRequest, db: &PgPool) -> Result<Transaction, Error> {
-        let mut tx: sqlx::Transaction<'_, Postgres> = db.begin().await.unwrap();
-        let from_account = Account::get_account_by_id(req.from_account_id, db)
+    pub async fn create<'a, E>(req: &TransactionRequest, db: &mut E) -> Result<Transaction, Error>
+    where
+        for<'c> &'c mut E: Executor<'c, Database = Postgres>,
+    {
+        let from_account = Account::get_account_by_id(req.from_account_id, &mut *db)
             .await
             .ok_or(Error::NotFound)?;
         if from_account.account_type != AccountType::FLOW.to_string() {
@@ -107,11 +109,11 @@ impl Transaction {
                 req.amount,
                 req.from_account_id
             )
-            .execute(&mut *tx)
+            .execute(&mut *db)
             .await
             .unwrap();
         }
-        let to_account = Account::get_account_by_id(req.to_account_id, db)
+        let to_account = Account::get_account_by_id(req.to_account_id, &mut *db)
             .await
             .ok_or(Error::NotFound)?;
         if to_account.account_type != AccountType::FLOW.to_string() {
@@ -120,16 +122,15 @@ impl Transaction {
                 req.amount,
                 req.to_account_id
             )
-            .execute(&mut *tx)
+            .execute(&mut *db)
             .await
             .unwrap();
         }
         let res = sqlx::query_as!(Transaction, "INSERT INTO expense_transactions (amount, from_account_id, to_account_id, timestamp, name, category_id, is_money_transaction) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", req.amount, req.from_account_id, req.to_account_id, Utc::now(), req.name, req.category_id, req.is_money_transaction)
-            .fetch_one(&mut *tx)
+            .fetch_one(&mut *db)
             .await
             .unwrap();
 
-        tx.commit().await.expect("Cannot create transaction");
         Ok(res)
     }
 }

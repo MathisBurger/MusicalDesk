@@ -1,5 +1,5 @@
 use serde::Serialize;
-use sqlx::{query_as, Pool, Postgres};
+use sqlx::{query_as, Executor, Pool, Postgres};
 
 use crate::controller::expense::account::{CreateAccountRequest, UpdateAccountRequest};
 
@@ -60,7 +60,10 @@ impl Account {
         matched.expect("Cannot get all accounts")
     }
 
-    pub async fn get_account_by_id(id: i32, db: &Pool<Postgres>) -> Option<Account> {
+    pub async fn get_account_by_id<'a, E>(id: i32, db: E) -> Option<Account>
+    where
+        E: Executor<'a, Database = Postgres>,
+    {
         query_as!(Account, "SELECT * FROM expense_accounts WHERE id = $1", id)
             .fetch_optional(db)
             .await

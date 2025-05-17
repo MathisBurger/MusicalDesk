@@ -10,7 +10,7 @@ use crate::{
     controller::PaginationQuery,
     dto::expense::{ExpenseDto, ExpenseWithImagesDto},
     models::{
-        expense::expense::Expense,
+        expense::expense::{Expense, ExpenseStatus},
         generic::{Error, Paginated, UserRole},
         image::Image,
         user::User,
@@ -125,6 +125,10 @@ pub async fn add_images_to_expense(
     if !(user.has_role_or_admin(UserRole::ExpenseRequestor) && user.id == expense.requestor_id)
         && !user.has_role_or_admin(UserRole::Accountant)
     {
+        return Err(Error::Forbidden);
+    }
+
+    if expense.status != ExpenseStatus::REQUEST.to_string() {
         return Err(Error::Forbidden);
     }
 

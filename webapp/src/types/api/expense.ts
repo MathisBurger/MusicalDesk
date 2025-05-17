@@ -1,6 +1,8 @@
 // ACCOUNT
 //
 
+import { Image } from "./generic";
+
 export enum AccountType {
   MONEY = "MONEY",
   MATERIAL = "MATERIAL",
@@ -110,12 +112,41 @@ export interface CreateTransactionRequest {
 
 // EXPENSE
 
+export interface ExpenseRequest {
+  name: string;
+  description: string;
+  total_amount: number;
+}
+
+export interface ExpenseTransactionRequest {
+  amount: number;
+  from_account_id: number;
+  to_account_id: number;
+  category_id?: number;
+}
+
+export interface AcceptExpenseRequest {
+  expense_transaction: ExpenseTransactionRequest;
+  balancing_transaction: ExpenseTransactionRequest;
+}
+
+export enum ExpenseStatus {
+  REQUEST = "REQUEST",
+  DENIED = "DENIED",
+  ACCEPTED = "ACCEPTED",
+}
+
 export interface Expense {
   id: number;
   expense_transaction: Transaction;
   balancing_transaction: Transaction;
   name: string;
   description: string;
-  is_request: boolean;
+  status: ExpenseStatus;
   total_amount: number;
+}
+
+export interface ExpenseWithImages {
+  expense: Expense;
+  images: Image[];
 }

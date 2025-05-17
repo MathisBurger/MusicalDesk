@@ -213,7 +213,7 @@ pub async fn accept_expense(
         return Err(Error::Forbidden);
     }
 
-    let mut expense = Expense::find_by_id(path.0, &state.database)
+    let expense = Expense::find_by_id(path.0, &state.database)
         .await
         .ok_or(Error::NotFound)?;
 
@@ -247,7 +247,7 @@ pub async fn accept_expense(
         is_money_transaction: true,
     };
 
-    expense = Expense::set_transactions(
+    Expense::set_transactions(
         expense.id,
         Transaction::create(&expense_transaction_req, &mut *tx).await?,
         Transaction::create(&balancing_transaction_req, &mut *tx).await?,
@@ -261,7 +261,5 @@ pub async fn accept_expense(
     }
 
     tx.commit().await.map_err(|_x| Error::BadRequest)?;
-
-    let response: ExpenseDto = serialize_one(&expense, &state.database).await;
-    Ok(HttpResponse::Ok().json(response))
+    Ok(HttpResponse::Ok().finish())
 }

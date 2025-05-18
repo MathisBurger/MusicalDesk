@@ -31,7 +31,7 @@ pub async fn create_transaction(
         .await
         .map_err(|_x| Error::BadRequest)?;
     let transaction = Transaction::create(&req, &mut *tx).await?;
-    tx.commit().await;
+    tx.commit().await.unwrap();
     let result: TransactionDto = serialize_one(&transaction, &state.database).await;
 
     Ok(HttpResponse::Ok().json(result))

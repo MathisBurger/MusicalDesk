@@ -1,4 +1,4 @@
-use crate::{controller::expense::category::CreateCategoryRequest, models::generic::Error};
+use crate::controller::expense::category::CreateCategoryRequest;
 use serde::Serialize;
 use sqlx::PgPool;
 
@@ -63,13 +63,5 @@ impl Category {
         .fetch_optional(db)
         .await
         .unwrap()
-    }
-
-    pub async fn delete(id: i32, db: &PgPool) -> Result<(), Error> {
-        sqlx::query!("DELETE FROM expense_categories WHERE id = $1", id)
-            .execute(db)
-            .await
-            .map_err(|_x| Error::NotFound)?;
-        Ok(())
     }
 }

@@ -1,5 +1,5 @@
 use crate::{
-    controller::{PaginationQuery, SearchQuery},
+    controller::PaginationQuery,
     dto::transaction::TransactionDto,
     models::{
         expense::{

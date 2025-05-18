@@ -39,19 +39,24 @@ pub struct Account {
 }
 
 impl Account {
-    pub async fn get_accounts(search: Option<String>, db: &Pool<Postgres>) -> Vec<Account> {
+    pub async fn get_accounts(
+        search: Option<String>,
+        account_type: Option<String>,
+        db: &Pool<Postgres>,
+    ) -> Vec<Account> {
         let matched = match search {
             Some(s) => {
                 query_as!(
                     Account,
-                    "SELECT * FROM expense_accounts WHERE name LIKE $1 ORDER BY id",
-                    format!("%{}%", s)
+                    "SELECT * FROM expense_accounts WHERE name LIKE $1 AND (account_type = $2 OR $2 IS NULL) ORDER BY id",
+                    format!("%{}%", s),
+                    account_type
                 )
                 .fetch_all(db)
                 .await
             }
             None => {
-                query_as!(Account, "SELECT * FROM expense_accounts ORDER BY id")
+                query_as!(Account, "SELECT * FROM expense_accounts WHERE account_type = $1 OR $1 IS NULL ORDER BY id", account_type)
                     .fetch_all(db)
                     .await
             }

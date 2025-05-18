@@ -3,7 +3,11 @@ import useForm from "@/form/useForm";
 import WrappedInput from "@/form/wrapped-input";
 import useAcceptExpenseMutation from "@/hooks/mutations/expense/useAcceptExpenseMutation";
 import useAlert from "@/hooks/useAlert";
-import { Expense } from "@/types/api/expense";
+import {
+  AcceptExpenseRequest,
+  AccountType,
+  Expense,
+} from "@/types/api/expense";
 import {
   Button,
   DialogActions,
@@ -21,68 +25,39 @@ interface AcceptExpenseModalProps {
   expense: Expense;
 }
 
-interface FormType {
-  ex_amount: number;
-  ex_from_account_id: number;
-  ex_to_account_id: number;
-  ex_category_id?: number;
-  bal_amount: number;
-  bal_from_account_id: number;
-  bal_to_account_id: number;
-  bal_category_id?: number;
-}
-
 const AcceptExpenseModal = ({ onClose, expense }: AcceptExpenseModalProps) => {
   const { displayAlert, showAlert } = useAlert();
   const { mutateAsync, isPending } = useAcceptExpenseMutation(expense.id);
 
-  const form = useForm<FormType>({
+  const form = useForm<AcceptExpenseRequest>({
     defaultValues: {
-      ex_amount: expense.total_amount / 100,
-      bal_amount: expense.total_amount / 100,
+      amount: expense.total_amount / 100,
     },
     labels: {
-      ex_amount: "Amount (Expense transaction)",
-      ex_from_account_id: "From account (Expense transaction)",
-      ex_to_account_id: "To account (Expense transaction)",
-      ex_category_id: "Category (Expense transaction)",
-      bal_amount: "Amount (Balancing transaction)",
-      bal_from_account_id: "From account (Balancing transaction)",
-      bal_to_account_id: "To account (Balancing transaction)",
-      bal_category_id: "Category (Balancing transaction)",
+      amount: "Amount",
+      from_account_id: "From account (Foreign account)",
+      to_account_id: "To account (Material account)",
+      money_account_id: "Money account (Account the payment will come from)",
+      category_id: "Category",
     },
     explicitTypes: {
-      ex_from_account_id: "number",
-      ex_to_account_id: "number",
-      ex_category_id: "number",
-      bal_from_account_id: "number",
-      bal_to_account_id: "number",
-      bal_category_id: "number",
+      money_account_id: "number",
+      from_account_id: "number",
+      to_account_id: "number",
+      category_id: "number",
     },
     required: [
-      "ex_amount",
-      "ex_from_account_id",
-      "ex_to_account_id",
-      "bal_amount",
-      "bal_from_account_id",
-      "bal_to_account_id",
+      "amount",
+      "from_account_id",
+      "to_account_id",
+      "money_account_id",
     ],
   });
 
-  const submit = async (data: FormType) => {
+  const submit = async (data: AcceptExpenseRequest) => {
     const result = await mutateAsync({
-      expense_transaction: {
-        amount: data.ex_amount * 100,
-        from_account_id: data.ex_from_account_id,
-        to_account_id: data.ex_to_account_id,
-        category_id: data.ex_category_id,
-      },
-      balancing_transaction: {
-        amount: data.bal_amount * 100,
-        from_account_id: data.bal_from_account_id,
-        to_account_id: data.bal_to_account_id,
-        category_id: data.bal_category_id,
-      },
+      ...data,
+      amount: data.amount * 100,
     });
     if (result) {
       onClose();
@@ -102,16 +77,20 @@ const AcceptExpenseModal = ({ onClose, expense }: AcceptExpenseModalProps) => {
         <DialogContent>
           {displayAlert()}
           <form onSubmit={form.onSubmit(submit)} onInvalid={form.onInvalid}>
-            <Typography level="h4">Expense transaction</Typography>
-            <FormInput {...form.getInputProps("ex_amount")} />
-            <AccountSelect {...form.getInputProps("ex_from_account_id")} />
-            <AccountSelect {...form.getInputProps("ex_to_account_id")} />
-            <CategorySelect {...form.getInputProps("ex_category_id")} />
-            <Typography level="h4">Balancing transaction</Typography>
-            <FormInput {...form.getInputProps("bal_amount")} />
-            <AccountSelect {...form.getInputProps("bal_from_account_id")} />
-            <AccountSelect {...form.getInputProps("bal_to_account_id")} />
-            <CategorySelect {...form.getInputProps("bal_category_id")} />
+            <FormInput {...form.getInputProps("amount")} />
+            <AccountSelect
+              {...form.getInputProps("from_account_id")}
+              accountType={AccountType.FOREIGN}
+            />
+            <AccountSelect
+              {...form.getInputProps("to_account_id")}
+              accountType={AccountType.MATERIAL}
+            />
+            <AccountSelect
+              {...form.getInputProps("money_account_id")}
+              accountType={AccountType.MONEY}
+            />
+            <CategorySelect {...form.getInputProps("category_id")} />
             <DialogActions>
               <Button type="submit" loading={isPending} color="success">
                 Accept

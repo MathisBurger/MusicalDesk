@@ -189,17 +189,12 @@ pub async fn deny_expense(
 }
 
 #[derive(Deserialize)]
-struct ExpenseTransactionRequest {
+struct AcceptExpenseRequest {
     pub amount: i32,
+    pub money_account_id: i32,
     pub from_account_id: i32,
     pub to_account_id: i32,
     pub category_id: Option<i32>,
-}
-
-#[derive(Deserialize)]
-struct AcceptExpenseRequest {
-    pub expense_transaction: ExpenseTransactionRequest,
-    pub balancing_transaction: ExpenseTransactionRequest,
 }
 
 #[post("/expense/expenses/{id}/accept")]
@@ -230,20 +225,20 @@ pub async fn accept_expense(
     Expense::set_status(expense.id, ExpenseStatus::ACCEPTED, &mut *tx).await;
 
     let expense_transaction_req = TransactionRequest {
-        amount: req.expense_transaction.amount,
-        from_account_id: req.expense_transaction.from_account_id,
-        to_account_id: req.expense_transaction.to_account_id,
+        amount: req.amount,
+        from_account_id: req.from_account_id,
+        to_account_id: req.to_account_id,
         name: format!("[EXPENSE] {}", expense.name),
-        category_id: req.expense_transaction.category_id,
+        category_id: None,
         is_money_transaction: false,
     };
 
     let balancing_transaction_req = &TransactionRequest {
-        amount: req.balancing_transaction.amount,
-        from_account_id: req.balancing_transaction.from_account_id,
-        to_account_id: req.balancing_transaction.to_account_id,
+        amount: req.amount,
+        from_account_id: req.money_account_id,
+        to_account_id: req.from_account_id,
         name: format!("[BALANCING] {}", expense.name),
-        category_id: req.balancing_transaction.category_id,
+        category_id: req.category_id,
         is_money_transaction: true,
     };
 
@@ -255,7 +250,7 @@ pub async fn accept_expense(
     )
     .await;
 
-    if let Some(category_id) = req.expense_transaction.category_id {
+    if let Some(category_id) = req.category_id {
         let budget_ids = Budget::find_for_category_active_ids(category_id, &mut *tx).await;
         Budget::add_expense_to_budgets(expense.id, budget_ids, &mut *tx).await;
     }

@@ -126,8 +126,11 @@ export interface ExpenseTransactionRequest {
 }
 
 export interface AcceptExpenseRequest {
-  expense_transaction: ExpenseTransactionRequest;
-  balancing_transaction: ExpenseTransactionRequest;
+  amount: number;
+  money_account_id: number;
+  from_account_id: number;
+  to_account_id: number;
+  category_id?: number;
 }
 
 export enum ExpenseStatus {

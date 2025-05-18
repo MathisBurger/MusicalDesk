@@ -1,9 +1,14 @@
 "use client";
 import { FormInputProps } from "@/form/form-input";
 import useAccountsQuery from "@/hooks/queries/expense/useAccountsQuery";
+import { AccountType } from "@/types/api/expense";
 import { Autocomplete, FormControl, FormLabel } from "@mui/joy";
 import { useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
+
+interface Props extends FormInputProps {
+  accountType?: AccountType;
+}
 
 const AccountSelect = ({
   name,
@@ -12,7 +17,8 @@ const AccountSelect = ({
   error,
   disabled,
   sx,
-}: FormInputProps) => {
+  accountType,
+}: Props) => {
   const [search, setSearch] = useState<string>("");
   const [selected, setSelected] = useState<null | {
     title: string;
@@ -20,7 +26,7 @@ const AccountSelect = ({
   }>(null);
   const [debounced] = useDebounce(search, 1000);
 
-  const { data, isLoading } = useAccountsQuery(debounced);
+  const { data, isLoading } = useAccountsQuery(debounced, accountType);
 
   const options = useMemo(
     () =>

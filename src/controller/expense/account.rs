@@ -19,16 +19,27 @@ use actix_web::{
 use actix_web::{post, HttpResponse};
 use serde::Deserialize;
 
+#[derive(Deserialize)]
+pub struct AccountSearchQuery {
+    pub search: Option<String>,
+    pub account_type: Option<String>,
+}
+
 #[get("/expense/accounts")]
 pub async fn get_accounts(
     user: User,
     state: Data<AppState>,
-    query: Query<SearchQuery>,
+    query: Query<AccountSearchQuery>,
 ) -> Result<HttpResponse, Error> {
     if !user.has_role_or_admin(UserRole::Accountant) {
         return Err(Error::Forbidden);
     }
-    let accounts = Account::get_accounts(query.search.clone(), &state.database).await;
+    let accounts = Account::get_accounts(
+        query.search.clone(),
+        query.account_type.clone(),
+        &state.database,
+    )
+    .await;
     Ok(HttpResponse::Ok().json(accounts))
 }
 

@@ -11,30 +11,12 @@ interface TransactionChipProps {
   value: Transaction;
 }
 
-const theme = extendTheme({
-  components: {
-    JoyChip: {
-      styleOverrides: {
-        root: {
-          color: "white",
-          "&:hover": {
-            color: "var(--joy-palette-text-primary)",
-          },
-        },
-        action: {
-          background: "none",
-        },
-      },
-    },
-  },
-});
-
 const TransactionChip = ({ value }: TransactionChipProps) => {
   const router = useRouter();
   const currentUser = useCurrentUser();
 
   return (
-    <CssVarsProvider theme={theme}>
+    <CssVarsProvider>
       <Chip
         onClick={
           isGranted(currentUser, [UserRole.Accountant, UserRole.Admin])
@@ -42,7 +24,7 @@ const TransactionChip = ({ value }: TransactionChipProps) => {
             : undefined
         }
       >
-        {value.id}
+        {value.name}
       </Chip>
     </CssVarsProvider>
   );

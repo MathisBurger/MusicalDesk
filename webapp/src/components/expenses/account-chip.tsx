@@ -1,4 +1,7 @@
+import useCurrentUser from "@/hooks/useCurrentUser";
 import { Account, MinimalAccount } from "@/types/api/expense";
+import { UserRole } from "@/types/api/user";
+import { isGranted } from "@/utils/auth";
 import { Chip, CssVarsProvider } from "@mui/joy";
 import { useRouter } from "next/navigation";
 
@@ -8,11 +11,16 @@ interface AccountChipProps {
 
 const AccountChip = ({ account }: AccountChipProps) => {
   const router = useRouter();
+  const currentUser = useCurrentUser();
 
   return (
     <CssVarsProvider>
       <Chip
-        onClick={() => router.push(`/backend/expenses/accounts/${account.id}`)}
+        onClick={
+          isGranted(currentUser, [UserRole.Accountant, UserRole.Admin])
+            ? () => router.push(`/backend/expenses/accounts/${account.id}`)
+            : undefined
+        }
       >
         {account.name}
       </Chip>

@@ -37,7 +37,7 @@ const TransactionChip = ({ value }: TransactionChipProps) => {
     <CssVarsProvider theme={theme}>
       <Chip
         onClick={
-          isGranted(currentUser, [UserRole.Accountant])
+          isGranted(currentUser, [UserRole.Accountant, UserRole.Admin])
             ? () => router.push(`/backend/expenses/transactions/${value.id}`)
             : undefined
         }

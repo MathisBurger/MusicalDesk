@@ -1,5 +1,8 @@
 "use client";
+import useCurrentUser from "@/hooks/useCurrentUser";
 import { Transaction } from "@/types/api/expense";
+import { UserRole } from "@/types/api/user";
+import { isGranted } from "@/utils/auth";
 import { CssVarsProvider, extendTheme } from "@mui/joy";
 import { Chip } from "@mui/joy";
 import { useRouter } from "next/navigation";
@@ -28,12 +31,15 @@ const theme = extendTheme({
 
 const TransactionChip = ({ value }: TransactionChipProps) => {
   const router = useRouter();
+  const currentUser = useCurrentUser();
 
   return (
     <CssVarsProvider theme={theme}>
       <Chip
-        onClick={() =>
-          router.push(`/backend/expenses/transactions/${value.id}`)
+        onClick={
+          isGranted(currentUser, [UserRole.Accountant])
+            ? () => router.push(`/backend/expenses/transactions/${value.id}`)
+            : undefined
         }
       >
         {value.id}

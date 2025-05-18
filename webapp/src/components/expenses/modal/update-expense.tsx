@@ -1,6 +1,7 @@
 import useForm from "@/form/useForm";
+import useUpdateExpenseMutation from "@/hooks/mutations/expense/useUpdateExpenseMutation";
 import useAlert from "@/hooks/useAlert";
-import { ExpenseRequest } from "@/types/api/expense";
+import { Expense, ExpenseRequest } from "@/types/api/expense";
 import {
   Button,
   DialogActions,
@@ -11,26 +12,23 @@ import {
   ModalDialog,
   Stack,
 } from "@mui/joy";
-import useRequestExpenseMutation from "@/hooks/mutations/expense/useRequestExpenseMutation";
 
-interface RequestExpenseModalProps {
+interface UpdateExpenseModalProps {
   onClose: () => void;
-  pageSize: number;
+  expense: Expense;
 }
 
-const RequestExpenseModal = ({
-  onClose,
-  pageSize,
-}: RequestExpenseModalProps) => {
-  const { mutateAsync: requestExpense, isPending } =
-    useRequestExpenseMutation(pageSize);
+const UpdateExpenseModal = ({ onClose, expense }: UpdateExpenseModalProps) => {
+  const { mutateAsync: updateExpense, isPending } = useUpdateExpenseMutation(
+    expense.id,
+  );
   const { displayAlert, showAlert } = useAlert();
 
   const form = useForm<ExpenseRequest>({
     defaultValues: {
-      name: "",
-      description: "",
-      total_amount: 0,
+      name: expense.name,
+      description: expense.description,
+      total_amount: expense.total_amount / 100,
     },
     labels: {
       name: "Name",
@@ -44,7 +42,7 @@ const RequestExpenseModal = ({
   });
 
   const submit = async (req: ExpenseRequest) => {
-    const result = await requestExpense({
+    const result = await updateExpense({
       ...req,
       total_amount: req.total_amount * 100,
     });
@@ -54,7 +52,7 @@ const RequestExpenseModal = ({
     }
     showAlert({
       color: "danger",
-      content: "Cannot request expense",
+      content: "Cannot update expense",
       duration: 1500,
     });
   };
@@ -63,7 +61,7 @@ const RequestExpenseModal = ({
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Request expense</DialogTitle>
+        <DialogTitle>Update expense</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -71,7 +69,7 @@ const RequestExpenseModal = ({
               {form.renderFormBody()}
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Create
+                  Update
                 </Button>
                 <Button color="neutral" onClick={onClose}>
                   Cancel
@@ -85,4 +83,4 @@ const RequestExpenseModal = ({
   );
 };
 
-export default RequestExpenseModal;
+export default UpdateExpenseModal;

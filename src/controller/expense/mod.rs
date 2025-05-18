@@ -30,5 +30,6 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(expense::get_expense)
         .service(expense::get_expenses)
         .service(expense::deny_expense)
-        .service(expense::accept_expense);
+        .service(expense::accept_expense)
+        .service(expense::add_files_to_expense);
 }

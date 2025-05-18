@@ -12,10 +12,10 @@ import AccountChip from "./account-chip";
 
 interface TransactionsListProps {
   transactions: Transaction[];
-  pageSize: number;
-  setPageSize: (pageSize: number) => void;
-  page: number;
-  setPage: (page: number) => void;
+  pageSize?: number;
+  setPageSize?: (pageSize: number) => void;
+  page?: number;
+  setPage?: (page: number) => void;
   loading: boolean;
   rowCount: number;
 }

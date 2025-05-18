@@ -123,8 +123,8 @@ struct UploadFileMultipart {
     pub files: Vec<TempFile>,
 }
 
-#[post("/expense/expenses/{id}/images")]
-pub async fn add_images_to_expense(
+#[post("/expense/expenses/{id}/files")]
+pub async fn add_files_to_expense(
     user: User,
     state: Data<AppState>,
     MultipartForm(form): MultipartForm<UploadFileMultipart>,

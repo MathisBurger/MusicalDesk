@@ -138,8 +138,8 @@ export enum ExpenseStatus {
 
 export interface Expense {
   id: number;
-  expense_transaction: Transaction;
-  balancing_transaction: Transaction;
+  expense_transaction?: Transaction;
+  balancing_transaction?: Transaction;
   name: string;
   description: string;
   status: ExpenseStatus;

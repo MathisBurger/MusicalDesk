@@ -18,6 +18,7 @@ MVP Planning:
 - [ ] Expense management (With categories, Images of bills, etc.)
 - [ ] Annual finance reports
 - [ ] Expense dashboard
+- [ ] Generalize images to files and make special endpoint for uploading files for events
 - [x] Move all frontend API types into typings folder
 - [ ] Eliminate all warnings
 - [ ] Backend code documentation

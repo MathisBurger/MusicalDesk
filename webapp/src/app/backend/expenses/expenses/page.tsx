@@ -26,7 +26,10 @@ const ExpensesPage = () => {
           <Grid>
             <Typography level="h1">Expenses</Typography>
           </Grid>
-          {isGranted(currentUser, [UserRole.Accountant, UserRole.Admin]) && (
+          {isGranted(currentUser, [
+            UserRole.ExpenseRequestor,
+            UserRole.Admin,
+          ]) && (
             <Grid>
               <Button onClick={() => setCreateModalOpen(true)}>
                 <Add />

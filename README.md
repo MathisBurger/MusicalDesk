@@ -15,7 +15,7 @@ MVP Planning:
 - [x] Remove invalidated field from tickets. invalidated_at is enough
 - [x] Create backend users & user overview that are not customers
 - [x] Add option to frontend to invalidate tickets and see their status
-- [ ] Expense management (With categories, Images of bills, etc.)
+- [x] Expense management (With categories, Images of bills, etc.)
 - [ ] Annual finance reports
 - [ ] Expense dashboard
 - [ ] Generalize images to files and make special endpoint for uploading files for events

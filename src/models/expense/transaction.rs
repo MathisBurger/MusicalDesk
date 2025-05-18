@@ -96,6 +96,25 @@ impl Transaction {
         .await
     }
 
+    pub async fn get_report_transactions_paginated(
+        report_id: i32,
+        page: i32,
+        page_size: i32,
+        db: &Pool<Postgres>,
+    ) -> Paginated<Transaction> {
+        Paginated::create_paginated_query(
+            "a.*",
+            "expense_transactions a JOIN expense_reports_transactions b ON b.transaction_id = a.id",
+            Some("b.report_id = $1"),
+            Some("a.timestamp DESC"),
+            page,
+            page_size,
+            vec![report_id],
+            db,
+        )
+        .await
+    }
+
     pub async fn create<'a, E>(req: &TransactionRequest, db: &mut E) -> Result<Transaction, Error>
     where
         for<'c> &'c mut E: Executor<'c, Database = Postgres>,

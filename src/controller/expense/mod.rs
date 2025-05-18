@@ -4,6 +4,7 @@ pub mod account;
 pub mod budget;
 pub mod category;
 pub mod expense;
+pub mod report;
 pub mod transaction;
 
 pub fn init_controllers(cfg: &mut ServiceConfig) {
@@ -31,5 +32,10 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(expense::get_expenses)
         .service(expense::deny_expense)
         .service(expense::accept_expense)
-        .service(expense::add_files_to_expense);
+        .service(expense::add_files_to_expense)
+        .service(report::create_report)
+        .service(report::get_reports)
+        .service(report::get_report)
+        .service(report::get_report_transactions)
+        .service(report::get_report_category_sumups);
 }

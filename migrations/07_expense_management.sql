@@ -80,6 +80,13 @@ CREATE TABLE IF NOT EXISTS expense_reports_transactions (
     PRIMARY KEY (report_id, transaction_id)
 );
 
+CREATE TABLE IF NOT EXISTS expense_reports_category_sumup (
+    report_id INTEGER NOT NULL REFERENCES expense_reports (id),
+    category_id INTEGER NOT NULL REFERENCES expense_categories (id),
+    sum INTEGER NOT NULL,
+    PRIMARY KEY (report_id, category_id)
+);
+
 CREATE TABLE IF NOT EXISTS image_access (
     image_id INTEGER NOT NULL REFERENCES images (id),
     user_id INTEGER NOT NULL REFERENCES users (id),

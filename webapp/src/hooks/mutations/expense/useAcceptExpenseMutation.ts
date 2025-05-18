@@ -6,7 +6,7 @@ const acceptExpense = async (
   data: AcceptExpenseRequest,
 ): Promise<boolean> => {
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/expense/expenses/${id}/deny`,
+    `${process.env.NEXT_PUBLIC_API_URL}/expense/expenses/${id}/accept`,
     {
       method: "POST",
       mode: "cors",

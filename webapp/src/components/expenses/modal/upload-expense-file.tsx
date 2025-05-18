@@ -9,7 +9,7 @@ import {
   ModalDialog,
 } from "@mui/joy";
 import { useState } from "react";
-import Dropzone from "../dropzone";
+import Dropzone from "../../dropzone";
 
 interface UploadExpenseFileModalProps {
   onClose: () => void;

@@ -24,7 +24,10 @@ const AccountSelect = ({
 
   const options = useMemo(
     () =>
-      (data ?? []).map((option) => ({ title: option.name, key: option.id })),
+      (data ?? []).map((option) => ({
+        title: `${option.name} (${option.owner_name})`,
+        key: option.id,
+      })),
     [data],
   );
 

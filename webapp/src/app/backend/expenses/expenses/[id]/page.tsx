@@ -3,7 +3,7 @@ import BackButton from "@/components/back-button";
 import ExpenseStatusChip from "@/components/expenses/expense-status-chip";
 import UpdateExpenseModal from "@/components/expenses/modal/update-expense";
 import TransactionsList from "@/components/expenses/transactions-list";
-import UploadExpenseFileModal from "@/components/expenses/upload-expense-file";
+import UploadExpenseFileModal from "@/components/expenses/modal/upload-expense-file";
 import KvList, { DisplayedData } from "@/components/kv-list";
 import LoadingComponent from "@/components/loading";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
@@ -27,6 +27,8 @@ import {
 } from "@mui/joy";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
+import DenyExpenseModal from "@/components/expenses/modal/deny-expense";
+import AcceptExpenseModal from "@/components/expenses/modal/accept-expense";
 
 const ExpensePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,10 +36,16 @@ const ExpensePage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [uploadFileModalOpen, setUploadFileModalOpen] =
     useState<boolean>(false);
+  const [denyModalOpen, setDenyModalOpen] = useState<boolean>(false);
+  const [acceptModalOpen, setAcceptModalOpen] = useState<boolean>(false);
   const { data, isLoading } = useExpenseQuery(parseInt(id, 10));
 
   const canUpdate =
     isGranted(currentUser, [UserRole.ExpenseRequestor]) &&
+    data?.expense.status === ExpenseStatus.REQUEST;
+
+  const canAcceptOrDeny =
+    isGranted(currentUser, [UserRole.Accountant, UserRole.Admin]) &&
     data?.expense.status === ExpenseStatus.REQUEST;
 
   const transactions = useMemo<Transaction[]>(() => {
@@ -85,12 +93,25 @@ const ExpensePage = () => {
         <BackButton /> &nbsp;
         <Typography level="h2">{data?.expense.name}</Typography>
         <Divider />
-        {canUpdate && (
+        {(canUpdate || canAcceptOrDeny) && (
           <Card>
             <Stack direction="row" spacing={2}>
               {canUpdate && (
                 <Button color="primary" onClick={() => setEditModalOpen(true)}>
                   Update
+                </Button>
+              )}
+              {canAcceptOrDeny && (
+                <Button color="danger" onClick={() => setDenyModalOpen(true)}>
+                  Deny
+                </Button>
+              )}
+              {canAcceptOrDeny && (
+                <Button
+                  color="success"
+                  onClick={() => setAcceptModalOpen(true)}
+                >
+                  Accept
                 </Button>
               )}
             </Stack>
@@ -126,16 +147,18 @@ const ExpensePage = () => {
               </List>
             </Card>
           </Grid>
-          <Grid xs={12}>
-            <Card>
-              <Typography level="h3">Transactions</Typography>
-              <TransactionsList
-                transactions={transactions}
-                loading={isLoading}
-                rowCount={transactions.length}
-              />
-            </Card>
-          </Grid>
+          {data?.expense.expense_transaction && (
+            <Grid xs={12}>
+              <Card>
+                <Typography level="h3">Transactions</Typography>
+                <TransactionsList
+                  transactions={transactions}
+                  loading={isLoading}
+                  rowCount={transactions.length}
+                />
+              </Card>
+            </Grid>
+          )}
         </Grid>
       </Stack>
       {editModalOpen && data?.expense && (
@@ -148,6 +171,18 @@ const ExpensePage = () => {
         <UploadExpenseFileModal
           onClose={() => setUploadFileModalOpen(false)}
           expenseId={data.expense.id}
+        />
+      )}
+      {denyModalOpen && data?.expense.id && (
+        <DenyExpenseModal
+          onClose={() => setDenyModalOpen(false)}
+          expenseId={data.expense.id}
+        />
+      )}
+      {acceptModalOpen && data?.expense && (
+        <AcceptExpenseModal
+          onClose={() => setAcceptModalOpen(false)}
+          expense={data.expense}
         />
       )}
     </RoleWrapper>

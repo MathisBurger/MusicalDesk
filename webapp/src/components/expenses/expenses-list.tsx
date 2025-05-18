@@ -1,9 +1,10 @@
 "use client";
 import { GridColDef } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
-import EntityList from "../entity-list";
+import EntityList, { EntityListRowAction } from "../entity-list";
 import { Expense } from "@/types/api/expense";
 import TransactionChip from "./transaction-chip";
+import ExpenseStatusChip from "./expense-status-chip";
 
 interface ExpensesListProps {
   expenses: Expense[];
@@ -45,6 +46,11 @@ const ExpensesList = ({
       valueFormatter: (value) => `${(value ?? 0) / 100}€`,
     },
     {
+      field: "status",
+      headerName: "Status",
+      renderCell: ({ row }) => <ExpenseStatusChip status={row.status} />,
+    },
+    {
       field: "expense_transaction",
       headerName: "Transaction (Expense)",
       renderCell: ({ row }) =>
@@ -62,6 +68,14 @@ const ExpensesList = ({
     },
   ];
 
+  const rowActions: EntityListRowAction[] = [
+    {
+      name: "Details",
+      onClick: (row) => router.push(`/backend/expenses/expenses/${row.id}`),
+      color: "primary",
+    },
+  ];
+
   return (
     <EntityList
       columns={cols}
@@ -73,6 +87,7 @@ const ExpensesList = ({
       setPageSize={setPageSize}
       paginationMode="server"
       rowCount={rowCount}
+      rowActions={rowActions}
     />
   );
 };

@@ -26,7 +26,7 @@ export const transformValue = (
   }
 
   if (typehint) {
-    if (typehint === "string") {
+    if (typehint === "string" || typehint === "textarea") {
       return `${value}`;
     }
     if (typehint === "number") {

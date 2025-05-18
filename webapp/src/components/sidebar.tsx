@@ -217,6 +217,15 @@ export default function Sidebar() {
                     </ListItemContent>
                   </ListItemButton>
                 </ListItem>
+                <ListItem>
+                  <ListItemButton
+                    onClick={() => router.push("/backend/expenses/expenses")}
+                  >
+                    <ListItemContent>
+                      <Typography level="title-sm">Expenses</Typography>
+                    </ListItemContent>
+                  </ListItemButton>
+                </ListItem>
               </NestedListToggler>
             </ListItem>
           </RoleWrapper>

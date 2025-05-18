@@ -6,9 +6,10 @@ import {
   FormLabel,
   Input,
   InputProps,
+  Textarea,
 } from "@mui/joy";
 import { FormValue } from "./types";
-import { useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 
 /** Input props of an form input field */
 export interface FormInputProps {
@@ -35,6 +36,7 @@ export interface FormInputProps {
 const mapType = (type?: string): string => {
   switch (type) {
     case "string":
+    case "textarea":
       return "text";
     case "datetime":
     case "datetime-iso":
@@ -96,6 +98,60 @@ const FormInput = ({
     return defaultValue;
   }, [defaultValue, type]);
 
+  const input = useMemo<ReactNode>(() => {
+    switch (type) {
+      case "textarea":
+        return (
+          <>
+            <Textarea
+              disabled={disabled}
+              value={`${value}`}
+              onChange={setValue ? (e) => setValue(e.target.value) : undefined}
+              minRows={4}
+            />
+            <input type="hidden" name={name} value={`${value}`} />
+          </>
+        );
+      case "boolean":
+      case "checkbox":
+        return (
+          <Checkbox
+            defaultChecked={
+              (defaultValueOverride as boolean | null | undefined) ?? false
+            }
+            name={name}
+            disabled={disabled}
+            sx={sx}
+            checked={value === true}
+            onChange={setValue ? (e) => setValue(e.target.checked) : undefined}
+          />
+        );
+      default:
+        return (
+          <Input
+            type={mapType(type)}
+            name={name}
+            endDecorator={endDecorator}
+            disabled={disabled}
+            slotProps={parseSlotProps(type, slotProps)}
+            sx={sx}
+            value={typeof value === "number" ? value : `${value}`}
+            onChange={setValue ? (e) => setValue(e.target.value) : undefined}
+          />
+        );
+    }
+  }, [
+    type,
+    name,
+    defaultValueOverride,
+    endDecorator,
+    disabled,
+    slotProps,
+    sx,
+    value,
+    setValue,
+  ]);
+
   if (!showField) {
     return null;
   }
@@ -107,30 +163,7 @@ const FormInput = ({
       disabled={disabled}
     >
       {label && <FormLabel>{label}</FormLabel>}
-      {mapType(type) === "checkbox" ? (
-        <Checkbox
-          defaultChecked={
-            (defaultValueOverride as boolean | null | undefined) ?? false
-          }
-          name={name}
-          disabled={disabled}
-          sx={sx}
-          checked={value === true}
-          onChange={setValue ? (e) => setValue(e.target.checked) : undefined}
-        />
-      ) : (
-        <Input
-          type={mapType(type)}
-          name={name}
-          defaultValue={(defaultValueOverride as string) ?? ""}
-          endDecorator={endDecorator}
-          disabled={disabled}
-          slotProps={parseSlotProps(type, slotProps)}
-          sx={sx}
-          value={typeof value === "number" ? value : `${value}`}
-          onChange={setValue ? (e) => setValue(e.target.value) : undefined}
-        />
-      )}
+      {input}
       {error && (
         <FormHelperText>
           <InfoOutlined />

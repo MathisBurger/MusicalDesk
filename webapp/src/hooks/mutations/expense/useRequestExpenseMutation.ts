@@ -23,13 +23,15 @@ const requestExpense = async (
   return (await result.json()) as Expense;
 };
 
-const useRequestExpenseMutation = () => {
+const useRequestExpenseMutation = (pageSize: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: requestExpense,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["expenseExpenses"] });
+      queryClient.invalidateQueries({
+        queryKey: ["expenseExpenses", 1, pageSize],
+      });
     },
   });
 };

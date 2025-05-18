@@ -35,6 +35,7 @@ export type ShowFieldConditions<T> = Partial<
 
 type Types =
   | "string"
+  | "textarea"
   | "number"
   | "datetime-iso"
   | "datetime-utc"

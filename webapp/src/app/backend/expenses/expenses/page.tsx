@@ -20,7 +20,7 @@ const ExpensesPage = () => {
   const { data, isLoading } = useExpensesQuery(page, pageSize);
 
   return (
-    <RoleWrapper roles={[UserRole.Accountant]}>
+    <RoleWrapper roles={[UserRole.Accountant, UserRole.ExpenseRequestor]}>
       <Stack spacing={2}>
         <Grid container spacing={4} alignItems="center">
           <Grid>

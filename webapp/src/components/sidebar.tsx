@@ -176,56 +176,74 @@ export default function Sidebar() {
               </ListItemButton>
             </ListItem>
           </RoleWrapper>
-          <RoleWrapper roles={[UserRole.Accountant]} hideAlert>
+          <RoleWrapper
+            roles={[UserRole.Accountant, UserRole.ExpenseRequestor]}
+            hideAlert
+          >
             <ListItem nested>
               <NestedListToggler title="Expenses" icon={<Money />}>
-                <ListItem>
-                  <ListItemButton
-                    onClick={() => router.push("/backend/expenses/accounts")}
-                  >
-                    <ListItemContent>
-                      <Typography level="title-sm">Accounts</Typography>
-                    </ListItemContent>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton
-                    onClick={() => router.push("/backend/expenses/categories")}
-                  >
-                    <ListItemContent>
-                      <Typography level="title-sm">Categories</Typography>
-                    </ListItemContent>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton
-                    onClick={() => router.push("/backend/expenses/budgets")}
-                  >
-                    <ListItemContent>
-                      <Typography level="title-sm">Budgets</Typography>
-                    </ListItemContent>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton
-                    onClick={() =>
-                      router.push("/backend/expenses/transactions")
-                    }
-                  >
-                    <ListItemContent>
-                      <Typography level="title-sm">Transactions</Typography>
-                    </ListItemContent>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton
-                    onClick={() => router.push("/backend/expenses/expenses")}
-                  >
-                    <ListItemContent>
-                      <Typography level="title-sm">Expenses</Typography>
-                    </ListItemContent>
-                  </ListItemButton>
-                </ListItem>
+                <RoleWrapper roles={[UserRole.Accountant]} hideAlert>
+                  <ListItem>
+                    <ListItemButton
+                      onClick={() => router.push("/backend/expenses/accounts")}
+                    >
+                      <ListItemContent>
+                        <Typography level="title-sm">Accounts</Typography>
+                      </ListItemContent>
+                    </ListItemButton>
+                  </ListItem>
+                </RoleWrapper>
+                <RoleWrapper roles={[UserRole.Accountant]} hideAlert>
+                  <ListItem>
+                    <ListItemButton
+                      onClick={() =>
+                        router.push("/backend/expenses/categories")
+                      }
+                    >
+                      <ListItemContent>
+                        <Typography level="title-sm">Categories</Typography>
+                      </ListItemContent>
+                    </ListItemButton>
+                  </ListItem>
+                </RoleWrapper>
+                <RoleWrapper roles={[UserRole.Accountant]} hideAlert>
+                  <ListItem>
+                    <ListItemButton
+                      onClick={() => router.push("/backend/expenses/budgets")}
+                    >
+                      <ListItemContent>
+                        <Typography level="title-sm">Budgets</Typography>
+                      </ListItemContent>
+                    </ListItemButton>
+                  </ListItem>
+                </RoleWrapper>
+                <RoleWrapper roles={[UserRole.Accountant]} hideAlert>
+                  <ListItem>
+                    <ListItemButton
+                      onClick={() =>
+                        router.push("/backend/expenses/transactions")
+                      }
+                    >
+                      <ListItemContent>
+                        <Typography level="title-sm">Transactions</Typography>
+                      </ListItemContent>
+                    </ListItemButton>
+                  </ListItem>
+                </RoleWrapper>
+                <RoleWrapper
+                  roles={[UserRole.Accountant, UserRole.ExpenseRequestor]}
+                  hideAlert
+                >
+                  <ListItem>
+                    <ListItemButton
+                      onClick={() => router.push("/backend/expenses/expenses")}
+                    >
+                      <ListItemContent>
+                        <Typography level="title-sm">Expenses</Typography>
+                      </ListItemContent>
+                    </ListItemButton>
+                  </ListItem>
+                </RoleWrapper>
               </NestedListToggler>
             </ListItem>
           </RoleWrapper>

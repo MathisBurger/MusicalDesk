@@ -1,6 +1,5 @@
 import FormInput from "@/form/form-input";
 import useForm from "@/form/useForm";
-import WrappedInput from "@/form/wrapped-input";
 import useAcceptExpenseMutation from "@/hooks/mutations/expense/useAcceptExpenseMutation";
 import useAlert from "@/hooks/useAlert";
 import {
@@ -15,7 +14,6 @@ import {
   DialogTitle,
   Modal,
   ModalDialog,
-  Typography,
 } from "@mui/joy";
 import AccountSelect from "../account-select";
 import CategorySelect from "../category-select";

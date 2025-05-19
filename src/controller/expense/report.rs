@@ -8,7 +8,7 @@ use serde::Deserialize;
 
 use crate::{
     controller::PaginationQuery,
-    dto::transaction::TransactionDto,
+    dto::{report::ReportCategorySumupDto, transaction::TransactionDto},
     models::{
         expense::{
             report::{Report, ReportCategorySumup},
@@ -109,5 +109,6 @@ pub async fn get_report_category_sumups(
         return Err(Error::Forbidden);
     }
     let sumups = ReportCategorySumup::find_by_report(path.0, &state.database).await;
-    Ok(HttpResponse::Ok().json(sumups))
+    let result: Vec<ReportCategorySumupDto> = serialize_many(sumups, &state.database).await;
+    Ok(HttpResponse::Ok().json(result))
 }

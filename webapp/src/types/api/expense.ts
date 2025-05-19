@@ -153,3 +153,23 @@ export interface ExpenseWithImages {
   expense: Expense;
   images: Image[];
 }
+
+// REPORT
+
+export interface CreateReportRequest {
+  name: string;
+  start_date: string;
+  end_date: string;
+}
+
+export interface Report {
+  id: number;
+  name: string;
+  start_date: string;
+  end_date: string;
+}
+
+export interface ReportCategorySumup {
+  category: MinimalCategory;
+  sum: number;
+}

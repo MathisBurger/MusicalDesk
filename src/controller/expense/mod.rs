@@ -3,6 +3,7 @@ use actix_web::web::ServiceConfig;
 pub mod account;
 pub mod budget;
 pub mod category;
+pub mod dashboard;
 pub mod expense;
 pub mod report;
 pub mod transaction;
@@ -37,5 +38,12 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(report::get_reports)
         .service(report::get_report)
         .service(report::get_report_transactions)
-        .service(report::get_report_category_sumups);
+        .service(report::get_report_category_sumups)
+        .service(dashboard::current_budgets_status)
+        .service(dashboard::last_transactions)
+        .service(dashboard::total_money_spent)
+        .service(dashboard::total_money_earned)
+        .service(dashboard::total_transactions_created)
+        .service(dashboard::money_spent_over_time)
+        .service(dashboard::money_spent_over_time_by_category);
 }

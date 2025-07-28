@@ -13,6 +13,7 @@ use crate::{
 };
 
 pub mod budget;
+pub mod dashboard;
 pub mod expense;
 pub mod report;
 pub mod ticket;

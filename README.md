@@ -16,7 +16,7 @@ MVP Planning:
 - [x] Create backend users & user overview that are not customers
 - [x] Add option to frontend to invalidate tickets and see their status
 - [x] Expense management (With categories, Images of bills, etc.)
-- [ ] Annual finance reports
+- [x] Annual finance reports
 - [ ] Expense dashboard
 - [ ] Generalize images to files and make special endpoint for uploading files for events
 - [x] Move all frontend API types into typings folder

@@ -47,6 +47,7 @@ pub async fn create_report(
     let report = Report::create(&req, &mut *tx).await;
     Report::create_transactions_mapping(&report, &mut *tx).await;
     ReportCategorySumup::create_in_range(report.id, &req.start_date, &req.end_date, &mut *tx).await;
+    tx.commit().await.map_err(|_x| Error::BadRequest)?;
 
     Ok(HttpResponse::Ok().json(report))
 }

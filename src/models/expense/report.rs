@@ -15,7 +15,8 @@ pub struct Report {
 #[derive(Serialize)]
 pub struct ReportCategorySumup {
     pub report_id: i32,
-    pub category_id: i32,
+    pub cat_key: i32,
+    pub category_id: Option<i32>,
     pub sum: i32,
 }
 
@@ -76,7 +77,7 @@ impl ReportCategorySumup {
     where
         for<'c> &'c mut E: Executor<'c, Database = Postgres>,
     {
-        sqlx::query_as!(ReportCategorySumup, "INSERT INTO expense_reports_category_sumup (report_id, category_id, sum) SELECT $1, category_id, SUM(amount) FROM expense_transactions WHERE timestamp BETWEEN $2 AND $3 GROUP BY category_id RETURNING *", report_id, start_date, end_date)
+        sqlx::query_as!(ReportCategorySumup, "INSERT INTO expense_reports_category_sumup (report_id, cat_key, category_id, sum) (SELECT $1, COALESCE(category_id, 0), category_id, SUM(amount) FROM expense_transactions WHERE timestamp BETWEEN $2 AND $3 GROUP BY category_id) RETURNING *", report_id, start_date, end_date)
             .fetch_all(db)
             .await
             .unwrap()

@@ -170,6 +170,6 @@ export interface Report {
 }
 
 export interface ReportCategorySumup {
-  category: MinimalCategory;
+  category?: MinimalCategory;
   sum: number;
 }

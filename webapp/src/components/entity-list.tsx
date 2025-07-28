@@ -1,16 +1,16 @@
 "use client";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useMuiTheme from "@/hooks/useMuiTheme";
 import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import {
   ButtonGroup,
   ButtonProps,
-  useColorScheme,
   Button,
   CssVarsProvider,
   Box,
 } from "@mui/joy";
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import {
   DataGrid,
   DataGridProps,
@@ -90,9 +90,8 @@ const EntityList = ({
   paginationMode,
   rowCount,
 }: EntityListProps) => {
-  const { mode } = useColorScheme();
-
   const user = useCurrentUser();
+  const muiTheme = useMuiTheme();
 
   const filteredRowActions = useMemo<undefined | EntityListRowAction[]>(() => {
     if (rowActions) {
@@ -118,32 +117,6 @@ const EntityList = ({
 
     return columns.map(setFlexPropertyIfAllowed);
   }, [filteredRowActions, columns]);
-
-  const muiTheme = createTheme({
-    palette: {
-      mode: mode as "light" | "dark",
-    },
-    components: {
-      MuiPopper: {
-        styleOverrides: {
-          root: {
-            zIndex: "9999 !important",
-          },
-        },
-      },
-      MuiPaper: {
-        styleOverrides: {
-          root: {
-            backgroundImage: "none !important",
-            border: mode === "dark" ? "2px solid #303030" : undefined,
-          },
-          elevation8: {
-            zIndex: "9999 !important",
-          },
-        },
-      },
-    },
-  });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const processedRows = useMemo<readonly any[]>(

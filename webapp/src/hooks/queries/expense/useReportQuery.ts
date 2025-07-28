@@ -1,3 +1,4 @@
+import { Report } from "@/types/api/expense";
 import { useQuery } from "@tanstack/react-query";
 
 const reportQuery = async (id: number): Promise<Report | null> => {

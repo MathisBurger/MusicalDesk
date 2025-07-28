@@ -7,7 +7,7 @@ use super::SerializerHelper;
 
 #[derive(Serialize)]
 pub struct ReportCategorySumupDto {
-    category: Value,
+    category: Option<Value>,
     sum: i32,
 }
 
@@ -21,7 +21,7 @@ impl Serializer<ReportCategorySumup> for ReportCategorySumupDto {
     ) -> Self {
         ReportCategorySumupDto {
             sum: input.sum,
-            category: Self::get_category(cache, input.category_id, db).await,
+            category: Self::get_category_option(cache, input.category_id, db).await,
         }
     }
 }

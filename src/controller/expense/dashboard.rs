@@ -9,9 +9,9 @@ use crate::{
     dto::{budget::BudgetDto, dashboard::MoneyOverTimeByCategoryDto},
     models::{
         expense::{
-            budget::Budget, get_money_spent_over_time, get_money_spent_over_time_by_category,
-            get_total_money_earned, get_total_money_spent, get_total_transactions_created,
-            ScatterTransaction,
+            budget::Budget, get_money_balance, get_money_spent_over_time,
+            get_money_spent_over_time_by_category, get_total_money_earned, get_total_money_spent,
+            get_total_transactions_created, ScatterTransaction,
         },
         generic::{Error, UserRole},
         user::User,
@@ -43,6 +43,7 @@ pub async fn last_transactions(user: User, state: Data<AppState>) -> Result<Http
 }
 
 #[derive(Deserialize, Clone, Copy)]
+#[serde(rename_all = "snake_case")]
 pub enum TimePeriod {
     Week,
     Month,
@@ -83,6 +84,15 @@ pub async fn total_money_earned(
         return Err(Error::Forbidden);
     }
     let total = get_total_money_earned(query.period, &state.database).await;
+    Ok(HttpResponse::Ok().json(TotalResponse { total }))
+}
+
+#[get("/expense/dashboard/money_balance")]
+pub async fn money_balance(user: User, state: Data<AppState>) -> Result<HttpResponse, Error> {
+    if !user.has_role_or_admin(UserRole::Accountant) {
+        return Err(Error::Forbidden);
+    }
+    let total = get_money_balance(&state.database).await;
     Ok(HttpResponse::Ok().json(TotalResponse { total }))
 }
 

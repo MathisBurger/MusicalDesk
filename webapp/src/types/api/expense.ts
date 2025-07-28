@@ -173,3 +173,58 @@ export interface ReportCategorySumup {
   category?: MinimalCategory;
   sum: number;
 }
+
+// DASHBOARD
+
+export interface ScatterTransaction {
+  id: number;
+  amount: number;
+  timestamp: string;
+}
+
+export enum TimePeriod {
+  Week = "week",
+  Month = "month",
+  Year = "year",
+  FiveYears = "five_year",
+}
+
+export interface TotalResponse {
+  total: number;
+}
+
+export interface MoneyOverTime {
+  label: number;
+  value: number;
+}
+
+export interface MoneyOverTimeByCategory {
+  time: number;
+  value: number;
+  category?: Category;
+}
+
+export const week = [
+  "Montag",
+  "Dienstag",
+  "Mittwoch",
+  "Donnerstag",
+  "Freitag",
+  "Samstag",
+  "Sonntag",
+];
+
+export const months = [
+  "Januar",
+  "Februar",
+  "März",
+  "April",
+  "Mai",
+  "Juni",
+  "Juli",
+  "August",
+  "September",
+  "Oktober",
+  "November",
+  "Dezember",
+];

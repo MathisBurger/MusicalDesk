@@ -33,17 +33,28 @@ impl ScatterTransaction {
 
 pub async fn get_total_money_spent(period: TimePeriod, db: &PgPool) -> i64 {
     let from = get_from_date(period);
-    let row = sqlx::query!("SELECT COUNT(total_amount) as amount FROM expense_expenses e JOIN expense_transactions t ON e.balancing_transaction_id = t.id WHERE t.timestamp > $1", from)
+    let row = sqlx::query!("SELECT SUM(total_amount) as amount FROM expense_expenses e JOIN expense_transactions t ON e.balancing_transaction_id = t.id WHERE t.timestamp > $1", from)
         .fetch_one(db)
         .await
         .unwrap();
     row.amount.unwrap_or(0)
 }
 
+pub async fn get_money_balance(db: &PgPool) -> i64 {
+    let row = sqlx::query!(
+        "SELECT SUM(balance) as amount FROM expense_accounts WHERE account_type = $1",
+        AccountType::MONEY.to_string()
+    )
+    .fetch_one(db)
+    .await
+    .unwrap();
+    row.amount.unwrap_or(0)
+}
+
 pub async fn get_total_money_earned(period: TimePeriod, db: &PgPool) -> i64 {
     let from = get_from_date(period);
     let row = sqlx::query!(
-        "SELECT COUNT(amount) as amount FROM expense_transactions t JOIN expense_accounts a1 ON t.from_account_id = a1.id JOIN expense_accounts a2 ON t.to_account_id = a2.id WHERE t.timestamp > $1 AND a1.account_type IN ($2, $3) AND a2.account_type = $4",
+        "SELECT SUM(amount) as amount FROM expense_transactions t JOIN expense_accounts a1 ON t.from_account_id = a1.id JOIN expense_accounts a2 ON t.to_account_id = a2.id WHERE t.timestamp > $1 AND a1.account_type IN ($2, $3) AND a2.account_type = $4",
         from,
         AccountType::FLOW.to_string(),
         AccountType::FOREIGN.to_string(),
@@ -76,7 +87,7 @@ pub struct MoneyOverTime {
 pub async fn get_money_spent_over_time(period: TimePeriod, db: &PgPool) -> Vec<MoneyOverTime> {
     let from = get_from_date(period.clone());
     let label_func = get_label_func(period);
-    let query = format!("SELECT COUNT(total_amount) as value, {} as label FROM expense_expenses e JOIN expense_transactions t ON e.balancing_transaction_id = t.id WHERE t.timestamp > $1 GROUP BY label", label_func);
+    let query = format!("SELECT SUM(total_amount) as value, {} as label FROM expense_expenses e JOIN expense_transactions t ON e.balancing_transaction_id = t.id WHERE t.timestamp > $1 GROUP BY label", label_func);
     sqlx::query_as::<_, MoneyOverTime>(&query)
         .bind(from)
         .fetch_all(db)
@@ -97,7 +108,7 @@ pub async fn get_money_spent_over_time_by_category(
 ) -> Vec<MoneyOverTimeByCategory> {
     let from = get_from_date(period.clone());
     let label_func = get_label_func(period);
-    let query = format!("SELECT COUNT(total_amount) as value, {} as time, t.category_id as category_id FROM expense_expenses e JOIN expense_transactions t ON e.expense_transaction_id = t.id WHERE t.timestamp > $1 GROUP BY time, t.category_id", label_func);
+    let query = format!("SELECT SUM(total_amount) as value, {} as time, t.category_id as category_id FROM expense_expenses e JOIN expense_transactions t ON e.balancing_transaction_id = t.id WHERE t.timestamp > $1 GROUP BY time, t.category_id", label_func);
     sqlx::query_as::<_, MoneyOverTimeByCategory>(&query)
         .bind(from)
         .fetch_all(db)
@@ -116,9 +127,9 @@ fn get_from_date(period: TimePeriod) -> DateTime<Utc> {
 
 fn get_label_func(period: TimePeriod) -> &'static str {
     match period {
-        TimePeriod::Week => "EXTRACT(ISODOW FROM t.timestamp)",
-        TimePeriod::Month => "EXTRACT(DAY FROM t.timestamp)",
-        TimePeriod::Year => "EXTRACT(MONTH FROM t.timestamp)",
-        TimePeriod::FiveYear => "EXTRACT(YEAR FROM t.timestamp)",
+        TimePeriod::Week => "EXTRACT(ISODOW FROM t.timestamp)::INT",
+        TimePeriod::Month => "EXTRACT(DAY FROM t.timestamp)::INT",
+        TimePeriod::Year => "EXTRACT(MONTH FROM t.timestamp)::INT",
+        TimePeriod::FiveYear => "EXTRACT(YEAR FROM t.timestamp)::INT",
     }
 }

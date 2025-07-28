@@ -185,6 +185,17 @@ export default function Sidebar() {
                 <RoleWrapper roles={[UserRole.Accountant]} hideAlert>
                   <ListItem>
                     <ListItemButton
+                      onClick={() => router.push("/backend/expenses/dashboard")}
+                    >
+                      <ListItemContent>
+                        <Typography level="title-sm">Dashboard</Typography>
+                      </ListItemContent>
+                    </ListItemButton>
+                  </ListItem>
+                </RoleWrapper>
+                <RoleWrapper roles={[UserRole.Accountant]} hideAlert>
+                  <ListItem>
+                    <ListItemButton
                       onClick={() => router.push("/backend/expenses/accounts")}
                     >
                       <ListItemContent>

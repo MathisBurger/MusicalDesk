@@ -43,6 +43,7 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(dashboard::last_transactions)
         .service(dashboard::total_money_spent)
         .service(dashboard::total_money_earned)
+        .service(dashboard::money_balance)
         .service(dashboard::total_transactions_created)
         .service(dashboard::money_spent_over_time)
         .service(dashboard::money_spent_over_time_by_category);

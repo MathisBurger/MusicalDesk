@@ -9,11 +9,13 @@ import useReportQuery from "@/hooks/queries/expense/useReportQuery";
 import useReportTransactionsQuery from "@/hooks/queries/expense/useReportTransactionsQuery";
 import { UserRole } from "@/types/api/user";
 import { Card, Divider, Grid, Stack, Typography } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 const ReportDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  const t = useTranslations();
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(25);
 
@@ -26,19 +28,19 @@ const ReportDetailsPage = () => {
   const listData = useMemo<DisplayedData[]>(
     () => [
       {
-        title: "Name",
+        title: t("labels.expense.report.name"),
         value: reportData?.name,
       },
       {
-        title: "Start date",
+        title: t("labels.expense.report.startDate"),
         value: reportData?.start_date,
       },
       {
-        title: "End date",
+        title: t("labels.expense.report.endDate"),
         value: reportData?.end_date,
       },
     ],
-    [reportData],
+    [reportData, t],
   );
 
   if (reportDataLoading) {

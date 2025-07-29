@@ -7,10 +7,12 @@ import { UserRole } from "@/types/api/user";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Stack, Typography } from "@mui/joy";
 import { GridColDef } from "@mui/x-data-grid";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const ExpenseReportsPage = () => {
+  const t = useTranslations();
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const router = useRouter();
 
@@ -19,25 +21,25 @@ const ExpenseReportsPage = () => {
   const cols: GridColDef[] = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: t("generic.id"),
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: t("labels.expense.report.name"),
     },
     {
       field: "start_date",
-      headerName: "Startdate",
+      headerName: t("labels.expense.report.startDate"),
     },
     {
       field: "end_date",
-      headerName: "Enddate",
+      headerName: t("labels.expense.report.endDate"),
     },
   ];
 
   const rowActions: EntityListRowAction[] = [
     {
-      name: "Details",
+      name: t("generic.details"),
       onClick: (row) => router.push(`/backend/expenses/reports/${row.id}`),
       color: "primary",
     },
@@ -48,12 +50,12 @@ const ExpenseReportsPage = () => {
       <Stack spacing={2}>
         <Grid container spacing={4} alignItems="center">
           <Grid>
-            <Typography level="h1">Reports</Typography>
+            <Typography level="h1">{t("headings.reports")}</Typography>
           </Grid>
           <Grid>
             <Button onClick={() => setCreateModalOpen(true)}>
               <Add />
-              &nbsp; Create
+              &nbsp; {t("generic.create")}
             </Button>
           </Grid>
         </Grid>

@@ -2,43 +2,45 @@ import useEventsQuery from "@/hooks/queries/event/useEventsQuery";
 import { GridColDef } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 import EntityList, { EntityListRowAction } from "../entity-list";
+import { useTranslations } from "next-intl";
 
 const EventList = () => {
   const router = useRouter();
+  const t = useTranslations();
 
   const { data, isLoading } = useEventsQuery();
 
   const cols: GridColDef[] = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: t("generic.id"),
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: t("labels.events.name"),
       width: 200,
     },
     {
       field: "price",
-      headerName: "Price",
+      headerName: t("labels.events.price"),
       width: 120,
       valueFormatter: (v) => `${v}€`,
     },
     {
       field: "tax_percentage",
-      headerName: "Tax",
+      headerName: t("labels.events.tax"),
       valueFormatter: (v) => `${v}%`,
     },
     {
       field: "event_date",
-      headerName: "Event Date",
+      headerName: t("labels.events.eventDate"),
       width: 200,
     },
   ];
 
   const rowActions: EntityListRowAction[] = [
     {
-      name: "Details",
+      name: t("generic.details"),
       color: "primary",
       onClick: (row) => router.push(`/backend/events/${row.id}`),
     },

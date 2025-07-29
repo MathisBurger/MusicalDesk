@@ -30,6 +30,7 @@ import {
 } from "@mui/joy";
 import { Button } from "@mui/joy";
 import { Menu } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -41,6 +42,7 @@ const ShopHeader = () => {
   const router = useRouter();
   const logout = useLogout();
   const pathname = usePathname();
+  const t = useTranslations();
 
   const { data: shoppingCart } = useShoppingCartQuery();
 
@@ -96,7 +98,7 @@ const ShopHeader = () => {
             sx={{ alignSelf: "center" }}
             onClick={() => router.push("/")}
           >
-            Shop
+            {t("actions.shop.shop")}
           </Button>
           {currentUser && (
             <Button
@@ -106,7 +108,7 @@ const ShopHeader = () => {
               sx={{ alignSelf: "center" }}
               onClick={() => router.push("/shop/my-tickets")}
             >
-              My tickets
+              {t("actions.shop.myTickets")}
             </Button>
           )}
           {!isGranted(currentUser, [UserRole.ShopCustomer]) && (
@@ -117,7 +119,7 @@ const ShopHeader = () => {
               sx={{ alignSelf: "center" }}
               onClick={() => router.push("/backend/dashboard")}
             >
-              Backend
+              {t("actions.shop.backend")}
             </Button>
           )}
         </Stack>
@@ -148,7 +150,9 @@ const ShopHeader = () => {
                 <ListItem>
                   <ListItemButton onClick={() => router.push("/")}>
                     <ListItemContent>
-                      <Typography level="title-sm">Shop</Typography>
+                      <Typography level="title-sm">
+                        {t("actions.shop.shop")}
+                      </Typography>
                     </ListItemContent>
                   </ListItemButton>
                 </ListItem>
@@ -157,7 +161,9 @@ const ShopHeader = () => {
                     onClick={() => router.push("/shop/my-tickets")}
                   >
                     <ListItemContent>
-                      <Typography level="title-sm">Tickets</Typography>
+                      <Typography level="title-sm">
+                        {t("actions.shop.myTickets")}
+                      </Typography>
                     </ListItemContent>
                   </ListItemButton>
                 </ListItem>
@@ -166,7 +172,9 @@ const ShopHeader = () => {
                     onClick={() => router.push("/backend/dashboard")}
                   >
                     <ListItemContent>
-                      <Typography level="title-sm">Backend</Typography>
+                      <Typography level="title-sm">
+                        {t("actions.shop.backend")}
+                      </Typography>
                     </ListItemContent>
                   </ListItemButton>
                 </ListItem>
@@ -223,13 +231,13 @@ const ShopHeader = () => {
                 variant="outlined"
                 onClick={() => router.push("/register")}
               >
-                Sign up
+                {t("actions.signUp")}
               </Button>
               <Button
                 color="primary"
                 onClick={() => router.push(`login?redirect_uri=${pathname}`)}
               >
-                Sign in
+                {t("actions.signIn")}
               </Button>
             </>
           )}

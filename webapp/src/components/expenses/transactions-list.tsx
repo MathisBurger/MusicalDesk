@@ -9,6 +9,7 @@ import {
   Transaction,
 } from "@/types/api/expense";
 import AccountChip from "./account-chip";
+import { useTranslations } from "next-intl";
 
 interface TransactionsListProps {
   transactions: Transaction[];
@@ -30,55 +31,56 @@ const TransactionsList = ({
   rowCount,
 }: TransactionsListProps) => {
   const router = useRouter();
+  const t = useTranslations();
 
   const cols: GridColDef[] = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: t("generic.id"),
     },
     {
       field: "amount",
-      headerName: "Amount",
+      headerName: t("labels.expense.transaction.amount"),
       valueFormatter: (value) => `${(value ?? 0) / 100}€`,
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: t("labels.expense.transaction.name"),
     },
     {
       field: "from_account",
-      headerName: "From (Account)",
+      headerName: t("labels.expense.transaction.fromAccount"),
       renderCell: ({ value }: GridRenderCellParams) => (
         <AccountChip account={value as MinimalAccount} />
       ),
     },
     {
       field: "to_account",
-      headerName: "To (Account)",
+      headerName: t("labels.expense.transaction.toAccount"),
       renderCell: ({ value }: GridRenderCellParams) => (
         <AccountChip account={value as MinimalAccount} />
       ),
     },
     {
       field: "timestamp",
-      headerName: "Timestamp",
+      headerName: t("labels.expense.transaction.timestamp"),
     },
     {
       field: "category",
-      headerName: "Category",
+      headerName: t("labels.expense.transaction.category"),
       renderCell: ({ value }: GridRenderCellParams) =>
         value ? <CategoryChip value={value as MinimalCategory} /> : null,
     },
     {
       field: "is_money_transaction",
-      headerName: "Money transaction?",
+      headerName: t("labels.expense.transaction.isMoneyTransaction"),
       type: "boolean",
     },
   ];
 
   const rowActions: EntityListRowAction[] = [
     {
-      name: "Details",
+      name: t("generic.details"),
       onClick: (row) => router.push(`/backend/expenses/transactions/${row.id}`),
       color: "primary",
     },

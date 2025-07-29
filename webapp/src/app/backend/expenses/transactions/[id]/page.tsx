@@ -9,54 +9,56 @@ import useTransactionQuery from "@/hooks/queries/expense/useTransactionQuery";
 import { UserRole } from "@/types/api/user";
 import { Check, Clear } from "@mui/icons-material";
 import { Card, Divider, Grid, Stack, Typography } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
 
 const TransactionPage = () => {
   const { id } = useParams<{ id: string }>();
+  const t = useTranslations();
 
   const { data, isLoading } = useTransactionQuery(parseInt(id, 10));
 
   const listData = useMemo<DisplayedData[]>(
     () => [
       {
-        title: "ID",
+        title: t("generic.id"),
         value: data?.id,
       },
       {
-        title: "Name",
+        title: t("labels.expense.transaction.name"),
         value: data?.name,
       },
       {
-        title: "Amount",
+        title: t("labels.expense.transaction.amount"),
         value: `${(data?.amount ?? 0) / 100}€`,
       },
       {
-        title: "From account",
+        title: t("labels.expense.transaction.fromAccount"),
         value: data?.from_account ? (
           <AccountChip account={data?.from_account} />
         ) : null,
       },
       {
-        title: "To account",
+        title: t("labels.expense.transaction.toAccount"),
         value: data?.to_account ? (
           <AccountChip account={data?.to_account} />
         ) : null,
       },
       {
-        title: "Category",
+        title: t("labels.expense.transaction.category"),
         value: data?.category ? <CategoryChip value={data.category} /> : null,
       },
       {
-        title: "Timestamp",
+        title: t("labels.expense.transaction.timestamp"),
         value: `${data?.timestamp}`,
       },
       {
-        title: "Is money transaction",
+        title: t("labels.expense.transaction.isMoneyTransaction"),
         value: data?.is_money_transaction ? <Check /> : <Clear />,
       },
     ],
-    [data],
+    [data, t],
   );
 
   if (isLoading) {

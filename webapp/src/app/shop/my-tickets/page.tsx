@@ -14,8 +14,10 @@ import {
   Stack,
   Typography,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 const MyTicketsPage = () => {
+  const t = useTranslations();
   const { data: currentTickets, isLoading: currentTicketsLoading } =
     useCurrentUserTicketsQuery();
   const { data: oldTickets, isLoading: oldTicketsLoading } =
@@ -28,7 +30,7 @@ const MyTicketsPage = () => {
   return (
     <RoleWrapper roles={[UserRole.ShopCustomer]}>
       <Stack spacing={2} sx={{ paddingBottom: "10em" }}>
-        <Typography level="h1">My tickets</Typography>
+        <Typography level="h1">{t("headings.myTickets")}</Typography>
         <Grid container direction="row" spacing={2}>
           {(currentTickets ?? []).map((ticket) => (
             <Grid xs={12} md={3} key={ticket.id}>
@@ -37,14 +39,14 @@ const MyTicketsPage = () => {
           ))}
           {(currentTickets ?? []).length === 0 && (
             <Alert variant="soft" color="warning" size="lg">
-              No current tickets
+              {t("messages.shop.noCurrentTickets")}
             </Alert>
           )}
         </Grid>
         {(oldTickets ?? []).length > 0 && (
           <Accordion>
             <AccordionSummary>
-              <Typography level="h3">Old tickets</Typography>
+              <Typography level="h3">{t("headings.oldTickets")}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Grid

@@ -1,0 +1,331 @@
+{
+  "dashboard": {
+    "expense": "Expense",
+    "events": "Events",
+    "members": "Members"
+  },
+  "generic": {
+    "edit": "Edit",
+    "create": "Create",
+    "add": "Add",
+    "update": "Update",
+    "cancel": "Cancel",
+    "unknown": "Unknown",
+    "id": "ID",
+    "details": "Details",
+    "active": "Active",
+    "inactive": "Inactive",
+    "reset": "Reset",
+    "noCategory": "(no category)",
+    "never": "(never)"
+  },
+  "headings": {
+    "accounts": "Accounts",
+    "budgets": "Budgets",
+    "categories": "Categories",
+    "images": "Images",
+    "transactions": "Transactions",
+    "expenses": "Expenses",
+    "reports": "Reports",
+    "paidMemberships": "Paid memberships",
+    "members": "Members",
+    "userDetails": "User Details",
+    "backendUsers": "Backend users",
+    "shoppingCart": "Shopping Cart",
+    "myTickets": "My tickets",
+    "oldTickets": "Old tickets",
+    "eventTicketShop": "Event Ticket Shop",
+    "coreData": "Core data",
+    "additionalData": "Additional data"
+  },
+  "modalTitles": {
+    "events": {
+      "createEvent": "Create Event",
+      "createTicket": "Create ticket",
+      "updateEvent": "Update event"
+    },
+    "expense": {
+      "acceptExpense": "Accept expense",
+      "createAccount": "Create Account",
+      "createBudget": "Create budget",
+      "createCategory": "Create category",
+      "createReport": "Create report",
+      "createTransaction": "Create transaction",
+      "denyExpense": "Deny expense",
+      "requestExpense": "Request expense",
+      "updateAccount": "Update account",
+      "updateBudget": "Update budget",
+      "updateCategory": "Update category",
+      "updateExpense": "Update expense",
+      "uploadFile": "Upload file"
+    },
+    "member": {
+      "confirmLeave": "Confirm leave",
+      "createMember": "Create member",
+      "editMember": "Update member"
+    },
+    "user": {
+      "createBackendUser": "Create backend user",
+      "updateBackendUser": "Update backend user",
+      "updateUserPassword": "Update user password"
+    }
+  },
+  "labels": {
+    "events": {
+      "events": "Events",
+      "name": "Name",
+      "price": "Price",
+      "tax": "Tax (%)",
+      "image": "Image",
+      "eventDate": "Date",
+      "activeFrom": "Active from",
+      "activeUntil": "Active until",
+      "ticket": {
+        "validUntil": "Valid until",
+        "invalidatedAt": "Invalidated at",
+        "quantity": "Quantity",
+        "boughtAt": "Bought at",
+        "owner": "Owner"
+      },
+      "dashboard": {
+        "lastThreeEvents": "Last three events",
+        "totalTicketCount": "Total ticket count"
+      }
+    },
+    "expense": {
+      "account": {
+        "name": "Name",
+        "ownerName": "Name of the owner",
+        "balance": "Balance",
+        "type": "Account type",
+        "iban": "IBAN",
+        "types": {
+          "FLOW": "Flow",
+          "MATERIAL": "Material",
+          "MONEY": "Money",
+          "FOREIGN": "Foreign"
+        }
+      },
+      "budget": {
+        "name": "Name",
+        "category": "Category",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "budget": "Budget",
+        "spent": "Spent"
+      },
+      "category": {
+        "name": "Name",
+        "color": "Color",
+        "isIncome": "Income category?"
+      },
+      "dashboard": {
+        "budgetStatus": "Budget status",
+        "lastTransactions": "Last 100 transactions",
+        "spentOverTime": "Spent over time",
+        "spentOverTimeByCategory": "Spent over time by category",
+        "spent": "Spent",
+        "remaining": "Remaining",
+        "over": "Over",
+        "totalMoneySpent": "Total money spent",
+        "totalMoneyEarned": "Total money earned",
+        "moneyBalance": "Money balance",
+        "transactionsCreated": "Transactions created",
+        "transactions": "Transactions",
+        "amount": "Amount (€)"
+      },
+      "expense": {
+        "name": "Name",
+        "status": "Status",
+        "description": "Description",
+        "totalAmount": "Total amount (€)",
+        "fromAccount": "From account (Foreign account)",
+        "toAccount": "To account (Material account)",
+        "moneyAccount": "Money account (Account the payment will come from)",
+        "category": "Category",
+        "expenseTransaction": "Transaction (Expense)",
+        "balancingTransaction": "Transaction (Balancing)"
+      },
+      "report": {
+        "name": "Name",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "pieChart": "Pie chart",
+        "barChart": "Bar chart",
+        "radarChart": "Radar chart"
+      },
+      "transaction": {
+        "name": "Name",
+        "amount": "Amount (€)",
+        "fromAccount": "Source account",
+        "toAccount": "Destination account",
+        "category": "Category",
+        "timestamp": "Timestamp",
+        "isMoneyTransaction": "Money transaction ?"
+      }
+    },
+    "member": {
+      "year": "Year",
+      "paidAt": "Paid at",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "street": "Street",
+      "houseNr": "House nr.",
+      "zip": "Zip",
+      "city": "City",
+      "iban": "IBAN",
+      "membershipFee": "Membership fee",
+      "address": "Address",
+      "leftAt": "Left at",
+      "dashboard": {
+        "totalMembers": "Total members",
+        "expectedFees": "Expected fees this year"
+      }
+    },
+    "user": {
+      "username": "Username",
+      "firstName": "First name",
+      "surname": "Surname",
+      "function": "Function",
+      "roles": "Roles"
+    },
+    "shop": {
+      "left": "Left",
+      "soldOut": "Sold out",
+      "total": "Total"
+    },
+    "username": "Username",
+    "password": "Password",
+    "customerRegistration": "Customer registration",
+    "email": "Email",
+    "back": "Back",
+    "actions": "Actions"
+  },
+  "tabs": {
+    "events": {
+      "coreData": "Core data",
+      "tickets": "Tickets",
+      "events": "Events",
+      "invalidateTickets": "Invalidate tickets",
+      "checkTickets": "Check tickets"
+    },
+    "member": {
+      "members": "Members",
+      "leftMembers": "Left members",
+      "memberships": "Memberships",
+      "unpaidMemberships": "Unpaid memberships",
+      "paidMemberships": "Paid memberships"
+    }
+  },
+  "actions": {
+    "events": {
+      "createTickets": "Create tickets"
+    },
+    "expense": {
+      "deny": "Deny",
+      "accept": "Accept"
+    },
+    "member": {
+      "leave": "Leave",
+      "hasPaid": "Has paid"
+    },
+    "shop": {
+      "shop": "Shop",
+      "shoppingCart": "Shopping Cart",
+      "myTickets": "My tickets",
+      "loginToBuy": "Login to buy",
+      "buyNow": "Buy now",
+      "addToShoppingCart": "Add to shopping cart",
+      "continueCurrentCheckout": "Continue current checkout",
+      "proceedWithCheckout": "Proceed with checkout",
+      "backend": "Backend",
+      "cancelReservation": "Cancel reservation"
+    },
+    "updatePassword": "Update password",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
+  },
+  "messages": {
+    "events": {
+      "ticketNotFound": "Ticket not found",
+      "cannotUploadFile": "Cannot upload file",
+      "cannotCreateEvent": "Cannot create event",
+      "cannotCreateTickets": "Cannot create tickets",
+      "cannotUpdateEvent": "Cannot update event",
+      "ticketHasBeenInvalidated": "Ticket has already been invalidated"
+    },
+    "shop": {
+      "checkoutCanceled": "Checkout canceled",
+      "checkoutSuccess": "Checkout success",
+      "ticketNotFound": "Ticket not found",
+      "noCurrentTickets": "No current tickets",
+      "noCurrentEvents": "No current events"
+    },
+    "expense": {
+      "cannotAcceptExpense": "Cannot accept expense",
+      "cannotCreateAccount": "Cannot create account",
+      "cannotCreateBudget": "Cannot create budget",
+      "cannotCreateCategory": "Cannot create category",
+      "cannotCreateReport": "Cannot create report",
+      "cannotCreateTransactions": "Cannot create transactions",
+      "cannotDenyExpense": "Cannot deny expense",
+      "reallyWantToDeny": "Do you really want to deny the expense?",
+      "cannotRequestExpense": "Cannot request expense",
+      "cannotUpdateAccount": "Cannot update account",
+      "cannotUpdateBudget": "Cannot update budget",
+      "cannotUpdateCategory": "Cannot update category",
+      "cannotUpdateExpense": "Cannot update expense",
+      "cannotUploadFiles": "Cannot upload files"
+    },
+    "member": {
+      "cannotLeaveUser": "Cannot leave user",
+      "confirmLeave": "Confirm that this member wants to leave?",
+      "cannotCreateMember": "Cannot create member",
+      "cannotUpdateMember": "Cannot update member"
+    },
+    "user": {
+      "cannotCreateBackendUser": "Cannot create backend user",
+      "cannotUpdateBackendUser": "Cannot update backend user",
+      "cannotUpdateBackendUserPassword": "Cannot update backend user password"
+    },
+    "invalidCreds": "Invalid username or password",
+    "noAccess": "You do not have access to this.",
+    "dropHere": "Drop the files here ...",
+    "dragHere": "Drag and drop some files here, or click to select files"
+  },
+  "validation": {
+    "events": {
+      "name": "Please choose an valid name",
+      "price": "Please choose an valid value"
+    },
+    "member": {
+      "iban": "Invalid IBAN format"
+    }
+  },
+  "roles": {
+    "admin": "Administrator",
+    "member_admin": "Member Administrator",
+    "event_admin": "Event Administrator",
+    "shop_customer": "Shop Customer",
+    "ticket_invalidator": "Event Ticket Invalidator",
+    "accountant": "Accountant",
+    "expense_requestor": "Expense Requestor"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "members": "Members",
+    "events": "Events",
+    "users": "Users",
+    "expenses": {
+      "title": "Expenses",
+      "dashboard": "Finance Dashboard",
+      "accounts": "Accounts",
+      "categories": "Categories",
+      "budgets": "Budgets",
+      "transactions": "Transactions",
+      "expenses": "Expenses",
+      "reports": "Reports"
+    }
+  }
+}

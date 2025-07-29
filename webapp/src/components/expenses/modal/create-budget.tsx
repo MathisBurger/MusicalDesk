@@ -15,6 +15,7 @@ import {
   Stack,
 } from "@mui/joy";
 import CategorySelect from "../category-select";
+import { useTranslations } from "next-intl";
 
 interface CreateBudgetModalProps {
   onClose: () => void;
@@ -23,6 +24,7 @@ interface CreateBudgetModalProps {
 const CreateBudgetModal = ({ onClose }: CreateBudgetModalProps) => {
   const { mutateAsync: createBudget, isPending } = useCreateBudgetMutation();
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const form = useForm<CreateBudgetRequest>({
     defaultValues: {
@@ -31,11 +33,11 @@ const CreateBudgetModal = ({ onClose }: CreateBudgetModalProps) => {
       budget: 0,
     },
     labels: {
-      name: "Name",
-      category_id: "Category",
-      start_date: "Startdate",
-      end_date: "Enddate",
-      budget: "Budget",
+      name: t("labels.expense.budget.name"),
+      category_id: t("labels.expense.budget.category"),
+      start_date: t("labels.expense.budget.startDate"),
+      end_date: t("labels.expense.budget.endDate"),
+      budget: t("labels.expense.budget.budget"),
     },
     explicitTypes: {
       start_date: "datetime-iso",
@@ -52,7 +54,7 @@ const CreateBudgetModal = ({ onClose }: CreateBudgetModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot create budget",
+      content: t("messages.expense.cannotCreateBudget"),
       duration: 1500,
     });
   };
@@ -61,7 +63,7 @@ const CreateBudgetModal = ({ onClose }: CreateBudgetModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Create budget</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.createBudget")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -73,10 +75,10 @@ const CreateBudgetModal = ({ onClose }: CreateBudgetModalProps) => {
               <FormInput {...form.getInputProps("budget")} />
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Create
+                  {t("generic.create")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

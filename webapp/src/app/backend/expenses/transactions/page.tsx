@@ -8,10 +8,12 @@ import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Stack, Typography } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 const TransactionsPage = () => {
   const currentUser = useCurrentUser();
+  const t = useTranslations();
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
   const [page, setPage] = useState<number>(1);
@@ -23,13 +25,13 @@ const TransactionsPage = () => {
       <Stack spacing={2}>
         <Grid container spacing={4} alignItems="center">
           <Grid>
-            <Typography level="h1">Transactions</Typography>
+            <Typography level="h1">{t("headings.transactions")}</Typography>
           </Grid>
           {isGranted(currentUser, [UserRole.Accountant, UserRole.Admin]) && (
             <Grid>
               <Button onClick={() => setCreateModalOpen(true)}>
                 <Add />
-                &nbsp; Create
+                &nbsp; {t("generic.create")}
               </Button>
             </Grid>
           )}

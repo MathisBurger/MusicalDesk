@@ -12,6 +12,7 @@ import {
   ModalDialog,
   Stack,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface CreateCategoryModalProps {
   onClose: () => void;
@@ -21,6 +22,7 @@ const CreateCategoryModal = ({ onClose }: CreateCategoryModalProps) => {
   const { mutateAsync: createCategory, isPending } =
     useCreateCategoryMutation();
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const form = useForm<CreateCategoryRequest>({
     defaultValues: {
@@ -29,9 +31,9 @@ const CreateCategoryModal = ({ onClose }: CreateCategoryModalProps) => {
       is_income: false,
     },
     labels: {
-      name: "Name",
-      hex_color: "Color",
-      is_income: "Income category",
+      name: t("labels.expense.category.name"),
+      hex_color: t("labels.expense.category.color"),
+      is_income: t("labels.expense.category.isIncome"),
     },
     required: ["name", "hex_color"],
     explicitTypes: {
@@ -47,7 +49,7 @@ const CreateCategoryModal = ({ onClose }: CreateCategoryModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot create account",
+      content: t("messages.expense.cannotCreateCategory"),
       duration: 1500,
     });
   };
@@ -56,7 +58,7 @@ const CreateCategoryModal = ({ onClose }: CreateCategoryModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Create category</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.createCategory")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -64,10 +66,10 @@ const CreateCategoryModal = ({ onClose }: CreateCategoryModalProps) => {
               {form.renderFormBody()}
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Create
+                  {t("generic.create")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

@@ -10,11 +10,13 @@ import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Stack, Typography } from "@mui/joy";
 import { GridColDef } from "@mui/x-data-grid";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const AccountsPage = () => {
   const currentUser = useCurrentUser();
+  const t = useTranslations();
   const router = useRouter();
   const [createAccountModalOpen, setCreateAccountModalOpen] =
     useState<boolean>(false);
@@ -24,41 +26,43 @@ const AccountsPage = () => {
   const cols: GridColDef[] = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: t("generic.id"),
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: t("labels.expense.account.name"),
       width: 200,
     },
     {
       field: "owner_name",
-      headerName: "Name des Besitzers",
+      headerName: t("labels.expense.account.ownerName"),
     },
     {
       field: "iban",
-      headerName: "IBAN",
+      headerName: t("labels.expense.account.iban"),
       width: 200,
     },
     {
       field: "balance",
-      headerName: "Balance",
+      headerName: t("labels.expense.account.balance"),
       width: 200,
       renderCell: ({ row }) =>
         row.account_type === AccountType.FLOW
-          ? "unknown"
+          ? t("generic.unknown")
           : `${(row.balance ?? 0) / 100}€`,
     },
     {
       field: "account_type",
-      headerName: "Account Type",
+      headerName: t("labels.expense.account.type"),
       width: 150,
+      valueFormatter: (value) =>
+        t(`labels.expense.account.types.${value as string}`),
     },
   ];
 
   const rowActions: EntityListRowAction[] = [
     {
-      name: "Details",
+      name: t("generic.details"),
       onClick: (row) => router.push(`/backend/expenses/accounts/${row.id}`),
       color: "primary",
     },
@@ -69,13 +73,13 @@ const AccountsPage = () => {
       <Stack spacing={2}>
         <Grid container spacing={4} alignItems="center">
           <Grid>
-            <Typography level="h1">Accounts</Typography>
+            <Typography level="h1">{t("headings.accounts")}</Typography>
           </Grid>
           {isGranted(currentUser, [UserRole.Accountant, UserRole.Admin]) && (
             <Grid>
               <Button onClick={() => setCreateAccountModalOpen(true)}>
                 <Add />
-                &nbsp; Create
+                &nbsp; {t("generic.create")}
               </Button>
             </Grid>
           )}

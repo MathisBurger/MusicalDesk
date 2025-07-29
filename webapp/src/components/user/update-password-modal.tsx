@@ -12,6 +12,7 @@ import {
 import useAlert from "@/hooks/useAlert";
 import useUpdateBackendUserPasswordMutation from "@/hooks/mutations/user/useUpdateBackendUserPasswordMutation";
 import { UpdateBackendUserPasswordRequest, User } from "@/types/api/user";
+import { useTranslations } from "next-intl";
 
 interface UpdateBackendUserPasswordModalProps {
   onClose: () => void;
@@ -26,6 +27,7 @@ const UpdateBackendUserPasswordModal = ({
     user.id,
   );
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const submit = async (req: UpdateBackendUserPasswordRequest) => {
     const result = await mutateAsync(req);
@@ -35,14 +37,14 @@ const UpdateBackendUserPasswordModal = ({
     }
     showAlert({
       color: "danger",
-      content: "Cannot update backend user password",
+      content: t("messages.user.cannotUpdateBackendUserPassword"),
       duration: 1500,
     });
   };
 
   const form = useForm<UpdateBackendUserPasswordRequest>({
     labels: {
-      password: "Password",
+      password: t("labels.user.password"),
     },
     required: ["password"],
     explicitTypes: {
@@ -54,7 +56,7 @@ const UpdateBackendUserPasswordModal = ({
     <Modal open onClose={onClose}>
       <ModalDialog>
         <ModalClose />
-        <DialogTitle>Update user password</DialogTitle>
+        <DialogTitle>{t("modalTitles.user.updateUserPassword")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -62,10 +64,10 @@ const UpdateBackendUserPasswordModal = ({
               {form.renderFormBody()}
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Update
+                  {t("generic.update")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

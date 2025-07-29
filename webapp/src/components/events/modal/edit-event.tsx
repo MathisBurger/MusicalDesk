@@ -14,6 +14,7 @@ import {
   ModalDialog,
   Stack,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface CreateEventModalProps {
   onClose: () => void;
@@ -24,7 +25,7 @@ const EditEventModal = ({ onClose, event }: CreateEventModalProps) => {
   const { mutateAsync: updateEvent, isPending } = useUpdateEventMutation(
     event.id,
   );
-
+  const t = useTranslations();
   const { displayAlert, showAlert } = useAlert();
 
   const submit = async (req: EventRequest) => {
@@ -35,7 +36,7 @@ const EditEventModal = ({ onClose, event }: CreateEventModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot update event",
+      content: t("messages.events.cannotUpdateEvent"),
       duration: 1500,
     });
   };
@@ -48,17 +49,17 @@ const EditEventModal = ({ onClose, event }: CreateEventModalProps) => {
       active_until: event.active_until ? new Date(event.active_until) : null,
     },
     labels: {
-      name: "Name",
-      price: "Price",
-      tax_percentage: "Tax",
-      image_id: "Image",
-      event_date: "Date",
-      active_from: "Active from",
-      active_until: "Active until",
+      name: t("labels.events.name"),
+      price: t("labels.events.price"),
+      tax_percentage: t("labels.events.tax"),
+      image_id: t("labels.events.image"),
+      event_date: t("labels.events.eventDate"),
+      active_from: t("labels.events.activeFrom"),
+      active_until: t("labels.events.activeUntil"),
     },
     validation: {
-      name: (v) => (v === "" ? "Please choose an valid name" : null),
-      price: (v) => (v === -1 ? "Please choose an valid value" : null),
+      name: (v) => (v === "" ? t("validation.events.name") : null),
+      price: (v) => (v === -1 ? t("validation.events.price") : null),
     },
     explicitTypes: {
       price: "number",
@@ -75,7 +76,7 @@ const EditEventModal = ({ onClose, event }: CreateEventModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Update event</DialogTitle>
+        <DialogTitle>{t("modalTitles.events.updateEvent")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -116,10 +117,10 @@ const EditEventModal = ({ onClose, event }: CreateEventModalProps) => {
               </Grid>
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Update
+                  {t("generic.update")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

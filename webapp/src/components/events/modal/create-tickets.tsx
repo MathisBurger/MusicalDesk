@@ -11,6 +11,7 @@ import {
   ModalClose,
   ModalDialog,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface CreateTicketsModalProps {
   onClose: () => void;
@@ -20,11 +21,12 @@ interface CreateTicketsModalProps {
 const CreateTicketsModal = ({ onClose, eventId }: CreateTicketsModalProps) => {
   const { mutateAsync, isPending } = useCreateTicketsMutation(eventId);
   const { showAlert, displayAlert } = useAlert();
+  const t = useTranslations();
 
   const form = useForm<CreateTicketsRequest>({
     labels: {
-      valid_until: "Valid until",
-      quantity: "Quantity",
+      valid_until: t("labels.events.ticket.validUntil"),
+      quantity: t("labels.events.ticket.quantity"),
     },
     explicitTypes: {
       valid_until: "datetime-iso",
@@ -41,7 +43,7 @@ const CreateTicketsModal = ({ onClose, eventId }: CreateTicketsModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot create tickets for event",
+      content: t("messages.events.cannotCreateTickets"),
       duration: 1500,
     });
   };
@@ -50,7 +52,7 @@ const CreateTicketsModal = ({ onClose, eventId }: CreateTicketsModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog>
         <ModalClose />
-        <DialogTitle>Create ticket</DialogTitle>
+        <DialogTitle>{t("modalTitles.events.createTicket")}</DialogTitle>
         <DialogContent>
           {displayAlert()}
           <form onSubmit={form.onSubmit(submit)} onInvalid={form.onInvalid}>
@@ -58,10 +60,10 @@ const CreateTicketsModal = ({ onClose, eventId }: CreateTicketsModalProps) => {
             <DialogActions>
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Create
+                  {t("generic.create")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </DialogActions>

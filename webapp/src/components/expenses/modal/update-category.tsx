@@ -12,6 +12,7 @@ import {
   ModalDialog,
   Stack,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface UpdateCategoryModalProps {
   onClose: () => void;
@@ -26,6 +27,7 @@ const UpdateCategoryModal = ({
     category.id,
   );
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const form = useForm<UpdateCategoryRequest>({
     defaultValues: {
@@ -33,8 +35,8 @@ const UpdateCategoryModal = ({
       hex_color: category.hex_color,
     },
     labels: {
-      name: "Name",
-      hex_color: "Farbe",
+      name: t("labels.expense.category.name"),
+      hex_color: t("labels.expense.category.color"),
     },
     required: ["name", "hex_color"],
     explicitTypes: {
@@ -50,7 +52,7 @@ const UpdateCategoryModal = ({
     }
     showAlert({
       color: "danger",
-      content: "Cannot update category",
+      content: t("messages.expense.cannotUpdateCategory"),
       duration: 1500,
     });
   };
@@ -59,7 +61,7 @@ const UpdateCategoryModal = ({
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Update category</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.updateCategory")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -67,10 +69,10 @@ const UpdateCategoryModal = ({
               {form.renderFormBody()}
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Update
+                  {t("generic.update")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

@@ -2,6 +2,7 @@ import { Button, Card, Typography } from "@mui/joy";
 import QrCode from "../qr-code";
 import { useRouter } from "next/navigation";
 import { UserTicketWithQrCode } from "@/types/api/event";
+import { useTranslations } from "next-intl";
 
 interface TicketCardProps {
   ticket: UserTicketWithQrCode;
@@ -9,6 +10,7 @@ interface TicketCardProps {
 
 const TicketCard = ({ ticket }: TicketCardProps) => {
   const router = useRouter();
+  const t = useTranslations();
 
   return (
     <Card variant="outlined">
@@ -19,7 +21,7 @@ const TicketCard = ({ ticket }: TicketCardProps) => {
         size="sm"
         onClick={() => router.push(`/shop/my-tickets/${ticket.id}`)}
       >
-        Details
+        {t("generic.details")}
       </Button>
     </Card>
   );

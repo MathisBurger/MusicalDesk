@@ -16,6 +16,7 @@ import {
   ModalDialog,
   Stack,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface CreateEventModalProps {
   onClose: () => void;
@@ -24,6 +25,7 @@ interface CreateEventModalProps {
 const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
   const { mutateAsync: uploadFile } = useUploadFileMutation();
   const { mutateAsync: createEvent, isPending } = useCreateEventMutation();
+  const t = useTranslations();
 
   const { displayAlert, showAlert } = useAlert();
 
@@ -44,7 +46,7 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
     if (res) {
       return { imageId: res.id };
     }
-    return { error: "Cannot upload file" };
+    return { error: t("messages.events.cannotUploadFile") };
   };
 
   const submit = async (req: EventRequest) => {
@@ -55,24 +57,24 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot create event",
+      content: t("messages.events.cannotCreateEvent"),
       duration: 1500,
     });
   };
 
   const form = useForm<EventRequest>({
     labels: {
-      name: "Name",
-      price: "Price",
-      tax_percentage: "Tax",
-      image_id: "Image",
-      event_date: "Date",
-      active_from: "Active from",
-      active_until: "Active until",
+      name: t("labels.events.name"),
+      price: t("labels.events.price"),
+      tax_percentage: t("labels.events.tax"),
+      image_id: t("labels.events.image"),
+      event_date: t("labels.events.eventDate"),
+      active_from: t("labels.events.activeFrom"),
+      active_until: t("labels.events.activeUntil"),
     },
     validation: {
-      name: (v) => (v === "" ? "Please choose an valid name" : null),
-      price: (v) => (v === -1 ? "Please choose an valid value" : null),
+      name: (v) => (v === "" ? t("validation.events.name") : null),
+      price: (v) => (v === -1 ? t("validation.events.price") : null),
     },
     explicitTypes: {
       price: "number",
@@ -89,7 +91,7 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Create event</DialogTitle>
+        <DialogTitle>{t("modalTitles.events.createEvent")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -134,10 +136,10 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
               </Grid>
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Create
+                  {t("generic.create")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

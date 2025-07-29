@@ -11,11 +11,13 @@ import useBudgetQuery from "@/hooks/queries/expense/useBudgetQuery";
 import { MinimalCategory } from "@/types/api/expense";
 import { UserRole } from "@/types/api/user";
 import { Button, Card, Divider, Grid, Stack, Typography } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 const BudgetDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  const t = useTranslations();
 
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -30,31 +32,31 @@ const BudgetDetailsPage = () => {
   const listData = useMemo<DisplayedData[]>(
     () => [
       {
-        title: "Name",
+        title: t("labels.expense.budget.name"),
         value: budgetData?.name,
       },
       {
-        title: "Category",
+        title: t("labels.expense.budget.category"),
         value: <CategoryChip value={budgetData?.category as MinimalCategory} />,
       },
       {
-        title: "Startdate",
+        title: t("labels.expense.budget.startDate"),
         value: budgetData?.start_date,
       },
       {
-        title: "Enddate",
-        value: budgetData?.budget,
+        title: t("labels.expense.budget.endDate"),
+        value: budgetData?.end_date,
       },
       {
-        title: "Budget",
+        title: t("labels.expense.budget.budget"),
         value: `${(budgetData?.budget ?? 0) / 100}€`,
       },
       {
-        title: "Spent",
+        title: t("labels.expense.budget.spent"),
         value: `${(budgetData?.spent ?? 0) / 100}€`,
       },
     ],
-    [budgetData],
+    [budgetData, t],
   );
 
   if (budgetLoading) {
@@ -70,7 +72,7 @@ const BudgetDetailsPage = () => {
         <Card>
           <Stack direction="row" spacing={2}>
             <Button color="primary" onClick={() => setEditModalOpen(true)}>
-              Edit
+              {t("generic.edit")}
             </Button>
           </Stack>
         </Card>

@@ -10,11 +10,13 @@ import useUserPaidMembershipsQuery from "@/hooks/queries/membership/useUserPaidM
 import { UserRole } from "@/types/api/user";
 import { Button, Card, Divider, Grid, Stack, Typography } from "@mui/joy";
 import { GridColDef } from "@mui/x-data-grid";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
 const MembersDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  const t = useTranslations();
 
   const { data, isLoading } = useMemberQuery(parseInt(id, 10));
   const { data: memberships, isLoading: membershipsLoading } =
@@ -26,11 +28,11 @@ const MembersDetailsPage = () => {
   const columns: GridColDef[] = [
     {
       field: "year",
-      headerName: "Year",
+      headerName: t("labels.member.year"),
     },
     {
       field: "paid_at",
-      headerName: "Paid at",
+      headerName: t("labels.member.paidAt"),
       width: 250,
     },
   ];
@@ -49,10 +51,10 @@ const MembersDetailsPage = () => {
             <Card>
               <Stack direction="row" spacing={2}>
                 <Button color="primary" onClick={() => setEditModalOpen(true)}>
-                  Edit
+                  {t("generic.edit")}
                 </Button>
                 <Button color="danger" onClick={() => setLeaveModalOpen(true)}>
-                  Leave
+                  {t("actions.member.leave")}
                 </Button>
               </Stack>
             </Card>
@@ -62,7 +64,9 @@ const MembersDetailsPage = () => {
           </Grid>
           <Grid xs={12} md={6}>
             <Card>
-              <Typography level="h3">Paid Memberships</Typography>
+              <Typography level="h3">
+                {t("headings.paidMemberships")}
+              </Typography>
               <EntityList
                 loading={membershipsLoading}
                 rows={memberships ?? []}

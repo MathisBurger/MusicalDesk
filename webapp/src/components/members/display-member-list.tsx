@@ -2,6 +2,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 import EntityList, { EntityListRowAction } from "../entity-list";
 import { Member } from "@/types/api/membership";
+import { useTranslations } from "next-intl";
 
 interface DisplayMemberListProps {
   members: Member[];
@@ -10,54 +11,55 @@ interface DisplayMemberListProps {
 
 const DisplayMemberList = ({ members, isLoading }: DisplayMemberListProps) => {
   const router = useRouter();
+  const t = useTranslations();
 
   const cols: GridColDef[] = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: t("generic.id"),
     },
     {
       field: "first_name",
-      headerName: "Firstname",
+      headerName: t("labels.member.firstName"),
     },
     {
       field: "last_name",
-      headerName: "Lastname",
+      headerName: t("labels.member.lastName"),
     },
     {
       field: "email",
-      headerName: "Email",
+      headerName: t("labels.member.email"),
     },
     {
       field: "street",
-      headerName: "Street",
+      headerName: t("labels.member.street"),
     },
     {
       field: "house_nr",
-      headerName: "House Nr.",
+      headerName: t("labels.member.houseNr"),
     },
     {
       field: "zip",
-      headerName: "Zip",
+      headerName: t("labels.member.zip"),
     },
     {
       field: "city",
-      headerName: "City",
+      headerName: t("labels.member.city"),
     },
     {
       field: "iban",
-      headerName: "IBAN",
+      headerName: t("labels.member.iban"),
     },
     {
       field: "membership_fee",
-      headerName: "Membership fee",
+      headerName: t("labels.member.membershipFee"),
     },
   ];
 
   const rowActions: EntityListRowAction[] = [
     {
       color: "primary",
-      name: "Details",
+      name: t("generic.details"),
       onClick: (row) => router.push(`/backend/members/${row.id}`),
     },
   ];

@@ -12,6 +12,7 @@ import {
   ModalDialog,
   Stack,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface UpdateBudgetModalProps {
   onClose: () => void;
@@ -23,6 +24,7 @@ const UpdateBudgetModal = ({ onClose, budget }: UpdateBudgetModalProps) => {
     budget.id,
   );
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const form = useForm<UpdateBudgetRequest>({
     defaultValues: {
@@ -30,8 +32,8 @@ const UpdateBudgetModal = ({ onClose, budget }: UpdateBudgetModalProps) => {
       budget: budget.budget / 100,
     },
     labels: {
-      name: "Name",
-      budget: "Budget",
+      name: t("labels.expense.budget.name"),
+      budget: t("labels.expense.budget.budget"),
     },
     required: ["name", "budget"],
     explicitTypes: {
@@ -47,7 +49,7 @@ const UpdateBudgetModal = ({ onClose, budget }: UpdateBudgetModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot update budget",
+      content: t("messages.expense.cannotUpdateBudget"),
       duration: 1500,
     });
   };
@@ -56,7 +58,7 @@ const UpdateBudgetModal = ({ onClose, budget }: UpdateBudgetModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Update budget</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.updateBudget")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -64,10 +66,10 @@ const UpdateBudgetModal = ({ onClose, budget }: UpdateBudgetModalProps) => {
               {form.renderFormBody()}
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Update
+                  {t("generic.update")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

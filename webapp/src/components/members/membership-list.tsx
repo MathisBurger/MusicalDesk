@@ -6,6 +6,7 @@ import { Option, Select, Typography } from "@mui/joy";
 import useUnpaidMembershipsQuery from "@/hooks/queries/membership/useUnpaidMembershipsQuery";
 import usePaidMembershipsQuery from "@/hooks/queries/membership/usePaidMembershipsQuery";
 import DisplayMembershipList from "./display-membership-list";
+import { useTranslations } from "next-intl";
 
 const MembershipList = () => {
   const { data: membershipYears, isLoading: yearsLoading } =
@@ -17,6 +18,8 @@ const MembershipList = () => {
 
   const { data: paidMemberships, isLoading: paidLoading } =
     usePaidMembershipsQuery(selectedYear ?? 0, selectedYear !== null);
+
+  const t = useTranslations();
 
   if (yearsLoading) {
     return <LoadingComponent />;
@@ -38,7 +41,7 @@ const MembershipList = () => {
         ))}
       </Select>
       <Typography level="h2" sx={{ marginTop: "1.5em" }}>
-        Unpaid memberships
+        {t("tabs.member.unpaidMemberships")}
       </Typography>
       <DisplayMembershipList
         loading={unpaidLoading}
@@ -47,7 +50,7 @@ const MembershipList = () => {
         canPay
       />
       <Typography level="h2" sx={{ marginTop: "1.5em" }}>
-        Paid memberships
+        {t("tabs.member.paidMemberships")}
       </Typography>
       <DisplayMembershipList
         loading={paidLoading}

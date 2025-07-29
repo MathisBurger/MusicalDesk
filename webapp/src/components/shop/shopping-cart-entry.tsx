@@ -3,6 +3,7 @@ import { ShoppingCartItem } from "@/types/api/event";
 import { AspectRatio, Button, Grid, Typography } from "@mui/joy";
 import { Card } from "@mui/joy";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 interface ShoppingCartEntryProps {
@@ -33,6 +34,8 @@ const ShoppingCartEntry = ({ item }: ShoppingCartEntryProps) => {
   const { mutate, isPending } = useCancelTicketReservationMutation(
     item.event_id,
   );
+
+  const t = useTranslations();
 
   const [reservationTimeLeft, setReservationTimeLeft] = useState<string>(
     getReservationTimeLeft(item.min_reserved_until, queryClient),
@@ -75,7 +78,7 @@ const ShoppingCartEntry = ({ item }: ShoppingCartEntryProps) => {
         </Grid>
         <Grid xs={2}>
           <Button color="danger" onClick={() => mutate()} loading={isPending}>
-            Cancel reservation
+            {t("actions.shop.cancelReservation")}
           </Button>
         </Grid>
       </Grid>

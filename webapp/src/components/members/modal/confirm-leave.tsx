@@ -10,6 +10,7 @@ import {
   ModalClose,
   ModalDialog,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface ConfirmLeaveModalProps {
   onClose: () => void;
@@ -19,6 +20,7 @@ interface ConfirmLeaveModalProps {
 const ConfirmLeaveModal = ({ onClose, memberId }: ConfirmLeaveModalProps) => {
   const { mutateAsync, isPending } = useLeaveMemberMutation(memberId);
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const leave = async () => {
     const result = await mutateAsync(memberId);
@@ -26,7 +28,7 @@ const ConfirmLeaveModal = ({ onClose, memberId }: ConfirmLeaveModalProps) => {
       showAlert({
         duration: 1000,
         color: "danger",
-        content: "Cannot leave user",
+        content: t("messages.member.cannotLeaveMember"),
       });
       return;
     }
@@ -38,14 +40,14 @@ const ConfirmLeaveModal = ({ onClose, memberId }: ConfirmLeaveModalProps) => {
       <ModalDialog>
         <ModalClose />
         {displayAlert()}
-        <DialogTitle>Confirm leave</DialogTitle>
-        <DialogContent>Confirm that this member wants to leave?</DialogContent>
+        <DialogTitle>{t("modalTitles.member.confirmLeave")}</DialogTitle>
+        <DialogContent>{t("messages.member.conformLeave")}</DialogContent>
         <DialogActions>
           <Button color="danger" loading={isPending} onClick={leave}>
-            Leave
+            {t("actions.member.leave")}
           </Button>
           <Button color="neutral" onClick={onClose}>
-            Cancel
+            {t("generic.cancel")}
           </Button>
         </DialogActions>
       </ModalDialog>

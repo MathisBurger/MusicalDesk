@@ -5,6 +5,7 @@ import { BarChart, PieChart, RadarChart } from "@mui/x-charts";
 import LoadingComponent from "../loading";
 import useReportSumupsQuery from "@/hooks/queries/expense/useReportSumupsQuery";
 import TabLayout from "../wrapper/tab-layout";
+import { useTranslations } from "next-intl";
 
 interface ReportChartsProps {
   reportId: number;
@@ -12,6 +13,7 @@ interface ReportChartsProps {
 
 const ReportCharts = ({ reportId }: ReportChartsProps) => {
   const muiTheme = useMuiTheme();
+  const t = useTranslations();
 
   const { data: sumUpData, isLoading: sumUpDataLoading } =
     useReportSumupsQuery(reportId);
@@ -22,7 +24,13 @@ const ReportCharts = ({ reportId }: ReportChartsProps) => {
 
   return (
     <Stack>
-      <TabLayout tabs={["Pie chart", "Bar chart", "Radar chart"]}>
+      <TabLayout
+        tabs={[
+          t("labels.expense.report.pieChart"),
+          t("labels.expense.report.barChart"),
+          t("labels.expense.report.radarChart"),
+        ]}
+      >
         <TabPanel value={0}>
           <ThemeProvider theme={muiTheme}>
             <CssBaseline />
@@ -32,7 +40,7 @@ const ReportCharts = ({ reportId }: ReportChartsProps) => {
                   data: (sumUpData ?? []).map((sumUp) => ({
                     id: sumUp.category?.id ?? 0,
                     value: sumUp.sum,
-                    label: sumUp.category?.name ?? "(no category)",
+                    label: sumUp.category?.name ?? t("generic.noCategory"),
                   })),
                   valueFormatter: (v) =>
                     v.value.toLocaleString("de-DE", {
@@ -52,16 +60,16 @@ const ReportCharts = ({ reportId }: ReportChartsProps) => {
                 {
                   data: (sumUpData ?? []).map((sumUp) => sumUp.sum),
                   valueFormatter: (v) =>
-                    v.toLocaleString("de-DE", {
+                    v?.toLocaleString("de-DE", {
                       style: "currency",
                       currency: "EUR",
-                    }),
+                    }) ?? "0",
                 },
               ]}
               xAxis={[
                 {
                   data: (sumUpData ?? []).map(
-                    (sumUp) => sumUp.category?.name ?? "(no category)",
+                    (sumUp) => sumUp.category?.name ?? t("generic.noCategory"),
                   ),
                 },
               ]}
@@ -79,7 +87,7 @@ const ReportCharts = ({ reportId }: ReportChartsProps) => {
               ]}
               radar={{
                 metrics: (sumUpData ?? []).map(
-                  (sumUp) => sumUp.category?.name ?? "(no category)",
+                  (sumUp) => sumUp.category?.name ?? t("generic.noCategory"),
                 ),
               }}
             />

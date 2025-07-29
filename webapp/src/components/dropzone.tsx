@@ -1,4 +1,5 @@
 import { Card, Stack } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
@@ -8,6 +9,8 @@ interface DropzoneProps {
 }
 
 const Dropzone = ({ files, setFiles }: DropzoneProps) => {
+  const t = useTranslations();
+
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       setFiles(acceptedFiles);
@@ -21,9 +24,9 @@ const Dropzone = ({ files, setFiles }: DropzoneProps) => {
       <div {...getRootProps()}>
         <input {...getInputProps()} />
         {isDragActive ? (
-          <p>Drop the files here ...</p>
+          <p>{t("messages.dropHere")}</p>
         ) : (
-          <p>Drag and drop some files here, or click to select files</p>
+          <p>{t("messages.dragHere")}</p>
         )}
       </div>
       <Stack direction="row" spacing={2}>

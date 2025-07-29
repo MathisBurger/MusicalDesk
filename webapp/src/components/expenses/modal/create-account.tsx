@@ -15,6 +15,7 @@ import {
   Stack,
 } from "@mui/joy";
 import AccountTypeSelect from "../account-type-select";
+import { useTranslations } from "next-intl";
 
 interface CreateAccountModalProps {
   onClose: () => void;
@@ -23,6 +24,7 @@ interface CreateAccountModalProps {
 const CreateAccountModal = ({ onClose }: CreateAccountModalProps) => {
   const { mutateAsync: createAccount, isPending } = useCreateAccountMutation();
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const form = useForm<CreateAccountRequest>({
     defaultValues: {
@@ -32,10 +34,10 @@ const CreateAccountModal = ({ onClose }: CreateAccountModalProps) => {
       iban: "",
     },
     labels: {
-      name: "Name",
-      owner_name: "Name des Besitzers",
-      iban: "IBAN",
-      account_type: "Account type",
+      name: t("labels.expense.account.name"),
+      owner_name: t("labels.expense.account.ownerName"),
+      iban: t("labels.expense.account.iban"),
+      account_type: t("labels.expense.account.type"),
     },
     required: ["name", "owner_name", "iban", "account_type"],
     explicitTypes: {
@@ -56,7 +58,7 @@ const CreateAccountModal = ({ onClose }: CreateAccountModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot create account",
+      content: t("messages.expense.cannotCreateAccount"),
       duration: 1500,
     });
   };
@@ -65,7 +67,7 @@ const CreateAccountModal = ({ onClose }: CreateAccountModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Create account</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.createAccount")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -78,10 +80,10 @@ const CreateAccountModal = ({ onClose }: CreateAccountModalProps) => {
               <FormInput {...form.getInputProps("iban")} />
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Create
+                  {t("generic.create")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

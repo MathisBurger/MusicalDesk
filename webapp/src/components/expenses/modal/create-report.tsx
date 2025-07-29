@@ -1,4 +1,3 @@
-import FormInput from "@/form/form-input";
 import useForm from "@/form/useForm";
 import useCreateReportMutation from "@/hooks/mutations/expense/useCreateReportMutation";
 import useAlert from "@/hooks/useAlert";
@@ -13,6 +12,7 @@ import {
   ModalDialog,
   Stack,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface CreateReportModalProps {
   onClose: () => void;
@@ -21,15 +21,16 @@ interface CreateReportModalProps {
 const CreateReportModal = ({ onClose }: CreateReportModalProps) => {
   const { mutateAsync: createReport, isPending } = useCreateReportMutation();
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const form = useForm<CreateReportRequest>({
     defaultValues: {
       name: "",
     },
     labels: {
-      name: "Name",
-      start_date: "Startdate",
-      end_date: "Enddate",
+      name: t("labels.expense.report.name"),
+      start_date: t("labels.expense.report.startDate"),
+      end_date: t("labels.expense.report.endDate"),
     },
     explicitTypes: {
       start_date: "datetime-iso",
@@ -46,7 +47,7 @@ const CreateReportModal = ({ onClose }: CreateReportModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot create report",
+      content: t("messages.expense.cannotCreateReport"),
       duration: 1500,
     });
   };
@@ -55,7 +56,7 @@ const CreateReportModal = ({ onClose }: CreateReportModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Create report</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.createReport")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -63,10 +64,10 @@ const CreateReportModal = ({ onClose }: CreateReportModalProps) => {
               {form.renderFormBody()}
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Create
+                  {t("generic.create")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

@@ -17,6 +17,7 @@ import {
 } from "@mui/joy";
 import AccountSelect from "../account-select";
 import CategorySelect from "../category-select";
+import { useTranslations } from "next-intl";
 
 interface AcceptExpenseModalProps {
   onClose: () => void;
@@ -26,17 +27,18 @@ interface AcceptExpenseModalProps {
 const AcceptExpenseModal = ({ onClose, expense }: AcceptExpenseModalProps) => {
   const { displayAlert, showAlert } = useAlert();
   const { mutateAsync, isPending } = useAcceptExpenseMutation(expense.id);
+  const t = useTranslations();
 
   const form = useForm<AcceptExpenseRequest>({
     defaultValues: {
       amount: expense.total_amount / 100,
     },
     labels: {
-      amount: "Amount",
-      from_account_id: "From account (Foreign account)",
-      to_account_id: "To account (Material account)",
-      money_account_id: "Money account (Account the payment will come from)",
-      category_id: "Category",
+      amount: t("labels.expense.expense.totalAmount"),
+      from_account_id: t("labels.expense.expense.fromAccount"),
+      to_account_id: t("labels.expense.expense.toAccount"),
+      money_account_id: t("labels.expense.expense.moneyAccount"),
+      category_id: t("labels.expense.expense.category"),
     },
     explicitTypes: {
       money_account_id: "number",
@@ -63,7 +65,7 @@ const AcceptExpenseModal = ({ onClose, expense }: AcceptExpenseModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot accept expense",
+      content: t("messages.expense.cannotAcceptExpense"),
       duration: 1500,
     });
   };
@@ -71,7 +73,7 @@ const AcceptExpenseModal = ({ onClose, expense }: AcceptExpenseModalProps) => {
   return (
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
-        <DialogTitle>Accept expense</DialogTitle>
+        <DialogTitle>{t("modalTitle.expense.acceptExpense")}</DialogTitle>
         <DialogContent>
           {displayAlert()}
           <form onSubmit={form.onSubmit(submit)} onInvalid={form.onInvalid}>
@@ -91,10 +93,10 @@ const AcceptExpenseModal = ({ onClose, expense }: AcceptExpenseModalProps) => {
             <CategorySelect {...form.getInputProps("category_id")} />
             <DialogActions>
               <Button type="submit" loading={isPending} color="success">
-                Accept
+                {t("actions.expense.accept")}
               </Button>
               <Button color="neutral" onClick={onClose}>
-                Cancel
+                {t("generic.cancel")}
               </Button>
             </DialogActions>
           </form>

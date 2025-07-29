@@ -15,10 +15,12 @@ import {
   Typography,
 } from "@mui/joy";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const BackendUsersPage = () => {
+  const t = useTranslations();
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const router = useRouter();
 
@@ -27,30 +29,30 @@ const BackendUsersPage = () => {
   const cols: GridColDef[] = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: t("generic.id"),
     },
     {
       field: "username",
-      headerName: "Username",
+      headerName: t("labels.user.username"),
     },
     {
       field: "first_name",
-      headerName: "Firstname",
+      headerName: t("labels.user.firstName"),
     },
     {
       field: "surname",
-      headerName: "Surname",
+      headerName: t("labels.user.surname"),
     },
     {
       field: "roles",
-      headerName: "Roles",
+      headerName: t("labels.user.roles"),
       width: 250,
       renderCell: (props: GridRenderCellParams) => (
         <CssVarsProvider>
           <Stack direction="row" alignItems="center" spacing={1} height="100%">
             {(props.value ?? []).map((role: string) => (
               <Chip variant="soft" color="primary" key={role}>
-                {role}
+                {t(`roles.${role}`)}
               </Chip>
             ))}
           </Stack>
@@ -63,7 +65,7 @@ const BackendUsersPage = () => {
     {
       color: "primary",
       onClick: (row) => router.push(`/backend/users/${row.id}`),
-      name: "Details",
+      name: t("generic.details"),
     },
   ];
 
@@ -72,12 +74,12 @@ const BackendUsersPage = () => {
       <Stack spacing={2}>
         <Grid container spacing={4} alignItems="center">
           <Grid>
-            <Typography level="h1">Backend users</Typography>
+            <Typography level="h1">{t("headings.backendUsers")}</Typography>
           </Grid>
           <Grid>
             <Button onClick={() => setCreateModalOpen(true)}>
               <Add />
-              &nbsp; Create
+              &nbsp; {t("generic.create")}
             </Button>
           </Grid>
         </Grid>

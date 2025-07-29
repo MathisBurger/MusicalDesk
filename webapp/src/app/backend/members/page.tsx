@@ -10,8 +10,10 @@ import DisplayMemberList from "@/components/members/display-member-list";
 import useMembersLeftQuery from "@/hooks/queries/membership/useMembersLeftQuery";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import { UserRole } from "@/types/api/user";
+import { useTranslations } from "next-intl";
 
 const MembersPage = () => {
+  const t = useTranslations();
   const [createMemberModalOpen, setCreateMemberModalOpen] =
     useState<boolean>(false);
 
@@ -24,17 +26,23 @@ const MembersPage = () => {
       <Stack spacing={2}>
         <Grid container spacing={4} alignItems="center">
           <Grid>
-            <Typography level="h1">Members</Typography>
+            <Typography level="h1">{t("headings.members")}</Typography>
           </Grid>
           <Grid>
             <Button onClick={() => setCreateMemberModalOpen(true)}>
               <Add />
-              &nbsp; Create
+              &nbsp; {t("generic.create")}
             </Button>
           </Grid>
         </Grid>
         <Divider />
-        <TabLayout tabs={["Members", "Left Members", "Memberships"]}>
+        <TabLayout
+          tabs={[
+            t("tabs.member.members"),
+            t("tabs.member.leftMembers"),
+            t("tabs.member.memberships"),
+          ]}
+        >
           <TabPanel value={0}>
             <DisplayMemberList
               members={members ?? []}

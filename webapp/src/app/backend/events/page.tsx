@@ -10,9 +10,11 @@ import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
 import { Button, Divider, Grid, Stack, TabPanel, Typography } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 const EventsPage = () => {
+  const t = useTranslations();
   const [createEventModalOpen, setCreateEventModalOpen] =
     useState<boolean>(false);
   const currentUser = useCurrentUser();
@@ -20,27 +22,27 @@ const EventsPage = () => {
   const tabs = useMemo<string[]>(() => {
     const tabKeys = [];
     if (isGranted(currentUser, [UserRole.EventAdmin, UserRole.Admin])) {
-      tabKeys.push("Events");
+      tabKeys.push(t("tabs.events.events"));
     }
     if (isGranted(currentUser, [UserRole.TicketInvalidator, UserRole.Admin])) {
-      tabKeys.push("Invalidate Tickets");
-      tabKeys.push("Check tickets");
+      tabKeys.push(t("tabs.events.invalidateTickets"));
+      tabKeys.push(t("tabs.events.checkTickets"));
     }
     return tabKeys;
-  }, [currentUser]);
+  }, [currentUser, t]);
 
   return (
     <RoleWrapper roles={[UserRole.EventAdmin, UserRole.TicketInvalidator]}>
       <Stack spacing={2}>
         <Grid container spacing={4} alignItems="center">
           <Grid>
-            <Typography level="h1">Events</Typography>
+            <Typography level="h1">{t("labels.events.events")}</Typography>
           </Grid>
           {isGranted(currentUser, [UserRole.EventAdmin, UserRole.Admin]) && (
             <Grid>
               <Button onClick={() => setCreateEventModalOpen(true)}>
                 <Add />
-                &nbsp; Create
+                &nbsp; {t("generic.create")}
               </Button>
             </Grid>
           )}

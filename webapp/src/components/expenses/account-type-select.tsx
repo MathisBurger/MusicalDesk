@@ -1,6 +1,7 @@
 import { FormInputProps } from "@/form/form-input";
 import { AccountType } from "@/types/api/expense";
 import { Option, Select } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 type AccountTypeSelectProps = Pick<
   FormInputProps,
@@ -12,6 +13,7 @@ const AccountTypeSelect = ({
   value,
   setValue,
 }: AccountTypeSelectProps) => {
+  const t = useTranslations();
   return (
     <Select
       name={name}
@@ -22,7 +24,7 @@ const AccountTypeSelect = ({
     >
       {Object.values(AccountType).map((role) => (
         <Option value={role} key={role}>
-          {role}
+          {t(`labels.expense.account.types.${role}`)}
         </Option>
       ))}
     </Select>

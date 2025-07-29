@@ -7,6 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
@@ -16,6 +17,7 @@ interface EventCardProps {
 
 const EventCard = ({ event }: EventCardProps) => {
   const router = useRouter();
+  const t = useTranslations();
 
   const dateString = useMemo<string>(() => {
     const date: Date = new Date(event.event.event_date);
@@ -40,13 +42,15 @@ const EventCard = ({ event }: EventCardProps) => {
           <Typography
             fontWeight={event.tickets_left === 0 ? "bold" : undefined}
           >
-            {event.tickets_left > 0 ? `${event.tickets_left} left` : "sold out"}
+            {event.tickets_left > 0
+              ? `${event.tickets_left} ${t("labels.shop.left")}`
+              : t("labels.shop.soldOut")}
           </Typography>
           <Typography fontWeight="bold">{event.event.price}€</Typography>
         </Stack>
       </CardContent>
       <Button onClick={() => router.push(`/shop/events/${event.event.id}`)}>
-        Details
+        {t("generic.details")}
       </Button>
     </Card>
   );

@@ -6,17 +6,19 @@ import useRegisterCustomerAccountMutation from "@/hooks/mutations/shop/useRegist
 import useAlert from "@/hooks/useAlert";
 import { RegisterRequest } from "@/types/api/event";
 import { Box, Button, Stack, Typography } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
+  const t = useTranslations();
   const { mutateAsync, isPending } = useRegisterCustomerAccountMutation();
   const { displayAlert, showAlert } = useAlert();
   const router = useRouter();
 
   const form = useForm<RegisterRequest>({
     labels: {
-      email: "Email",
-      password: "Password",
+      email: t("labels.email"),
+      password: t("labels.password"),
     },
     required: ["email", "password"],
   });
@@ -28,7 +30,7 @@ const RegisterPage = () => {
     } else {
       showAlert({
         color: "danger",
-        content: "Invalid username or password",
+        content: t("messages.invalidCreds"),
         duration: 3000,
       });
     }
@@ -86,7 +88,7 @@ const RegisterPage = () => {
           >
             <BackButton />
             <Typography component="h1" level="h3">
-              Sign up
+              {t("actions.signUp")}
             </Typography>
             {displayAlert()}
             <Stack sx={{ gap: 4, mt: 2 }}>
@@ -98,7 +100,7 @@ const RegisterPage = () => {
                     type="password"
                   />
                   <Button type="submit" fullWidth disabled={isPending}>
-                    Sign up
+                    {t("actions.signUp")}
                   </Button>
                 </Stack>
               </form>

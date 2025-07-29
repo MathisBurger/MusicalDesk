@@ -2,36 +2,39 @@ import { Card, Grid, Typography } from "@mui/joy";
 import { useMemo } from "react";
 import KvList, { DisplayedData } from "../kv-list";
 import { Event } from "@/types/api/event";
+import { useTranslations } from "next-intl";
 
 interface CoreDataTabProps {
   event: Event;
 }
 
 const CoreDataTab = ({ event }: CoreDataTabProps) => {
+  const t = useTranslations();
+
   const displayData = useMemo<DisplayedData[]>(
     () => [
       {
-        title: "Price",
+        title: t("labels.events.price"),
         value: event.price,
       },
       {
-        title: "Tax",
+        title: t("labels.events.tax"),
         value: event.tax_percentage,
       },
       {
-        title: "Event date",
+        title: t("labels.events.eventDate"),
         value: event.event_date.toLocaleString(),
       },
       {
-        title: "Active from",
+        title: t("labels.events.activeFrom"),
         value: event.active_from?.toLocaleString(),
       },
       {
-        title: "Active until",
+        title: t("labels.events.activeUntil"),
         value: event.active_until?.toLocaleString(),
       },
     ],
-    [event],
+    [event, t],
   );
 
   const eventImage = useMemo<string>(
@@ -43,13 +46,13 @@ const CoreDataTab = ({ event }: CoreDataTabProps) => {
     <Grid container direction="row" spacing={4}>
       <Grid xs={12} md={6}>
         <Card>
-          <Typography level="h3">Core data</Typography>
+          <Typography level="h3">{t("headings.coreData")}</Typography>
           <KvList displayData={displayData} />
         </Card>
       </Grid>
       <Grid xs={12} md={6}>
         <Card>
-          <Typography level="h3">Additional data</Typography>
+          <Typography level="h3">{t("headings.additionalData")}</Typography>
           <img src={eventImage} />
         </Card>
       </Grid>

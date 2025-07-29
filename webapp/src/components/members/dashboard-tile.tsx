@@ -1,17 +1,19 @@
 import useDashboardExpectedMembershipFeesQuery from "@/hooks/queries/membership/useDashboardExpectedMembershipFeesQuery";
 import useDashboardMemberCountQuery from "@/hooks/queries/membership/useDashboardMemberCountQuery";
 import { Card, Grid, Stack, Typography } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 const MemberDashboardTile = () => {
   const { data: memberCount } = useDashboardMemberCountQuery();
   const { data: expectedFees } = useDashboardExpectedMembershipFeesQuery();
+  const t = useTranslations();
 
   return (
     <>
       <Grid xs={3}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Total members</Typography>
+            <Typography>{t("labels.member.dashboard.totalMembers")}</Typography>
             <Typography level="h2">{memberCount?.total}</Typography>
           </Stack>
         </Card>
@@ -19,7 +21,7 @@ const MemberDashboardTile = () => {
       <Grid xs={3}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Expected fees this year</Typography>
+            <Typography>{t("labels.member.dashboard.expectedFees")}</Typography>
             <Typography level="h2">
               {expectedFees?.total.toLocaleString("de-DE", {
                 style: "currency",

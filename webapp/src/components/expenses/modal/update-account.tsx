@@ -16,6 +16,7 @@ import {
   ModalDialog,
   Stack,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface UpdateAccountModalProps {
   onClose: () => void;
@@ -27,6 +28,7 @@ const UpdateAccountModal = ({ onClose, account }: UpdateAccountModalProps) => {
     account.id,
   );
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const form = useForm<UpdateAccountRequest>({
     defaultValues: {
@@ -35,9 +37,9 @@ const UpdateAccountModal = ({ onClose, account }: UpdateAccountModalProps) => {
       iban: account.iban,
     },
     labels: {
-      name: "Name",
-      owner_name: "Name des Besitzers",
-      iban: "IBAN",
+      name: t("labels.expense.account.name"),
+      owner_name: t("labels.expense.account.ownerName"),
+      iban: t("labels.expense.account.iban"),
     },
     required: ["name", "owner_name", "iban"],
     showFieldConditions: {
@@ -55,7 +57,7 @@ const UpdateAccountModal = ({ onClose, account }: UpdateAccountModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot update account",
+      content: t("messages.expense.cannotUpdateAccount"),
       duration: 1500,
     });
   };
@@ -64,7 +66,7 @@ const UpdateAccountModal = ({ onClose, account }: UpdateAccountModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Update account</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.updateAccount")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -72,10 +74,10 @@ const UpdateAccountModal = ({ onClose, account }: UpdateAccountModalProps) => {
               {form.renderFormBody()}
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Update
+                  {t("generic.update")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

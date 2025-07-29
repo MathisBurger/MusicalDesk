@@ -4,6 +4,7 @@ import useMuiTheme from "@/hooks/useMuiTheme";
 import { months, TimePeriod, week } from "@/types/api/expense";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BarChart, BarSeries } from "@mui/x-charts";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 interface DashboardMoneySpentOverTimeByCategoryChartProps {
@@ -14,6 +15,7 @@ const DashboardMoneySpentOverTimeByCategoryChart = ({
   period,
 }: DashboardMoneySpentOverTimeByCategoryChartProps) => {
   const muiTheme = useMuiTheme();
+  const t = useTranslations();
   const { data, isLoading } =
     useDashboardMoneySpentOverTimeByCategoryQuery(period);
 
@@ -23,7 +25,7 @@ const DashboardMoneySpentOverTimeByCategoryChart = ({
 
     const grouped = new Map<number, Record<string, number>>();
     for (const { time, value, category } of data ?? []) {
-      const normalizedCategory = category?.name ?? "(no category)";
+      const normalizedCategory = category?.name ?? t("generic.noCategory");
       categoriesSet.add(normalizedCategory);
       timesSet.add(time);
 
@@ -43,7 +45,7 @@ const DashboardMoneySpentOverTimeByCategoryChart = ({
     }));
 
     return { times, series };
-  }, [data]);
+  }, [data, t]);
 
   if (isLoading) {
     return <LoadingComponent />;

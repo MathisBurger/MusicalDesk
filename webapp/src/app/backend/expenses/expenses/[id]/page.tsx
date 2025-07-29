@@ -29,9 +29,11 @@ import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import DenyExpenseModal from "@/components/expenses/modal/deny-expense";
 import AcceptExpenseModal from "@/components/expenses/modal/accept-expense";
+import { useTranslations } from "next-intl";
 
 const ExpensePage = () => {
   const { id } = useParams<{ id: string }>();
+  const t = useTranslations();
   const currentUser = useCurrentUser();
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [uploadFileModalOpen, setUploadFileModalOpen] =
@@ -62,25 +64,25 @@ const ExpensePage = () => {
   const listData = useMemo<DisplayedData[]>(
     () => [
       {
-        title: "Name",
+        title: t("labels.expense.expense.name"),
         value: data?.expense.name,
       },
       {
-        title: "Status",
+        title: t("labels.expense.expense.status"),
         value: data?.expense.status ? (
           <ExpenseStatusChip status={data.expense.status} />
         ) : null,
       },
       {
-        title: "Description",
+        title: t("labels.expense.expense.description"),
         value: data?.expense.description,
       },
       {
-        title: "Total amount",
+        title: t("labels.expense.expense.totalAmount"),
         value: `${(data?.expense.total_amount ?? 0) / 100}€`,
       },
     ],
-    [data?.expense],
+    [data?.expense, t],
   );
 
   if (isLoading) {
@@ -98,12 +100,12 @@ const ExpensePage = () => {
             <Stack direction="row" spacing={2}>
               {canUpdate && (
                 <Button color="primary" onClick={() => setEditModalOpen(true)}>
-                  Update
+                  {t("generic.edit")}
                 </Button>
               )}
               {canAcceptOrDeny && (
                 <Button color="danger" onClick={() => setDenyModalOpen(true)}>
-                  Deny
+                  {t("actions.expense.deny")}
                 </Button>
               )}
               {canAcceptOrDeny && (
@@ -111,7 +113,7 @@ const ExpensePage = () => {
                   color="success"
                   onClick={() => setAcceptModalOpen(true)}
                 >
-                  Accept
+                  {t("actions.expense.accept")}
                 </Button>
               )}
             </Stack>
@@ -126,13 +128,13 @@ const ExpensePage = () => {
           <Grid xs={6}>
             <Card>
               <Stack direction="row" spacing={2}>
-                <Typography level="h3">Images</Typography>
+                <Typography level="h3">{t("headings.images")}</Typography>
                 {canUpdate && (
                   <Button
                     size="sm"
                     onClick={() => setUploadFileModalOpen(true)}
                   >
-                    <Add /> &nbsp; Add
+                    <Add /> &nbsp; {t("generic.add")}
                   </Button>
                 )}
               </Stack>
@@ -150,7 +152,7 @@ const ExpensePage = () => {
           {data?.expense.expense_transaction && (
             <Grid xs={12}>
               <Card>
-                <Typography level="h3">Transactions</Typography>
+                <Typography level="h3">{t("headings.transactions")}</Typography>
                 <TransactionsList
                   transactions={transactions}
                   loading={isLoading}

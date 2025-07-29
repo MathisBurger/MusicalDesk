@@ -5,12 +5,15 @@ import useDashboardTotalMoneySpentQuery from "@/hooks/queries/expense/useDashboa
 import useDashboardTotalTransactionsCreatedQuery from "@/hooks/queries/expense/useDashboardTotalTransactionsCreatedQuery";
 import { TimePeriod } from "@/types/api/expense";
 import { Card, Grid, Stack, Typography } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface DashboardKpiCardsProps {
   period: TimePeriod;
 }
 
 const DashboardKpiCards = ({ period }: DashboardKpiCardsProps) => {
+  const t = useTranslations();
+
   const { data: spentData, isLoading: spentLoading } =
     useDashboardTotalMoneySpentQuery(period);
   const { data: earnedData, isLoading: earnedLoading } =
@@ -25,7 +28,9 @@ const DashboardKpiCards = ({ period }: DashboardKpiCardsProps) => {
       <Grid xs={3}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Total money spent</Typography>
+            <Typography>
+              {t("labels.expense.dashboard.totalMoneySpent")}
+            </Typography>
             {spentLoading ? (
               <LoadingComponent />
             ) : (
@@ -42,7 +47,9 @@ const DashboardKpiCards = ({ period }: DashboardKpiCardsProps) => {
       <Grid xs={3}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Total money earned</Typography>
+            <Typography>
+              {t("labels.expense.dashboard.totalMoneyEarned")}
+            </Typography>
             {earnedLoading ? (
               <LoadingComponent />
             ) : (
@@ -59,7 +66,9 @@ const DashboardKpiCards = ({ period }: DashboardKpiCardsProps) => {
       <Grid xs={3}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Money balance</Typography>
+            <Typography>
+              {t("labels.expense.dashboard.moneyBalance")}
+            </Typography>
             {moneyBalanceLoading ? (
               <LoadingComponent />
             ) : (
@@ -79,7 +88,9 @@ const DashboardKpiCards = ({ period }: DashboardKpiCardsProps) => {
       <Grid xs={3}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Transactions created</Typography>
+            <Typography>
+              {t("labels.expense.dashboard.transactionsCreated")}
+            </Typography>
             {transactionsLoading ? (
               <LoadingComponent />
             ) : (

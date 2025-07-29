@@ -6,6 +6,7 @@ import BackButton from "../back-button";
 import useUserQuery from "@/hooks/queries/user/useUserQuery";
 import LoadingComponent from "../loading";
 import { UserTicket, UserTicketWithQrCode } from "@/types/api/event";
+import { useTranslations } from "next-intl";
 
 interface TicketDetailsProps {
   ticket: UserTicketWithQrCode | UserTicket;
@@ -14,6 +15,7 @@ interface TicketDetailsProps {
 }
 
 const TicketDetails = ({ ticket, hasQrCode = true }: TicketDetailsProps) => {
+  const t = useTranslations();
   const { data: user, isLoading } = useUserQuery(
     ticket.owner_id ?? 0,
     !!ticket.owner_id,
@@ -22,19 +24,19 @@ const TicketDetails = ({ ticket, hasQrCode = true }: TicketDetailsProps) => {
   const displayedData = useMemo<DisplayedData[]>(
     () => [
       {
-        title: "Valid until",
+        title: t("labels.events.ticket.validUntil"),
         value: ticket.valid_until,
       },
       {
-        title: "Invalidated at",
+        title: t("labels.events.ticket.invalidatedAt"),
         value: ticket.invalidated_at ?? "<never>",
       },
       {
-        title: "Bought at",
+        title: t("labels.events.ticket.boughtAt"),
         value: ticket.bought_at ?? "<never>",
       },
       {
-        title: "Owner",
+        title: t("labels.events.ticket.owner"),
         value: isLoading ? <LoadingComponent /> : user?.username,
       },
     ],

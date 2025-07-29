@@ -8,6 +8,7 @@ import useCurrentCheckoutSessionQuery from "@/hooks/queries/shop/useCurrentCheck
 import useShoppingCartQuery from "@/hooks/queries/shop/useShoppingCartQuery";
 import { UserRole } from "@/types/api/user";
 import { Button, Card, Stack, Typography } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
@@ -17,6 +18,7 @@ const MyShoppingCartPage = () => {
     useCurrentCheckoutSessionQuery();
   const { mutateAsync, isPending } = useCheckoutMutation();
   const router = useRouter();
+  const t = useTranslations();
 
   const checkout = async () => {
     const res = await mutateAsync();
@@ -40,13 +42,13 @@ const MyShoppingCartPage = () => {
     <RoleWrapper roles={[UserRole.ShopCustomer]}>
       <Stack spacing={2} sx={{ marginTop: "2em" }}>
         <BackButton />
-        <Typography level="h1">Shopping cart</Typography>
+        <Typography level="h1">{t("headings.shoppingCart")}</Typography>
         {(data ?? []).map((item) => (
           <ShoppingCartEntry item={item} key={item.event_id} />
         ))}
         <Card variant="soft" color="primary">
           <Typography level="h4" fontWeight="bold">
-            Total: {total}€
+            {t("labels.shop.total")}: {total}€
           </Typography>
           {currentCheckoutSession && (
             <Button
@@ -54,7 +56,7 @@ const MyShoppingCartPage = () => {
                 router.replace(currentCheckoutSession.checkout_uri)
               }
             >
-              Continue current checkout
+              {t("actions.shop.continueCurrentCheckout")}
             </Button>
           )}
           <Button
@@ -63,7 +65,7 @@ const MyShoppingCartPage = () => {
             onClick={checkout}
           >
             {" "}
-            Proceed with Checkout
+            {t("actions.shop.proceedWithCheckout")}
           </Button>
         </Card>
       </Stack>

@@ -22,6 +22,7 @@ import RoleWrapper from "./wrapper/role-wrapper";
 import useLogout from "@/hooks/useLogout";
 import NestedListToggler from "./nested-list-toggler";
 import { UserRole } from "@/types/api/user";
+import { useTranslations } from "next-intl";
 
 function openSidebar() {
   if (typeof window !== "undefined") {
@@ -54,6 +55,7 @@ export default function Sidebar() {
   const currentUser = useCurrentUser();
   const router = useRouter();
   const logout = useLogout();
+  const t = useTranslations();
 
   return (
     <Sheet
@@ -138,7 +140,9 @@ export default function Sidebar() {
             <ListItemButton onClick={() => router.push("/backend/dashboard")}>
               <DashboardRoundedIcon />
               <ListItemContent>
-                <Typography level="title-sm">Dashboard</Typography>
+                <Typography level="title-sm">
+                  {t("sidebar.dashboard")}
+                </Typography>
               </ListItemContent>
             </ListItemButton>
           </ListItem>
@@ -148,7 +152,9 @@ export default function Sidebar() {
               <ListItemButton onClick={() => router.push("/backend/members")}>
                 <SupervisedUserCircle />
                 <ListItemContent>
-                  <Typography level="title-sm">Members</Typography>
+                  <Typography level="title-sm">
+                    {t("sidebar.members")}
+                  </Typography>
                 </ListItemContent>
               </ListItemButton>
             </ListItem>
@@ -161,7 +167,9 @@ export default function Sidebar() {
               <ListItemButton onClick={() => router.push("/backend/events")}>
                 <Event />
                 <ListItemContent>
-                  <Typography level="title-sm">Events</Typography>
+                  <Typography level="title-sm">
+                    {t("sidebar.events")}
+                  </Typography>
                 </ListItemContent>
               </ListItemButton>
             </ListItem>
@@ -171,7 +179,7 @@ export default function Sidebar() {
               <ListItemButton onClick={() => router.push("/backend/users")}>
                 <SupervisedUserCircle />
                 <ListItemContent>
-                  <Typography level="title-sm">Users</Typography>
+                  <Typography level="title-sm">{t("sidebar.users")}</Typography>
                 </ListItemContent>
               </ListItemButton>
             </ListItem>
@@ -181,14 +189,19 @@ export default function Sidebar() {
             hideAlert
           >
             <ListItem nested>
-              <NestedListToggler title="Expenses" icon={<Money />}>
+              <NestedListToggler
+                title={t("sidebar.expenses.title")}
+                icon={<Money />}
+              >
                 <RoleWrapper roles={[UserRole.Accountant]} hideAlert>
                   <ListItem>
                     <ListItemButton
                       onClick={() => router.push("/backend/expenses/dashboard")}
                     >
                       <ListItemContent>
-                        <Typography level="title-sm">Dashboard</Typography>
+                        <Typography level="title-sm">
+                          {t("sidebar.expenses.dashboard")}
+                        </Typography>
                       </ListItemContent>
                     </ListItemButton>
                   </ListItem>
@@ -199,7 +212,9 @@ export default function Sidebar() {
                       onClick={() => router.push("/backend/expenses/accounts")}
                     >
                       <ListItemContent>
-                        <Typography level="title-sm">Accounts</Typography>
+                        <Typography level="title-sm">
+                          {t("sidebar.expenses.accounts")}
+                        </Typography>
                       </ListItemContent>
                     </ListItemButton>
                   </ListItem>
@@ -212,7 +227,9 @@ export default function Sidebar() {
                       }
                     >
                       <ListItemContent>
-                        <Typography level="title-sm">Categories</Typography>
+                        <Typography level="title-sm">
+                          {t("sidebar.expenses.categories")}
+                        </Typography>
                       </ListItemContent>
                     </ListItemButton>
                   </ListItem>
@@ -223,7 +240,9 @@ export default function Sidebar() {
                       onClick={() => router.push("/backend/expenses/budgets")}
                     >
                       <ListItemContent>
-                        <Typography level="title-sm">Budgets</Typography>
+                        <Typography level="title-sm">
+                          {t("sidebar.expenses.budgets")}
+                        </Typography>
                       </ListItemContent>
                     </ListItemButton>
                   </ListItem>
@@ -236,7 +255,9 @@ export default function Sidebar() {
                       }
                     >
                       <ListItemContent>
-                        <Typography level="title-sm">Transactions</Typography>
+                        <Typography level="title-sm">
+                          {t("sidebar.expenses.transactions")}
+                        </Typography>
                       </ListItemContent>
                     </ListItemButton>
                   </ListItem>
@@ -250,7 +271,9 @@ export default function Sidebar() {
                       onClick={() => router.push("/backend/expenses/expenses")}
                     >
                       <ListItemContent>
-                        <Typography level="title-sm">Expenses</Typography>
+                        <Typography level="title-sm">
+                          {t("sidebar.expenses.expenses")}
+                        </Typography>
                       </ListItemContent>
                     </ListItemButton>
                   </ListItem>
@@ -261,7 +284,9 @@ export default function Sidebar() {
                       onClick={() => router.push("/backend/expenses/reports")}
                     >
                       <ListItemContent>
-                        <Typography level="title-sm">Reports</Typography>
+                        <Typography level="title-sm">
+                          {t("sidebar.expenses.reports")}
+                        </Typography>
                       </ListItemContent>
                     </ListItemButton>
                   </ListItem>

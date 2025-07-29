@@ -3,8 +3,10 @@ import useDashboardTicketCountQuery from "@/hooks/queries/event/useDashboardTick
 import { Card, Grid, Stack, Typography } from "@mui/joy";
 import { GridColDef } from "@mui/x-data-grid";
 import EntityList from "../entity-list";
+import { useTranslations } from "next-intl";
 
 const EventDashboardTile = () => {
+  const t = useTranslations();
   const { data: eventData, isLoading: eventLoading } =
     useDashboardEventsQuery();
   const { data: ticketCount } = useDashboardTicketCountQuery();
@@ -12,27 +14,27 @@ const EventDashboardTile = () => {
   const cols: GridColDef[] = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: t("generic.id"),
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: t("labels.events.name"),
       width: 200,
     },
     {
       field: "price",
-      headerName: "Price",
+      headerName: t("labels.events.price"),
       width: 120,
       valueFormatter: (v) => `${v}€`,
     },
     {
       field: "tax_percentage",
-      headerName: "Tax",
+      headerName: t("labels.events.tax"),
       valueFormatter: (v) => `${v}%`,
     },
     {
       field: "event_date",
-      headerName: "Event Date",
+      headerName: t("labels.events.eventDate"),
       width: 200,
     },
   ];
@@ -42,7 +44,9 @@ const EventDashboardTile = () => {
       <Grid xs={9}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Latest three events</Typography>
+            <Typography>
+              {t("labels.events.dashboard.lastThreeEvents")}
+            </Typography>
             <EntityList
               columns={cols}
               rows={eventData ?? []}
@@ -54,7 +58,9 @@ const EventDashboardTile = () => {
       <Grid xs={3}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Total ticket count</Typography>
+            <Typography>
+              {t("labels.events.dashboard.totalTicketCount")}
+            </Typography>
             <Typography level="h2">{ticketCount?.total}</Typography>
           </Stack>
         </Card>

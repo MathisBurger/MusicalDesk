@@ -4,9 +4,11 @@ import useMuiTheme from "@/hooks/useMuiTheme";
 import { BarChart } from "@mui/x-charts";
 import { useMemo } from "react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 const DashboardBudgetsChart = () => {
   const muiTheme = useMuiTheme();
+  const t = useTranslations();
   const { data, isLoading } = useDashboardBudgetsQuery();
 
   const chartData = useMemo(() => {
@@ -36,14 +38,24 @@ const DashboardBudgetsChart = () => {
         dataset={chartData}
         xAxis={[{ scaleType: "band", dataKey: "name" }]}
         series={[
-          { dataKey: "green", stack: "total", color: "green", label: "Spent" },
+          {
+            dataKey: "green",
+            stack: "total",
+            color: "green",
+            label: t("labels.expense.dashboard.spent"),
+          },
           {
             dataKey: "purple",
             stack: "total",
             color: "purple",
-            label: "Remaining",
+            label: t("labels.expense.dashboard.remaining"),
           },
-          { dataKey: "red", stack: "total", color: "red", label: "Over" },
+          {
+            dataKey: "red",
+            stack: "total",
+            color: "red",
+            label: t("labels.expense.dashboard.over"),
+          },
         ]}
       />
     </ThemeProvider>

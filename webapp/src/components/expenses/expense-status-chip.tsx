@@ -1,8 +1,7 @@
 "use client";
-import { Category, ExpenseStatus, MinimalCategory } from "@/types/api/expense";
+import { ExpenseStatus } from "@/types/api/expense";
 import { CssVarsProvider, extendTheme } from "@mui/joy";
 import { Chip } from "@mui/joy";
-import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
 interface ExpenseStatusChipProps {
@@ -25,8 +24,6 @@ const theme = extendTheme({
 });
 
 const ExpenseStatusChip = ({ status }: ExpenseStatusChipProps) => {
-  const router = useRouter();
-
   const color = useMemo<string>(() => {
     switch (status) {
       case ExpenseStatus.REQUEST:

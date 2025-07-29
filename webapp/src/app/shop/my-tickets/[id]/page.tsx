@@ -6,9 +6,11 @@ import { Alert } from "@mui/joy";
 import { useParams } from "next/navigation";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import { UserRole } from "@/types/api/user";
+import { useTranslations } from "next-intl";
 
 const MyTicketDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  const t = useTranslations();
   const { data, isLoading } = useUserTicketQuery(parseInt(id, 10));
 
   if (isLoading) {
@@ -26,7 +28,7 @@ const MyTicketDetailsPage = () => {
   return (
     <RoleWrapper roles={[UserRole.ShopCustomer]}>
       <Alert variant="soft" size="lg" color="danger">
-        Ticket not found
+        {t("messages.shop.ticketNotFound")}
       </Alert>
     </RoleWrapper>
   );

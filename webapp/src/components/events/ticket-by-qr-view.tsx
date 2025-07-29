@@ -3,9 +3,11 @@ import LoadingComponent from "../loading";
 import { Button, Stack } from "@mui/joy";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import TicketDetails from "./ticket-details";
+import { useTranslations } from "next-intl";
 
 const TicketByQrCodeView = () => {
   const { data, mutate, reset, isPending } = useTicketByQrCodeMutation();
+  const t = useTranslations();
 
   if (isPending) {
     return <LoadingComponent />;
@@ -14,7 +16,7 @@ const TicketByQrCodeView = () => {
   return (
     <Stack spacing={2}>
       <Button color="primary" onClick={reset}>
-        Reset
+        {t("generic.reset")}
       </Button>
       {data === undefined && (
         <BarcodeScannerComponent

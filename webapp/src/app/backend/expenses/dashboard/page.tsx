@@ -13,17 +13,21 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 const ExpenseDashboardPage = () => {
   const [timePeriod, setTimePeriod] = useState(TimePeriod.Month);
+  const t = useTranslations();
 
   return (
     <Grid container spacing={2}>
       <Grid xs={6}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Budget status</Typography>
+            <Typography>
+              {t("labels.expense.dashboard.budgetStatus")}
+            </Typography>
             <DashboardBudgetsChart />
           </Stack>
         </Card>
@@ -31,7 +35,9 @@ const ExpenseDashboardPage = () => {
       <Grid xs={6}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Last 100 transactions</Typography>
+            <Typography>
+              {t("labels.expense.dashboard.lastTransactions")}
+            </Typography>
             <DashboardLastTransactionChart />
           </Stack>
         </Card>
@@ -51,7 +57,9 @@ const ExpenseDashboardPage = () => {
       <Grid xs={6}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Spent over time</Typography>
+            <Typography>
+              {t("labels.expense.dashboard.spentOverTime")}
+            </Typography>
             <DashboardMoneySpentOverTimeChart period={timePeriod} />
           </Stack>
         </Card>
@@ -59,7 +67,9 @@ const ExpenseDashboardPage = () => {
       <Grid xs={6}>
         <Card>
           <Stack spacing={2}>
-            <Typography>Spent over time by category</Typography>
+            <Typography>
+              {t("labels.expense.dashboard.spentOverTimeByCategory")}
+            </Typography>
             <DashboardMoneySpentOverTimeByCategoryChart period={timePeriod} />
           </Stack>
         </Card>

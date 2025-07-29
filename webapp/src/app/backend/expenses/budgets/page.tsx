@@ -11,12 +11,14 @@ import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Stack, Tab, TabList, Tabs, Typography } from "@mui/joy";
 import { GridColDef } from "@mui/x-data-grid";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const BudgetsPage = () => {
   const currentUser = useCurrentUser();
   const router = useRouter();
+  const t = useTranslations();
   const [active, setActive] = useState<number>(1);
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
@@ -25,42 +27,42 @@ const BudgetsPage = () => {
   const cols: GridColDef[] = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: t("generic.id"),
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: t("labels.expense.budget.name"),
     },
     {
       field: "category",
-      headerName: "Category",
+      headerName: t("labels.expense.budget.category"),
       renderCell: ({ row }) => (
         <CategoryChip value={row.category as MinimalCategory} />
       ),
     },
     {
       field: "start_date",
-      headerName: "Startdate",
+      headerName: t("labels.expense.budget.startDate"),
     },
     {
       field: "end_date",
-      headerName: "Enddate",
+      headerName: t("labels.expense.budget.endDate"),
     },
     {
       field: "budget",
-      headerName: "Budget",
+      headerName: t("labels.expense.budget.budget"),
       valueFormatter: (value) => `${(value ?? 0) / 100}€`,
     },
     {
       field: "spent",
-      headerName: "Spent",
+      headerName: t("labels.expense.budget.spent"),
       valueFormatter: (value) => `${(value ?? 0) / 100}€`,
     },
   ];
 
   const rowActions: EntityListRowAction[] = [
     {
-      name: "Details",
+      name: t("generic.details"),
       onClick: (row) => router.push(`/backend/expenses/budgets/${row.id}`),
       color: "primary",
     },
@@ -71,13 +73,13 @@ const BudgetsPage = () => {
       <Stack spacing={2}>
         <Grid container spacing={4} alignItems="center">
           <Grid>
-            <Typography level="h1">Budgets</Typography>
+            <Typography level="h1">{t("headings.budgets")}</Typography>
           </Grid>
           {isGranted(currentUser, [UserRole.Accountant, UserRole.Admin]) && (
             <Grid>
               <Button onClick={() => setCreateModalOpen(true)}>
                 <Add />
-                &nbsp; Create
+                &nbsp; {t("generic.create")}
               </Button>
             </Grid>
           )}
@@ -88,8 +90,8 @@ const BudgetsPage = () => {
           onChange={(_, newValue) => setActive(newValue as number)}
         >
           <TabList>
-            <Tab value={1}>Active</Tab>
-            <Tab value={0}>Inactive</Tab>
+            <Tab value={1}>{t("generic.active")}</Tab>
+            <Tab value={0}>{t("generic.inactive")}</Tab>
           </TabList>
         </Tabs>
         <EntityList

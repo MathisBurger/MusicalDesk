@@ -4,6 +4,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import usePayMembershipMutation from "@/hooks/mutations/membership/usePayMembershipMutation";
 import { useRouter } from "next/navigation";
 import { Member } from "@/types/api/membership";
+import { useTranslations } from "next-intl";
 
 interface DisplayMembershipListProps {
   members: Member[];
@@ -20,46 +21,42 @@ const DisplayMembershipList = ({
 }: DisplayMembershipListProps) => {
   const { mutateAsync } = usePayMembershipMutation(selectedYear ?? -1);
   const router = useRouter();
+  const t = useTranslations();
 
   const cols: GridColDef[] = [
     {
       field: "first_name",
-      headerName: "Firstname",
+      headerName: t("labels.member.firstName"),
     },
     {
       field: "last_name",
-      headerName: "Lastname",
+      headerName: t("labels.member.lastName"),
     },
     {
       field: "membership_fee",
-      headerName: "Membership fee",
+      headerName: t("labels.member.membershipFee"),
     },
     {
       field: "iban",
-      headerName: "IBAN",
+      headerName: t("labels.member.iban"),
       width: 300,
     },
     {
       field: "email",
-      headerName: "Email",
+      headerName: t("labels.member.email"),
       width: 200,
-    },
-    {
-      field: "telephone",
-      headerName: "Telephone",
-      width: 150,
     },
   ];
 
   const possibleActions: EntityListRowAction[] = [
     {
       color: "primary",
-      name: "Details",
+      name: t("generic.details"),
       onClick: (row) => router.push(`/backend/members/${row.id}`),
     },
     {
       color: "success",
-      name: "Has paid",
+      name: t("actions.member.hasPaid"),
       onClick: async (row) => {
         console.log(row);
         await mutateAsync({

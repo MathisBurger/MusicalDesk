@@ -11,11 +11,13 @@ import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Stack, Typography } from "@mui/joy";
 import { GridColDef } from "@mui/x-data-grid";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const CategoriesPage = () => {
   const currentUser = useCurrentUser();
+  const t = useTranslations();
   const router = useRouter();
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
@@ -24,21 +26,21 @@ const CategoriesPage = () => {
   const cols: GridColDef[] = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: t("generic.id"),
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: t("labels.expense.category.name"),
       width: 200,
     },
     {
       field: "hex_color",
-      headerName: "Color",
+      headerName: t("labels.expense.category.color"),
       renderCell: ({ row }) => <CategoryChip value={row as Category} />,
     },
     {
       field: "is_income",
-      headerName: "Income category",
+      headerName: t("labels.expense.category.isIncome"),
       width: 150,
       type: "boolean",
     },
@@ -46,7 +48,7 @@ const CategoriesPage = () => {
 
   const rowActions: EntityListRowAction[] = [
     {
-      name: "Details",
+      name: t("generic.details"),
       onClick: (row) => router.push(`/backend/expenses/categories/${row.id}`),
       color: "primary",
     },
@@ -57,13 +59,13 @@ const CategoriesPage = () => {
       <Stack spacing={2}>
         <Grid container spacing={4} alignItems="center">
           <Grid>
-            <Typography level="h1">Categories</Typography>
+            <Typography level="h1">{t("headings.categories")}</Typography>
           </Grid>
           {isGranted(currentUser, [UserRole.Accountant, UserRole.Admin]) && (
             <Grid>
               <Button onClick={() => setCreateModalOpen(true)}>
                 <Add />
-                &nbsp; Create
+                &nbsp; {t("generic.create")}
               </Button>
             </Grid>
           )}

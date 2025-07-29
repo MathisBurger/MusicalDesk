@@ -23,11 +23,11 @@ MVP Planning:
 - [x] Eliminate all warnings
 - [x] Extend user information (firstName, lastName, function, etc.)
 - [x] Add useful dashboard (financial data, latest events and how many tickets left, member count and total yearly income through memberships)
-- [ ] Add frontend translations
+- [x] Add frontend translations
 - [ ] Make translation language configurable in user settings
 - [ ] Handle cascade in database
-- [ ] Backend code documentation
 - [ ] GitHub issues marked with MVP
+- [ ] Backend code documentation
 - [ ] Add good README file
 
 

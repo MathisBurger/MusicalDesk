@@ -11,11 +11,13 @@ import useCategoryTransactionsQuery from "@/hooks/queries/expense/useCategoryTra
 import { UserRole } from "@/types/api/user";
 import { Check, Clear } from "@mui/icons-material";
 import { Button, Card, Divider, Grid, Stack, Typography } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 const CategoryPage = () => {
   const { id } = useParams<{ id: string }>();
+  const t = useTranslations();
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(25);
@@ -28,19 +30,19 @@ const CategoryPage = () => {
   const listData = useMemo<DisplayedData[]>(
     () => [
       {
-        title: "Name",
+        title: t("labels.expense.category.name"),
         value: categoryData?.name,
       },
       {
-        title: "Color",
+        title: t("labels.expense.category.color"),
         value: categoryData ? <CategoryChip value={categoryData} /> : null,
       },
       {
-        title: "Income category",
+        title: t("labels.expense.category.isIncome"),
         value: categoryData?.is_income ? <Check /> : <Clear />,
       },
     ],
-    [categoryData],
+    [categoryData, t],
   );
 
   if (categoryDataLoading) {
@@ -56,7 +58,7 @@ const CategoryPage = () => {
         <Card>
           <Stack direction="row" spacing={2}>
             <Button color="primary" onClick={() => setEditModalOpen(true)}>
-              Edit
+              {t("generic.edit")}
             </Button>
           </Stack>
         </Card>

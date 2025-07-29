@@ -17,11 +17,13 @@ import {
   Stack,
   Typography,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 const ShopEventDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  const t = useTranslations();
   const currentUser = useCurrentUser();
   const router = useRouter();
   const pathname = usePathname();
@@ -114,26 +116,28 @@ const ShopEventDetailsPage = () => {
               </Stack>
             )}
             <Typography fontWeight={ticketsLeft === 0 ? "bold" : undefined}>
-              {ticketsLeft > 0 ? `${ticketsLeft} left` : "sold out"}
+              {ticketsLeft > 0
+                ? `${ticketsLeft} ${t("labels.shop.left")}`
+                : t("labels.shop.soldOut")}
             </Typography>
             {ticketsLeft > 0 && currentUser === null && (
               <Button
                 onClick={() => router.push(`/login?redirect_uri=${pathname}`)}
               >
-                Login to buy
+                {t("actions.shop.loginToBuy")}
               </Button>
             )}
             {ticketsLeft > 0 && currentUser && (
               <Stack direction="row" spacing={2}>
                 <Button loading={isPending || checkoutPending} onClick={buyNow}>
-                  Buy now
+                  {t("actions.shop.buyNow")}
                 </Button>
                 <Button
                   variant="outlined"
                   onClick={() => mutateAsync()}
                   loading={isPending}
                 >
-                  Add to shopping cart
+                  {t("actions.shop.addToShoppingCart")}
                 </Button>
               </Stack>
             )}

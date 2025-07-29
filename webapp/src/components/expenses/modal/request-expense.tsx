@@ -12,6 +12,7 @@ import {
   Stack,
 } from "@mui/joy";
 import useRequestExpenseMutation from "@/hooks/mutations/expense/useRequestExpenseMutation";
+import { useTranslations } from "next-intl";
 
 interface RequestExpenseModalProps {
   onClose: () => void;
@@ -25,6 +26,7 @@ const RequestExpenseModal = ({
   const { mutateAsync: requestExpense, isPending } =
     useRequestExpenseMutation(pageSize);
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const form = useForm<ExpenseRequest>({
     defaultValues: {
@@ -33,9 +35,9 @@ const RequestExpenseModal = ({
       total_amount: 0,
     },
     labels: {
-      name: "Name",
-      description: "Description",
-      total_amount: "Total amount in €",
+      name: t("labels.expense.expense.name"),
+      description: t("labels.expense.expense.description"),
+      total_amount: t("labels.expense.expense.totalAmount"),
     },
     required: ["name", "description", "total_amount"],
     explicitTypes: {
@@ -54,7 +56,7 @@ const RequestExpenseModal = ({
     }
     showAlert({
       color: "danger",
-      content: "Cannot request expense",
+      content: t("messages.expense.cannotRequestExpense"),
       duration: 1500,
     });
   };
@@ -63,7 +65,7 @@ const RequestExpenseModal = ({
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Request expense</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.requestExpense")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -71,10 +73,10 @@ const RequestExpenseModal = ({
               {form.renderFormBody()}
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Create
+                  {t("generic.create")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

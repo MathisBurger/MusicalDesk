@@ -9,6 +9,7 @@ import {
   ModalDialog,
   Typography,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface DenyExpenseModalProps {
   onClose: () => void;
@@ -18,6 +19,7 @@ interface DenyExpenseModalProps {
 const DenyExpenseModal = ({ onClose, expenseId }: DenyExpenseModalProps) => {
   const { displayAlert, showAlert } = useAlert();
   const { mutateAsync, isPending } = useDenyExpenseMutation(expenseId);
+  const t = useTranslations();
 
   const submit = async () => {
     const result = await mutateAsync();
@@ -27,7 +29,7 @@ const DenyExpenseModal = ({ onClose, expenseId }: DenyExpenseModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot deny expense",
+      content: t("messages.expense.cannotDenyExpense"),
       duration: 1500,
     });
   };
@@ -35,16 +37,16 @@ const DenyExpenseModal = ({ onClose, expenseId }: DenyExpenseModalProps) => {
   return (
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
-        <DialogTitle>Deny expense</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.denyExpense")}</DialogTitle>
         <DialogContent>
           {displayAlert()}
-          <Typography>Do you really want to deny the expense?</Typography>
+          <Typography>{t("messages.expense.reallyWantToDeny")}</Typography>
           <DialogActions>
             <Button onClick={submit} loading={isPending} color="danger">
-              Deny
+              {t("actions.expense.deny")}
             </Button>
             <Button color="neutral" onClick={onClose}>
-              Cancel
+              {t("generic.cancel")}
             </Button>
           </DialogActions>
         </DialogContent>

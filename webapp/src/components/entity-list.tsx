@@ -18,6 +18,7 @@ import {
   GridRenderCellParams,
   GridToolbar,
 } from "@mui/x-data-grid";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 export interface EntityListRowAction {
@@ -92,6 +93,7 @@ const EntityList = ({
 }: EntityListProps) => {
   const user = useCurrentUser();
   const muiTheme = useMuiTheme();
+  const t = useTranslations();
 
   const filteredRowActions = useMemo<undefined | EntityListRowAction[]>(() => {
     if (rowActions) {
@@ -106,7 +108,7 @@ const EntityList = ({
     if (filteredRowActions && filteredRowActions.length > 0) {
       const actions = {
         field: "_actions",
-        headerName: "Actions",
+        headerName: t("labels.actions"),
         flex: 1,
         renderCell: (props: GridRenderCellParams) =>
           getRowActions(props.row, filteredRowActions),

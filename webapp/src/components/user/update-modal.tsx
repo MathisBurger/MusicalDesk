@@ -15,6 +15,7 @@ import useAlert from "@/hooks/useAlert";
 import useUpdateBackendUserMutation from "@/hooks/mutations/user/useUpdateBackendUserMutation";
 import { UpdateBackendUserRequest, User, UserRole } from "@/types/api/user";
 import FormInput from "@/form/form-input";
+import { useTranslations } from "next-intl";
 
 interface UpdateBackendUserModalProps {
   onClose: () => void;
@@ -27,6 +28,7 @@ const UpdateBackendUserModal = ({
 }: UpdateBackendUserModalProps) => {
   const { mutateAsync, isPending } = useUpdateBackendUserMutation(user.id);
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const submit = async (req: UpdateBackendUserRequest) => {
     const result = await mutateAsync(req);
@@ -36,7 +38,7 @@ const UpdateBackendUserModal = ({
     }
     showAlert({
       color: "danger",
-      content: "Cannot update backend user",
+      content: t("messages.user.cannotUpdateBackendUser"),
       duration: 1500,
     });
   };
@@ -49,10 +51,10 @@ const UpdateBackendUserModal = ({
       function: user.function,
     },
     labels: {
-      roles: "Roles",
-      first_name: "First name",
-      surname: "Surname",
-      function: "Function",
+      roles: t("label.user.roles"),
+      first_name: t("label.user.firstName"),
+      surname: t("label.user.surname"),
+      function: t("label.user.function"),
     },
     required: ["roles", "first_name", "surname", "function"],
   });
@@ -61,7 +63,7 @@ const UpdateBackendUserModal = ({
     <Modal open onClose={onClose}>
       <ModalDialog>
         <ModalClose />
-        <DialogTitle>Update backend user</DialogTitle>
+        <DialogTitle>{t("modalTitles.user.updateBackendUser")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -82,10 +84,10 @@ const UpdateBackendUserModal = ({
               </Stack>
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Update
+                  {t("generic.update")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

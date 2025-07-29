@@ -2,9 +2,11 @@ import useShopEventsQuery from "@/hooks/queries/shop/useShopEventsQuery";
 import { Alert, Grid } from "@mui/joy";
 import EventCardSkeleton from "./event-card-skeleton";
 import EventCard from "./event-card";
+import { useTranslations } from "next-intl";
 
 const ShopEventList = () => {
   const { data, isLoading } = useShopEventsQuery();
+  const t = useTranslations();
 
   return (
     <Grid container direction="row" spacing={2}>
@@ -28,7 +30,7 @@ const ShopEventList = () => {
       ))}
       {(data ?? []).length === 0 && !isLoading && (
         <Alert variant="soft" color="primary" size="lg">
-          There are no current events
+          {t("messages.shop.noCurrentEvents")}
         </Alert>
       )}
     </Grid>

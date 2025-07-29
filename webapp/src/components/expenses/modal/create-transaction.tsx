@@ -15,6 +15,7 @@ import {
 } from "@mui/joy";
 import CategorySelect from "../category-select";
 import AccountSelect from "../account-select";
+import { useTranslations } from "next-intl";
 
 interface CreateTransactionModalProps {
   onClose: () => void;
@@ -28,6 +29,7 @@ const CreateTransactionModal = ({
   const { mutateAsync: createTransaction, isPending } =
     useCreateTransactionMutation(pageSize);
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const form = useForm<CreateTransactionRequest>({
     defaultValues: {
@@ -38,12 +40,12 @@ const CreateTransactionModal = ({
       is_money_transaction: true,
     },
     labels: {
-      name: "Name",
-      amount: "Amount",
-      from_account_id: "Account (From)",
-      to_account_id: "Account (To)",
-      category_id: "Category",
-      is_money_transaction: "Money transaction?",
+      name: t("labels.expense.transaction.name"),
+      amount: t("labels.expense.transaction.amount"),
+      from_account_id: t("labels.expense.transaction.fromAccount"),
+      to_account_id: t("labels.expense.transaction.toAccount"),
+      category_id: t("labels.expense.transaction.category"),
+      is_money_transaction: t("labels.expense.transaction.isMoneyTransaction"),
     },
     required: ["name", "amount", "from_account_id", "to_account_id"],
     explicitTypes: {
@@ -62,7 +64,7 @@ const CreateTransactionModal = ({
     }
     showAlert({
       color: "danger",
-      content: "Cannot create transaction",
+      content: t("messages.expense.cannotCreateTransaction"),
       duration: 1500,
     });
   };
@@ -71,7 +73,7 @@ const CreateTransactionModal = ({
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Create transaction</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.createTransaction")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -84,10 +86,10 @@ const CreateTransactionModal = ({
               <FormInput {...form.getInputProps("is_money_transaction")} />
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Create
+                  {t("generic.create")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

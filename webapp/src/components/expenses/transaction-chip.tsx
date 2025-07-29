@@ -3,7 +3,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { Transaction } from "@/types/api/expense";
 import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
-import { CssVarsProvider, extendTheme } from "@mui/joy";
+import { CssVarsProvider } from "@mui/joy";
 import { Chip } from "@mui/joy";
 import { useRouter } from "next/navigation";
 

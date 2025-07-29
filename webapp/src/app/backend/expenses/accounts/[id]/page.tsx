@@ -10,11 +10,13 @@ import useAccountTransactionsQuery from "@/hooks/queries/expense/useAccountTrans
 import { AccountType } from "@/types/api/expense";
 import { UserRole } from "@/types/api/user";
 import { Button, Card, Divider, Grid, Stack, Typography } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 const AccountDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  const t = useTranslations();
 
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -29,23 +31,23 @@ const AccountDetailsPage = () => {
   const listData = useMemo<DisplayedData[]>(() => {
     const fields = [
       {
-        title: "Name",
+        title: t("labels.expense.account.name"),
         value: accountData?.name,
       },
       {
-        title: "Name des Besitzers",
+        title: t("labels.expense.account.ownerName"),
         value: accountData?.owner_name,
       },
       {
-        title: "Balance",
+        title: t("labels.expense.account.balance"),
         value:
           accountData?.account_type === AccountType.FLOW
-            ? "unknown"
+            ? t("generic.unknown")
             : `${(accountData?.balance ?? 0) / 100}€`,
       },
       {
-        title: "Account type",
-        value: accountData?.account_type,
+        title: t("labels.expense.account.type"),
+        value: t("labels.expense.account.types." + accountData?.account_type),
       },
     ];
     if (
@@ -53,12 +55,12 @@ const AccountDetailsPage = () => {
       accountData?.account_type === AccountType.FOREIGN
     ) {
       fields.push({
-        title: "IBAN",
+        title: t("labels.expense.account.iban"),
         value: accountData?.iban,
       });
     }
     return fields;
-  }, [accountData]);
+  }, [accountData, t]);
 
   if (accountDataLoading) {
     return <LoadingComponent />;
@@ -73,7 +75,7 @@ const AccountDetailsPage = () => {
         <Card>
           <Stack direction="row" spacing={2}>
             <Button color="primary" onClick={() => setEditModalOpen(true)}>
-              Edit
+              {t("generic.edit")}
             </Button>
           </Stack>
         </Card>

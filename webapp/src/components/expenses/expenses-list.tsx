@@ -5,6 +5,7 @@ import EntityList, { EntityListRowAction } from "../entity-list";
 import { Expense } from "@/types/api/expense";
 import TransactionChip from "./transaction-chip";
 import ExpenseStatusChip from "./expense-status-chip";
+import { useTranslations } from "next-intl";
 
 interface ExpensesListProps {
   expenses: Expense[];
@@ -26,33 +27,34 @@ const ExpensesList = ({
   rowCount,
 }: ExpensesListProps) => {
   const router = useRouter();
+  const t = useTranslations();
 
   const cols: GridColDef[] = [
     {
       field: "id",
-      headerName: "ID",
+      headerName: t("generic.id"),
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: t("labels.expense.expense.name"),
     },
     {
       field: "description",
-      headerName: "Description",
+      headerName: t("labels.expense.expense.description"),
     },
     {
       field: "total_amount",
-      headerName: "Total amount",
+      headerName: t("labels.expense.expense.totalAmount"),
       valueFormatter: (value) => `${(value ?? 0) / 100}€`,
     },
     {
       field: "status",
-      headerName: "Status",
+      headerName: t("labels.expense.expense.status"),
       renderCell: ({ row }) => <ExpenseStatusChip status={row.status} />,
     },
     {
       field: "expense_transaction",
-      headerName: "Transaction (Expense)",
+      headerName: t("labels.expense.expense.expenseTransaction"),
       renderCell: ({ row }) =>
         row.expense_transaction ? (
           <TransactionChip value={row.expense_transaction} />
@@ -60,7 +62,7 @@ const ExpensesList = ({
     },
     {
       field: "balancing_transaction",
-      headerName: "Transaction (Balancing)",
+      headerName: t("labels.expense.expense.balancingTransaction"),
       renderCell: ({ row }) =>
         row.balancing_transaction ? (
           <TransactionChip value={row.balancing_transaction} />
@@ -70,7 +72,7 @@ const ExpensesList = ({
 
   const rowActions: EntityListRowAction[] = [
     {
-      name: "Details",
+      name: t("generic.details"),
       onClick: (row) => router.push(`/backend/expenses/expenses/${row.id}`),
       color: "primary",
     },

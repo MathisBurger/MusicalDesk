@@ -10,6 +10,7 @@ import {
 } from "@mui/joy";
 import { useState } from "react";
 import Dropzone from "../../dropzone";
+import { useTranslations } from "next-intl";
 
 interface UploadExpenseFileModalProps {
   onClose: () => void;
@@ -23,6 +24,7 @@ const UploadExpenseFileModal = ({
   const [files, setFiles] = useState<File[]>([]);
   const { displayAlert, showAlert } = useAlert();
   const { mutateAsync, isPending } = useUploadFileToExpenseMutation(expenseId);
+  const t = useTranslations();
 
   const submit = async () => {
     const formData = new FormData();
@@ -36,7 +38,7 @@ const UploadExpenseFileModal = ({
     }
     showAlert({
       color: "danger",
-      content: "Cannot upload files",
+      content: t("messages.expense.cannotUploadFiles"),
       duration: 1500,
     });
   };
@@ -44,16 +46,16 @@ const UploadExpenseFileModal = ({
   return (
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
-        <DialogTitle>Upload file</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.uploadFile")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Dropzone files={files} setFiles={setFiles} />
           <DialogActions>
             <Button onClick={submit} loading={isPending}>
-              Create
+              {t("generic.create")}
             </Button>
             <Button color="neutral" onClick={onClose}>
-              Cancel
+              {t("generic.cancel")}
             </Button>
           </DialogActions>
         </DialogContent>

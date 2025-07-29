@@ -2,6 +2,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import { Alert } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { PropsWithChildren } from "react";
 
 interface RoleWrapperProps {
@@ -21,6 +22,7 @@ const RoleWrapper = ({
   hideAlert,
 }: PropsWithChildren<RoleWrapperProps>) => {
   const currentUser = useCurrentUser();
+  const t = useTranslations();
 
   if (!isGranted(currentUser, roles.concat(UserRole.Admin))) {
     if (hideAlert) {
@@ -28,7 +30,7 @@ const RoleWrapper = ({
     }
     return (
       <Alert variant="soft" color="danger" size="lg">
-        You do not have access to this.
+        {t("messages.noAccess")}
       </Alert>
     );
   }

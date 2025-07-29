@@ -15,6 +15,7 @@ import {
   ModalDialog,
   Stack,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface EditMemberModalProps {
   onClose: () => void;
@@ -29,18 +30,20 @@ const EditMemberModal = ({
 }: EditMemberModalProps) => {
   const { mutateAsync, isPending } = useEditMemberMutation(memberId);
   const { showAlert, displayAlert } = useAlert();
+  const t = useTranslations();
+
   const form = useForm<EditMemberRequest>({
     defaultValues: { ...member },
     labels: {
-      first_name: "First Name",
-      last_name: "Last Name",
-      email: "Email",
-      street: "Street",
-      house_nr: "House nr.",
-      zip: "Zip",
-      city: "City",
-      iban: "IBAN",
-      membership_fee: "Membership fee",
+      first_name: t("labels.member.firstName"),
+      last_name: t("labels.member.lastName"),
+      email: t("labels.member.email"),
+      street: t("labels.member.street"),
+      house_nr: t("labels.member.houseNr"),
+      zip: t("labels.member.zip"),
+      city: t("labels.member.city"),
+      iban: t("labels.member.iban"),
+      membership_fee: t("labels.member.membershipFee"),
     },
     validation: {
       iban: (v: FormValue) =>
@@ -50,7 +53,7 @@ const EditMemberModal = ({
                 (v as string).replace(/\s+/g, "").toUpperCase(),
               )
             ? null
-            : "Invalid IBAN format",
+            : t("validation.member.iban"),
     },
     required: ["first_name", "last_name"],
   });
@@ -64,7 +67,7 @@ const EditMemberModal = ({
     } else {
       showAlert({
         color: "danger",
-        content: "Cannot update member",
+        content: t("messages.member.cannotUpdateMember"),
       });
     }
   };
@@ -73,7 +76,7 @@ const EditMemberModal = ({
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Update Member</DialogTitle>
+        <DialogTitle>{t("modalTitles.member.editMember")}</DialogTitle>
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
             {displayAlert()}
@@ -101,10 +104,10 @@ const EditMemberModal = ({
               <FormInput {...form.getInputProps("membership_fee")} />
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Update
+                  {t("generic.update")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

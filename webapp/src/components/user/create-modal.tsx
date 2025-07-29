@@ -16,6 +16,7 @@ import WrappedInput from "@/form/wrapped-input";
 import useAlert from "@/hooks/useAlert";
 import { useRouter } from "next/navigation";
 import { CreateBackendUserRequest } from "@/types/api/user";
+import { useTranslations } from "next-intl";
 
 interface CreateBackendUserModal {
   onClose: () => void;
@@ -25,6 +26,7 @@ const CreateBackendUserModal = ({ onClose }: CreateBackendUserModal) => {
   const { mutateAsync, isPending } = useCreateBackendUserMutation();
   const { displayAlert, showAlert } = useAlert();
   const router = useRouter();
+  const t = useTranslations();
 
   const submit = async (req: CreateBackendUserRequest) => {
     const result = await mutateAsync(req);
@@ -35,7 +37,7 @@ const CreateBackendUserModal = ({ onClose }: CreateBackendUserModal) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot create backend user",
+      content: t("messages.user.cannotCreateBackendUser"),
       duration: 1500,
     });
   };
@@ -49,12 +51,12 @@ const CreateBackendUserModal = ({ onClose }: CreateBackendUserModal) => {
       function: "",
     },
     labels: {
-      username: "Username",
-      password: "Password",
-      first_name: "First name",
-      surname: "Surname",
-      function: "Function",
-      roles: "Roles",
+      username: t("labels.user.username"),
+      password: t("labels.user.password"),
+      first_name: t("labels.user.firstName"),
+      surname: t("labels.user.surname"),
+      function: t("labels.user.function"),
+      roles: t("labels.user.roles"),
     },
     required: [
       "username",
@@ -74,7 +76,7 @@ const CreateBackendUserModal = ({ onClose }: CreateBackendUserModal) => {
     <Modal open onClose={onClose}>
       <ModalDialog>
         <ModalClose />
-        <DialogTitle>Create backend user</DialogTitle>
+        <DialogTitle>{t("modalTitles.user.createBackendUser")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -94,10 +96,10 @@ const CreateBackendUserModal = ({ onClose }: CreateBackendUserModal) => {
               </Stack>
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Create
+                  {t("generic.create")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

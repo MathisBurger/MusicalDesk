@@ -3,8 +3,10 @@ import useDashboardLastTransactionsQuery from "@/hooks/queries/expense/useDashbo
 import useMuiTheme from "@/hooks/useMuiTheme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ScatterChart } from "@mui/x-charts";
+import { useTranslations } from "next-intl";
 
 const DashboardLastTransactionChart = () => {
+  const t = useTranslations();
   const muiTheme = useMuiTheme();
   const { data, isLoading } = useDashboardLastTransactionsQuery();
 
@@ -19,10 +21,10 @@ const DashboardLastTransactionChart = () => {
         height={100}
         series={[
           {
-            label: "Transactions",
+            label: t("labels.expense.dashboard.transactions"),
             data: (data ?? []).map((transaction) => ({
               id: transaction.id,
-              y: transaction.amount / 100, // z.B. Euro statt Cents
+              y: transaction.amount / 100,
               x: new Date(transaction.timestamp).getTime(),
             })),
           },
@@ -40,7 +42,7 @@ const DashboardLastTransactionChart = () => {
         ]}
         yAxis={[
           {
-            label: "Betrag (€)",
+            label: t("labels.expense.dashboard.amount"),
           },
         ]}
       />

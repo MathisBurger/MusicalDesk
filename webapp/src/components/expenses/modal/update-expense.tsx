@@ -12,6 +12,7 @@ import {
   ModalDialog,
   Stack,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 
 interface UpdateExpenseModalProps {
   onClose: () => void;
@@ -23,6 +24,7 @@ const UpdateExpenseModal = ({ onClose, expense }: UpdateExpenseModalProps) => {
     expense.id,
   );
   const { displayAlert, showAlert } = useAlert();
+  const t = useTranslations();
 
   const form = useForm<ExpenseRequest>({
     defaultValues: {
@@ -31,9 +33,9 @@ const UpdateExpenseModal = ({ onClose, expense }: UpdateExpenseModalProps) => {
       total_amount: expense.total_amount / 100,
     },
     labels: {
-      name: "Name",
-      description: "Description",
-      total_amount: "Total amount in €",
+      name: t("labels.expense.expense.name"),
+      description: t("labels.expense.expense.description"),
+      total_amount: t("labels.expense.expense.totalAmount"),
     },
     required: ["name", "description", "total_amount"],
     explicitTypes: {
@@ -52,7 +54,7 @@ const UpdateExpenseModal = ({ onClose, expense }: UpdateExpenseModalProps) => {
     }
     showAlert({
       color: "danger",
-      content: "Cannot update expense",
+      content: t("messages.expense.cannotUpdateExpense"),
       duration: 1500,
     });
   };
@@ -61,7 +63,7 @@ const UpdateExpenseModal = ({ onClose, expense }: UpdateExpenseModalProps) => {
     <Modal open onClose={onClose}>
       <ModalDialog sx={{ width: "50%" }}>
         <ModalClose />
-        <DialogTitle>Update expense</DialogTitle>
+        <DialogTitle>{t("modalTitles.expense.updateExpense")}</DialogTitle>
         {displayAlert()}
         <DialogContent>
           <Stack sx={{ gap: 4, mt: 2 }}>
@@ -69,10 +71,10 @@ const UpdateExpenseModal = ({ onClose, expense }: UpdateExpenseModalProps) => {
               {form.renderFormBody()}
               <DialogActions>
                 <Button type="submit" loading={isPending}>
-                  Update
+                  {t("generic.update")}
                 </Button>
                 <Button color="neutral" onClick={onClose}>
-                  Cancel
+                  {t("generic.cancel")}
                 </Button>
               </DialogActions>
             </form>

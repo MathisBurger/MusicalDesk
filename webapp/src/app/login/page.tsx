@@ -13,6 +13,7 @@ import {
   Stack,
   Typography,
 } from "@mui/joy";
+import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent } from "react";
 
@@ -26,6 +27,7 @@ interface SignInFormElement extends HTMLFormElement {
 }
 
 const LoginPage = () => {
+  const t = useTranslations();
   const { mutateAsync, isPending } = useLoginMutation();
   // Do not fetch on initial load
   const { refetch } = useUserSelfQuery(false);
@@ -54,7 +56,7 @@ const LoginPage = () => {
     } else {
       showAlert({
         color: "danger",
-        content: "Invalid username or password",
+        content: t("messages.invalidCreds"),
         duration: 3000,
       });
     }
@@ -111,25 +113,25 @@ const LoginPage = () => {
           >
             <BackButton />
             <Typography component="h1" level="h3">
-              Sign in
+              {t("actions.signIn")}
             </Typography>
             {displayAlert()}
             <Stack sx={{ gap: 4, mt: 2 }}>
               <form onSubmit={onSubmit}>
                 <FormControl required>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>{t("labels.username")}</FormLabel>
                   <Input type="text" name="username" disabled={isPending} />
                 </FormControl>
                 <FormControl required>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t("labels.password")}</FormLabel>
                   <Input type="password" name="password" disabled={isPending} />
                 </FormControl>
                 <Link underline="always" href="/register">
-                  Customer registration
+                  {t("labels.customerRegistration")}
                 </Link>
                 <Stack sx={{ gap: 4, mt: 2 }}>
                   <Button type="submit" fullWidth disabled={isPending}>
-                    Sign in
+                    {t("actions.signIn")}
                   </Button>
                 </Stack>
               </form>

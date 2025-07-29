@@ -15,6 +15,7 @@ pub struct CreateUserRequest {
     pub surname: String,
     pub function: String,
     pub roles: Vec<String>,
+    pub language: String,
 }
 
 #[derive(Deserialize)]
@@ -23,6 +24,7 @@ pub struct UpdateUserRequest {
     pub first_name: String,
     pub surname: String,
     pub function: String,
+    pub language: String,
 }
 
 #[derive(Deserialize)]
@@ -46,9 +48,8 @@ pub async fn get_user(
         .ok_or(Error::NotFound)?;
     if user.has_role_or_admin(UserRole::EventAdmin)
         || user.has_role_or_admin(UserRole::TicketInvalidator)
+        || requested_user.id == user.id
     {
-        return Ok(HttpResponse::Ok().json(requested_user));
-    } else if user.id == requested_user.id {
         return Ok(HttpResponse::Ok().json(requested_user));
     }
     return Err(Error::Forbidden);
@@ -69,13 +70,14 @@ pub async fn get_backend_user(
     state: Data<AppState>,
     path: Path<(i32,)>,
 ) -> Result<HttpResponse, Error> {
-    if !user.has_role(UserRole::Admin) {
-        return Err(Error::Forbidden);
-    }
-    let user = User::get_by_id(path.0, &state.database)
+    let requested_user = User::get_by_id(path.0, &state.database)
         .await
         .ok_or(Error::NotFound)?;
-    Ok(HttpResponse::Ok().json(user))
+    if !user.has_role(UserRole::Admin) && requested_user.id != user.id {
+        return Err(Error::Forbidden);
+    }
+
+    Ok(HttpResponse::Ok().json(requested_user))
 }
 
 #[post("/users/backend")]
@@ -97,17 +99,20 @@ pub async fn update_backend_user(
     user: User,
     state: Data<AppState>,
     path: Path<(i32,)>,
-    req: Json<UpdateUserRequest>,
+    mut req: Json<UpdateUserRequest>,
 ) -> Result<HttpResponse, Error> {
-    if !user.has_role(UserRole::Admin) {
-        return Err(Error::Forbidden);
-    }
-
-    validate_roles(&req.roles)?;
-    let user = User::update_user(path.0, &req, &state.database)
+    let requested_user = User::get_by_id(path.0, &state.database)
         .await
         .ok_or(Error::NotFound)?;
-    Ok(HttpResponse::Ok().json(user))
+
+    if !user.has_role(UserRole::Admin) && requested_user.id != user.id {
+        return Err(Error::Forbidden);
+    }
+    req.roles = requested_user.roles.clone();
+    let updated_user = User::update_user(path.0, &req, &state.database)
+        .await
+        .ok_or(Error::NotFound)?;
+    Ok(HttpResponse::Ok().json(updated_user))
 }
 
 #[post("/users/backend/{id}/password")]

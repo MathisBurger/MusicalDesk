@@ -4,6 +4,7 @@ import { PropsWithChildren } from "react";
 import ShopHeader from "../shop/header";
 import useTheme from "@/hooks/useTheme";
 import { User } from "@/types/api/user";
+import TranslationWrapper from "../wrapper/translation-wrapper";
 
 interface ShopLayoutProps {
   currentUser: User | null;
@@ -19,8 +20,10 @@ const ShopLayout = ({
     <CssVarsProvider disableTransitionOnChange theme={theme}>
       <CssBaseline />
       <CurrentUserContext.Provider value={currentUser}>
-        <ShopHeader />
-        <Container>{children}</Container>
+        <TranslationWrapper>
+          <ShopHeader />
+          <Container>{children}</Container>
+        </TranslationWrapper>
       </CurrentUserContext.Provider>
     </CssVarsProvider>
   );

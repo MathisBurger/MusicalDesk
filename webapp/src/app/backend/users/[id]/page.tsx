@@ -44,6 +44,10 @@ const UserDetailsPage = () => {
         value: data?.function,
       },
       {
+        title: t("labels.user.language"),
+        value: t(`language.${data?.language}`),
+      },
+      {
         title: t("labels.user.roles"),
         value: (
           <Stack spacing={1} direction="row" flexWrap="wrap" rowGap={2}>

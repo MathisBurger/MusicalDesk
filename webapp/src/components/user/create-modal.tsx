@@ -15,8 +15,9 @@ import RoleSelect from "../role-select";
 import WrappedInput from "@/form/wrapped-input";
 import useAlert from "@/hooks/useAlert";
 import { useRouter } from "next/navigation";
-import { CreateBackendUserRequest } from "@/types/api/user";
+import { CreateBackendUserRequest, Language } from "@/types/api/user";
 import { useTranslations } from "next-intl";
+import LanguageSelect from "./language-select";
 
 interface CreateBackendUserModal {
   onClose: () => void;
@@ -49,6 +50,7 @@ const CreateBackendUserModal = ({ onClose }: CreateBackendUserModal) => {
       first_name: "",
       surname: "",
       function: "",
+      language: Language.German,
     },
     labels: {
       username: t("labels.user.username"),
@@ -57,6 +59,7 @@ const CreateBackendUserModal = ({ onClose }: CreateBackendUserModal) => {
       surname: t("labels.user.surname"),
       function: t("labels.user.function"),
       roles: t("labels.user.roles"),
+      language: t("labels.user.language"),
     },
     required: [
       "username",
@@ -65,6 +68,7 @@ const CreateBackendUserModal = ({ onClose }: CreateBackendUserModal) => {
       "first_name",
       "surname",
       "function",
+      "language",
     ],
     explicitTypes: {
       roles: "array",
@@ -92,6 +96,9 @@ const CreateBackendUserModal = ({ onClose }: CreateBackendUserModal) => {
                     name={form.getInputProps("roles").name}
                     multiple
                   />
+                </WrappedInput>
+                <WrappedInput {...form.getInputProps("language")}>
+                  <LanguageSelect name={form.getInputProps("language").name} />
                 </WrappedInput>
               </Stack>
               <DialogActions>

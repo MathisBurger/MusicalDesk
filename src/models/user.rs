@@ -28,6 +28,7 @@ pub struct User {
     pub first_name: Option<String>,
     pub surname: Option<String>,
     pub function: Option<String>,
+    pub language: String,
 }
 
 impl User {
@@ -109,13 +110,14 @@ impl User {
         let hash = hash(req.password.clone(), DEFAULT_COST).unwrap();
         sqlx::query_as!(
             User,
-            "INSERT INTO users (username, password, roles, first_name, surname, function) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+            "INSERT INTO users (username, password, roles, first_name, surname, function, language) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
             req.username,
             hash,
             &req.roles,
             req.first_name,
             req.surname,
-            req.function
+            req.function,
+            req.language
         )
         .fetch_one(db)
         .await
@@ -129,11 +131,12 @@ impl User {
     ) -> Option<User> {
         sqlx::query_as!(
             User,
-            "UPDATE users SET roles = $1, first_name = $2, surname = $3, function = $4 WHERE id = $5 RETURNING *",
+            "UPDATE users SET roles = $1, first_name = $2, surname = $3, function = $4, language = $5 WHERE id = $6 RETURNING *",
             &req.roles,
             req.first_name,
             req.surname,
             req.function,
+            req.language,
             id
         )
         .fetch_optional(db)

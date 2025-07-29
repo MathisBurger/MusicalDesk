@@ -188,7 +188,8 @@
       "firstName": "Vorname",
       "surname": "Nachname",
       "function": "Funktion",
-      "roles": "Rollen"
+      "roles": "Rollen",
+      "language": "Sprache"
     },
     "shop": {
       "left": "Verfügbar",
@@ -220,7 +221,7 @@
   },
   "actions": {
     "events": {
-      "createTickets": "Tickets erstellen"
+      "createTicket": "Tickets erstellen"
     },
     "expense": {
       "deny": "Ablehnen",
@@ -327,5 +328,9 @@
       "expenses": "Ausgaben",
       "reports": "Berichte"
     }
+  },
+  "language": {
+    "en": "English",
+    "de": "Deutsch"
   }
 }

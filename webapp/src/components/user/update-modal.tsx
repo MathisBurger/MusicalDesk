@@ -16,6 +16,7 @@ import useUpdateBackendUserMutation from "@/hooks/mutations/user/useUpdateBacken
 import { UpdateBackendUserRequest, User, UserRole } from "@/types/api/user";
 import FormInput from "@/form/form-input";
 import { useTranslations } from "next-intl";
+import LanguageSelect from "./language-select";
 
 interface UpdateBackendUserModalProps {
   onClose: () => void;
@@ -49,14 +50,16 @@ const UpdateBackendUserModal = ({
       first_name: user.first_name,
       surname: user.surname,
       function: user.function,
+      language: user.language,
     },
     labels: {
-      roles: t("label.user.roles"),
-      first_name: t("label.user.firstName"),
-      surname: t("label.user.surname"),
-      function: t("label.user.function"),
+      roles: t("labels.user.roles"),
+      first_name: t("labels.user.firstName"),
+      surname: t("labels.user.surname"),
+      function: t("labels.user.function"),
+      language: t("labels.user.language"),
     },
-    required: ["roles", "first_name", "surname", "function"],
+    required: ["roles", "first_name", "surname", "function", "language"],
   });
 
   return (
@@ -79,6 +82,12 @@ const UpdateBackendUserModal = ({
                     }
                     name={form.getInputProps("roles").name}
                     multiple
+                  />
+                </WrappedInput>
+                <WrappedInput {...form.getInputProps("language")}>
+                  <LanguageSelect
+                    name={form.getInputProps("language").name}
+                    defaultValue={form.getInputProps("language").value}
                   />
                 </WrappedInput>
               </Stack>

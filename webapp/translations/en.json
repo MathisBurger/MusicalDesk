@@ -188,7 +188,8 @@
       "firstName": "First name",
       "surname": "Surname",
       "function": "Function",
-      "roles": "Roles"
+      "roles": "Roles",
+      "language": "Language"
     },
     "shop": {
       "left": "Left",
@@ -220,7 +221,7 @@
   },
   "actions": {
     "events": {
-      "createTickets": "Create tickets"
+      "createTicket": "Create tickets"
     },
     "expense": {
       "deny": "Deny",
@@ -327,5 +328,9 @@
       "expenses": "Expenses",
       "reports": "Reports"
     }
+  },
+  "language": {
+    "en": "English",
+    "de": "German"
   }
 }

@@ -5,6 +5,7 @@ export interface CreateBackendUserRequest {
   first_name: string;
   surname: string;
   function: string;
+  language: Language;
 }
 
 export interface UpdateBackendUserRequest {
@@ -12,10 +13,16 @@ export interface UpdateBackendUserRequest {
   first_name: string;
   surname: string;
   function: string;
+  language: Language;
 }
 
 export interface UpdateBackendUserPasswordRequest {
   password: string;
+}
+
+export enum Language {
+  English = "en",
+  German = "de",
 }
 
 export interface User {
@@ -25,6 +32,7 @@ export interface User {
   first_name: string;
   surname: string;
   function: string;
+  language: Language;
 }
 
 export enum UserRole {

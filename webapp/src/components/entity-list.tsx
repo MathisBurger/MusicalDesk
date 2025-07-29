@@ -10,6 +10,7 @@ import {
   CssVarsProvider,
   Box,
 } from "@mui/joy";
+import { Badge, BadgeProps, styled, Tooltip } from "@mui/material";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import {
   DataGrid,
@@ -29,8 +30,12 @@ export interface EntityListRowAction {
   authFunc?: (row: GridRenderCellParams["row"]) => boolean;
 }
 
+export type EntityListCol = GridColDef & {
+  tooltip?: string;
+};
+
 interface EntityListProps {
-  columns: GridColDef[];
+  columns: EntityListCol[];
   rowActions?: EntityListRowAction[];
   rows: DataGridProps["rows"];
   loading: boolean;
@@ -42,7 +47,7 @@ interface EntityListProps {
   rowCount?: number;
 }
 
-const setFlexPropertyIfAllowed = (def: GridColDef): GridColDef => {
+const setFlexPropertyIfAllowed = (def: EntityListCol): EntityListCol => {
   if (def.width) {
     return def;
   }
@@ -79,6 +84,19 @@ const getRowActions = (row: unknown, actions: EntityListRowAction[]) => {
   );
 };
 
+const StyledBadge = styled(Badge)<BadgeProps>(() => ({
+  "& .MuiBadge-badge": {
+    right: -8,
+    top: 10,
+    width: 12,
+    height: 12,
+    minWidth: 12,
+    fontSize: "0.65rem",
+    lineHeight: "14px",
+    padding: 0,
+  },
+}));
+
 const EntityList = ({
   columns,
   rows,
@@ -114,7 +132,24 @@ const EntityList = ({
           getRowActions(props.row, filteredRowActions),
       };
 
-      return columns.map(setFlexPropertyIfAllowed).concat([actions]);
+      return columns
+        .map(setFlexPropertyIfAllowed)
+        .concat([actions])
+        .map((column) => ({
+          ...column,
+          renderHeader: (v) =>
+            column.tooltip ? (
+              <Box minWidth="50px">
+                <Tooltip title={column.tooltip}>
+                  <StyledBadge badgeContent={"i"} color="primary">
+                    <Box component="span">{v.colDef.headerName}</Box>
+                  </StyledBadge>
+                </Tooltip>
+              </Box>
+            ) : (
+              v.colDef.headerName
+            ),
+        }));
     }
 
     return columns.map(setFlexPropertyIfAllowed);

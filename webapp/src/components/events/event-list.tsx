@@ -1,7 +1,6 @@
 import useEventsQuery from "@/hooks/queries/event/useEventsQuery";
-import { GridColDef } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
-import EntityList, { EntityListRowAction } from "../entity-list";
+import EntityList, { EntityListCol, EntityListRowAction } from "../entity-list";
 import { useTranslations } from "next-intl";
 
 const EventList = () => {
@@ -10,7 +9,7 @@ const EventList = () => {
 
   const { data, isLoading } = useEventsQuery();
 
-  const cols: GridColDef[] = [
+  const cols: EntityListCol[] = [
     {
       field: "id",
       headerName: t("generic.id"),

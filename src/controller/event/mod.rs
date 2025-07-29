@@ -2,6 +2,7 @@ use actix_web::web::ServiceConfig;
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
 
+mod dashboard;
 mod event;
 mod ticket;
 
@@ -25,5 +26,7 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(ticket::get_tickets_for_event)
         .service(ticket::get_user_ticket)
         .service(ticket::invalidate_ticket)
-        .service(ticket::view_ticket_by_qr_code);
+        .service(ticket::view_ticket_by_qr_code)
+        .service(dashboard::three_last_events)
+        .service(dashboard::total_tickets);
 }

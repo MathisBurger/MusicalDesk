@@ -2,6 +2,7 @@ use actix_web::web::ServiceConfig;
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
 
+mod dashboard;
 mod member;
 mod membership;
 
@@ -36,5 +37,7 @@ pub fn init_controllers(cfg: &mut ServiceConfig) {
         .service(membership::get_paid_memberships)
         .service(membership::get_open_membership_fees)
         .service(membership::get_paid_memberships_for_user)
-        .service(membership::get_membership_years);
+        .service(membership::get_membership_years)
+        .service(dashboard::member_count)
+        .service(dashboard::yearly_earnings);
 }

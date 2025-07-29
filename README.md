@@ -22,7 +22,7 @@ MVP Planning:
 - [x] Generalize images to files and make special endpoint for uploading files for events
 - [x] Eliminate all warnings
 - [x] Extend user information (firstName, lastName, function, etc.)
-- [ ] Add useful dashboard (financial data, latest events and how many tickets left, member count and total yearly income through memberships)
+- [x] Add useful dashboard (financial data, latest events and how many tickets left, member count and total yearly income through memberships)
 - [ ] Add frontend translations
 - [ ] Make translation language configurable in user settings
 - [ ] Handle cascade in database

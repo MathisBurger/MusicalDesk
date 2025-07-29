@@ -34,6 +34,14 @@ const BackendUsersPage = () => {
       headerName: "Username",
     },
     {
+      field: "first_name",
+      headerName: "Firstname",
+    },
+    {
+      field: "surname",
+      headerName: "Surname",
+    },
+    {
       field: "roles",
       headerName: "Roles",
       width: 250,

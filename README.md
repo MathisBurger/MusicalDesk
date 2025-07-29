@@ -21,7 +21,7 @@ MVP Planning:
 - [x] Move all frontend API types into typings folder
 - [x] Generalize images to files and make special endpoint for uploading files for events
 - [x] Eliminate all warnings
-- [ ] Extend user information (firstName, lastName, function, etc.)
+- [x] Extend user information (firstName, lastName, function, etc.)
 - [ ] Add useful dashboard (financial data, latest events and how many tickets left, member count and total yearly income through memberships)
 - [ ] Add frontend translations
 - [ ] Make translation language configurable in user settings

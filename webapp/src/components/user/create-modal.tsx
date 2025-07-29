@@ -44,13 +44,26 @@ const CreateBackendUserModal = ({ onClose }: CreateBackendUserModal) => {
     defaultValues: {
       username: "",
       password: "",
+      first_name: "",
+      surname: "",
+      function: "",
     },
     labels: {
       username: "Username",
       password: "Password",
+      first_name: "First name",
+      surname: "Surname",
+      function: "Function",
       roles: "Roles",
     },
-    required: ["username", "password", "roles"],
+    required: [
+      "username",
+      "password",
+      "roles",
+      "first_name",
+      "surname",
+      "function",
+    ],
     explicitTypes: {
       roles: "array",
       password: "password",
@@ -69,6 +82,9 @@ const CreateBackendUserModal = ({ onClose }: CreateBackendUserModal) => {
               <Stack spacing={2}>
                 <FormInput {...form.getInputProps("username")} />
                 <FormInput {...form.getInputProps("password")} />
+                <FormInput {...form.getInputProps("first_name")} />
+                <FormInput {...form.getInputProps("surname")} />
+                <FormInput {...form.getInputProps("function")} />
                 <WrappedInput {...form.getInputProps("roles")}>
                   <RoleSelect
                     name={form.getInputProps("roles").name}

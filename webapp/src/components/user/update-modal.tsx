@@ -14,6 +14,7 @@ import WrappedInput from "@/form/wrapped-input";
 import useAlert from "@/hooks/useAlert";
 import useUpdateBackendUserMutation from "@/hooks/mutations/user/useUpdateBackendUserMutation";
 import { UpdateBackendUserRequest, User, UserRole } from "@/types/api/user";
+import FormInput from "@/form/form-input";
 
 interface UpdateBackendUserModalProps {
   onClose: () => void;
@@ -43,11 +44,17 @@ const UpdateBackendUserModal = ({
   const form = useForm<UpdateBackendUserRequest>({
     defaultValues: {
       roles: user.roles,
+      first_name: user.first_name,
+      surname: user.surname,
+      function: user.function,
     },
     labels: {
       roles: "Roles",
+      first_name: "First name",
+      surname: "Surname",
+      function: "Function",
     },
-    required: ["roles"],
+    required: ["roles", "first_name", "surname", "function"],
   });
 
   return (
@@ -60,6 +67,9 @@ const UpdateBackendUserModal = ({
           <Stack sx={{ gap: 4, mt: 2 }}>
             <form onSubmit={form.onSubmit(submit)} onInvalid={form.onInvalid}>
               <Stack spacing={2}>
+                <FormInput {...form.getInputProps("first_name")} />
+                <FormInput {...form.getInputProps("surname")} />
+                <FormInput {...form.getInputProps("function")} />
                 <WrappedInput {...form.getInputProps("roles")}>
                   <RoleSelect
                     defaultValue={

@@ -11,12 +11,18 @@ use crate::AppState;
 pub struct CreateUserRequest {
     pub username: String,
     pub password: String,
+    pub first_name: String,
+    pub surname: String,
+    pub function: String,
     pub roles: Vec<String>,
 }
 
 #[derive(Deserialize)]
 pub struct UpdateUserRequest {
     pub roles: Vec<String>,
+    pub first_name: String,
+    pub surname: String,
+    pub function: String,
 }
 
 #[derive(Deserialize)]

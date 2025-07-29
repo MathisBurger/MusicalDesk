@@ -25,6 +25,9 @@ pub struct User {
     pub customer_id: Option<String>,
     #[serde(skip_serializing)]
     pub current_checkout_session: Option<String>,
+    pub first_name: Option<String>,
+    pub surname: Option<String>,
+    pub function: Option<String>,
 }
 
 impl User {
@@ -106,10 +109,13 @@ impl User {
         let hash = hash(req.password.clone(), DEFAULT_COST).unwrap();
         sqlx::query_as!(
             User,
-            "INSERT INTO users (username, password, roles) VALUES ($1, $2, $3) RETURNING *",
+            "INSERT INTO users (username, password, roles, first_name, surname, function) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
             req.username,
             hash,
-            &req.roles
+            &req.roles,
+            req.first_name,
+            req.surname,
+            req.function
         )
         .fetch_one(db)
         .await
@@ -123,8 +129,11 @@ impl User {
     ) -> Option<User> {
         sqlx::query_as!(
             User,
-            "UPDATE users SET roles = $1 WHERE id = $2 RETURNING *",
+            "UPDATE users SET roles = $1, first_name = $2, surname = $3, function = $4 WHERE id = $5 RETURNING *",
             &req.roles,
+            req.first_name,
+            req.surname,
+            req.function,
             id
         )
         .fetch_optional(db)

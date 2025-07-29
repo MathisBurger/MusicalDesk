@@ -2,10 +2,16 @@ export interface CreateBackendUserRequest {
   username: string;
   password: string;
   roles: UserRole[];
+  first_name: string;
+  surname: string;
+  function: string;
 }
 
 export interface UpdateBackendUserRequest {
   roles: UserRole[];
+  first_name: string;
+  surname: string;
+  function: string;
 }
 
 export interface UpdateBackendUserPasswordRequest {
@@ -16,6 +22,9 @@ export interface User {
   id: number;
   username: string;
   roles: UserRole[];
+  first_name: string;
+  surname: string;
+  function: string;
 }
 
 export enum UserRole {

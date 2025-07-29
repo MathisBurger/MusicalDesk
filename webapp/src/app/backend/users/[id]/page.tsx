@@ -30,6 +30,18 @@ const UserDetailsPage = () => {
         value: data?.username,
       },
       {
+        title: "Firstname",
+        value: data?.first_name,
+      },
+      {
+        title: "Surname",
+        value: data?.surname,
+      },
+      {
+        title: "Function",
+        value: data?.function,
+      },
+      {
         title: "Roles",
         value: (
           <Stack spacing={1} direction="row" flexWrap="wrap" rowGap={2}>

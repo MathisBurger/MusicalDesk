@@ -1,8 +1,7 @@
 use account::AccountType;
 use chrono::{DateTime, Duration, Utc};
 use serde::Serialize;
-use sqlx::Row;
-use sqlx::{postgres::PgRow, prelude::FromRow, PgPool};
+use sqlx::{prelude::FromRow, PgPool};
 
 use crate::controller::expense::dashboard::TimePeriod;
 

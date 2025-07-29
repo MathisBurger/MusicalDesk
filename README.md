@@ -19,14 +19,14 @@ MVP Planning:
 - [x] Annual finance reports
 - [x] Expense dashboard
 - [x] Move all frontend API types into typings folder
-- [ ] Generalize images to files and make special endpoint for uploading files for events
-- [ ] Eliminate all warnings
-- [ ] Backend code documentation
+- [x] Generalize images to files and make special endpoint for uploading files for events
+- [x] Eliminate all warnings
 - [ ] Extend user information (firstName, lastName, function, etc.)
 - [ ] Add useful dashboard (financial data, latest events and how many tickets left, member count and total yearly income through memberships)
 - [ ] Add frontend translations
 - [ ] Make translation language configurable in user settings
 - [ ] Handle cascade in database
+- [ ] Backend code documentation
 - [ ] GitHub issues marked with MVP
 - [ ] Add good README file
 

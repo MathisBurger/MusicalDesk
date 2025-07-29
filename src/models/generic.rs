@@ -167,7 +167,7 @@ where
         U: Encode<'static, sqlx::Postgres> + Type<sqlx::Postgres> + Clone + Send + Sync + 'static,
     {
         let split: Vec<&str> = query.split("$").collect();
-        let mut qb = QueryBuilder::new(split.get(0).unwrap().clone());
+        let mut qb = QueryBuilder::new(*split.get(0).unwrap());
         for index in 1..split.len() {
             let statement = split.get(index).unwrap();
             let statement_split = statement.split_once(" ").unwrap_or((statement, ""));

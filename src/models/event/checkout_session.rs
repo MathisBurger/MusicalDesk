@@ -7,8 +7,9 @@ use crate::models::generic::Error;
 #[derive(Clone)]
 pub struct DbCheckoutSession {
     pub session_id: String,
-    // TODO: Check where these fields are needed.
+    #[allow(dead_code)]
     pub active_until: DateTime<Utc>,
+    #[allow(dead_code)]
     pub session_secret: String,
 }
 

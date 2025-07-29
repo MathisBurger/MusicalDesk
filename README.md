@@ -25,7 +25,7 @@ MVP Planning:
 - [x] Add useful dashboard (financial data, latest events and how many tickets left, member count and total yearly income through memberships)
 - [x] Add frontend translations
 - [x] Make translation language configurable in user settings
-- [ ] Handle cascade in database
+- [x] Handle cascade in database
 - [ ] GitHub issues marked with MVP
 - [ ] Backend code documentation
 - [ ] Add good README file

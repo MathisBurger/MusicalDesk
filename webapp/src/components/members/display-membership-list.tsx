@@ -1,6 +1,5 @@
 "use client";
-import EntityList, { EntityListRowAction } from "../entity-list";
-import { GridColDef } from "@mui/x-data-grid";
+import EntityList, { EntityListCol, EntityListRowAction } from "../entity-list";
 import usePayMembershipMutation from "@/hooks/mutations/membership/usePayMembershipMutation";
 import { useRouter } from "next/navigation";
 import { Member } from "@/types/api/membership";
@@ -23,27 +22,32 @@ const DisplayMembershipList = ({
   const router = useRouter();
   const t = useTranslations();
 
-  const cols: GridColDef[] = [
+  const cols: EntityListCol[] = [
     {
       field: "first_name",
       headerName: t("labels.member.firstName"),
+      tooltip: t("tooltips.member.firstName"),
     },
     {
       field: "last_name",
       headerName: t("labels.member.lastName"),
+      tooltip: t("tooltips.member.lastName"),
     },
     {
       field: "membership_fee",
       headerName: t("labels.member.membershipFee"),
+      tooltip: t("tooltips.member.membershipFee"),
     },
     {
       field: "iban",
       headerName: t("labels.member.iban"),
+      tooltip: t("tooltips.member.iban"),
       width: 300,
     },
     {
       field: "email",
       headerName: t("labels.member.email"),
+      tooltip: t("tooltips.member.email"),
       width: 200,
     },
   ];

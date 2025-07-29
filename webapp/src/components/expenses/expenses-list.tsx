@@ -1,7 +1,6 @@
 "use client";
-import { GridColDef } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
-import EntityList, { EntityListRowAction } from "../entity-list";
+import EntityList, { EntityListCol, EntityListRowAction } from "../entity-list";
 import { Expense } from "@/types/api/expense";
 import TransactionChip from "./transaction-chip";
 import ExpenseStatusChip from "./expense-status-chip";
@@ -29,28 +28,33 @@ const ExpensesList = ({
   const router = useRouter();
   const t = useTranslations();
 
-  const cols: GridColDef[] = [
+  const cols: EntityListCol[] = [
     {
       field: "id",
       headerName: t("generic.id"),
+      tooltip: t("tooltips.id"),
     },
     {
       field: "name",
       headerName: t("labels.expense.expense.name"),
+      tooltip: t("tooltips.expense.expense.name"),
     },
     {
       field: "description",
       headerName: t("labels.expense.expense.description"),
+      tooltip: t("tooltips.expense.expense.description"),
     },
     {
       field: "total_amount",
       headerName: t("labels.expense.expense.totalAmount"),
       valueFormatter: (value) => `${(value ?? 0) / 100}€`,
+      tooltip: t("tooltips.expense.expense.totalAmount"),
     },
     {
       field: "status",
       headerName: t("labels.expense.expense.status"),
       renderCell: ({ row }) => <ExpenseStatusChip status={row.status} />,
+      tooltip: t("tooltips.expense.expense.status"),
     },
     {
       field: "expense_transaction",
@@ -59,6 +63,7 @@ const ExpensesList = ({
         row.expense_transaction ? (
           <TransactionChip value={row.expense_transaction} />
         ) : null,
+      tooltip: t("tooltips.expense.expense.expenseTransaction"),
     },
     {
       field: "balancing_transaction",
@@ -67,6 +72,7 @@ const ExpensesList = ({
         row.balancing_transaction ? (
           <TransactionChip value={row.balancing_transaction} />
         ) : null,
+      tooltip: t("tooltips.expense.expense.balancingTransaction"),
     },
   ];
 

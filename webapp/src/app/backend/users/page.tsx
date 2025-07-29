@@ -1,5 +1,8 @@
 "use client";
-import EntityList, { EntityListRowAction } from "@/components/entity-list";
+import EntityList, {
+  EntityListCol,
+  EntityListRowAction,
+} from "@/components/entity-list";
 import CreateBackendUserModal from "@/components/user/create-modal";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useBackendUsersQuery from "@/hooks/queries/user/useBackendUsersQuery";
@@ -14,7 +17,7 @@ import {
   Stack,
   Typography,
 } from "@mui/joy";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -26,22 +29,26 @@ const BackendUsersPage = () => {
 
   const { data, isLoading } = useBackendUsersQuery();
 
-  const cols: GridColDef[] = [
+  const cols: EntityListCol[] = [
     {
       field: "id",
       headerName: t("generic.id"),
+      tooltip: t("tooltips.id"),
     },
     {
       field: "username",
       headerName: t("labels.user.username"),
+      tooltip: t("tooltips.user.username"),
     },
     {
       field: "first_name",
       headerName: t("labels.user.firstName"),
+      tooltip: t("tooltips.user.firstName"),
     },
     {
       field: "surname",
       headerName: t("labels.user.surname"),
+      tooltip: t("tooltips.user.surname"),
     },
     {
       field: "roles",
@@ -58,6 +65,7 @@ const BackendUsersPage = () => {
           </Stack>
         </CssVarsProvider>
       ),
+      tooltip: t("tooltips.user.roles"),
     },
   ];
 

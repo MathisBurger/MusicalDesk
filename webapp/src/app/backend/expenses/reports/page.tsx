@@ -1,12 +1,14 @@
 "use client";
-import EntityList, { EntityListRowAction } from "@/components/entity-list";
+import EntityList, {
+  EntityListCol,
+  EntityListRowAction,
+} from "@/components/entity-list";
 import CreateReportModal from "@/components/expenses/modal/create-report";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useReportsQuery from "@/hooks/queries/expense/useReportsQuery";
 import { UserRole } from "@/types/api/user";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Stack, Typography } from "@mui/joy";
-import { GridColDef } from "@mui/x-data-grid";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,22 +20,26 @@ const ExpenseReportsPage = () => {
 
   const { data, isLoading } = useReportsQuery();
 
-  const cols: GridColDef[] = [
+  const cols: EntityListCol[] = [
     {
       field: "id",
       headerName: t("generic.id"),
+      tooltip: t("tooltips.id"),
     },
     {
       field: "name",
       headerName: t("labels.expense.report.name"),
+      tooltip: t("tooltips.expense.report.name"),
     },
     {
       field: "start_date",
       headerName: t("labels.expense.report.startDate"),
+      tooltip: t("tooltips.expense.report.startDate"),
     },
     {
       field: "end_date",
       headerName: t("labels.expense.report.endDate"),
+      tooltip: t("tooltips.expense.report.endDate"),
     },
   ];
 

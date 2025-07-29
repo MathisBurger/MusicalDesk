@@ -1,5 +1,8 @@
 "use client";
-import EntityList, { EntityListRowAction } from "@/components/entity-list";
+import EntityList, {
+  EntityListCol,
+  EntityListRowAction,
+} from "@/components/entity-list";
 import CategoryChip from "@/components/expenses/category-chip";
 import CreateCategoryModal from "@/components/expenses/modal/create-category";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
@@ -10,7 +13,6 @@ import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Stack, Typography } from "@mui/joy";
-import { GridColDef } from "@mui/x-data-grid";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -23,26 +25,30 @@ const CategoriesPage = () => {
 
   const { data, isLoading } = useCategoriesQuery();
 
-  const cols: GridColDef[] = [
+  const cols: EntityListCol[] = [
     {
       field: "id",
       headerName: t("generic.id"),
+      tooltip: t("tooltips.id"),
     },
     {
       field: "name",
       headerName: t("labels.expense.category.name"),
       width: 200,
+      tooltip: t("tooltips.expense.category.name"),
     },
     {
       field: "hex_color",
       headerName: t("labels.expense.category.color"),
       renderCell: ({ row }) => <CategoryChip value={row as Category} />,
+      tooltip: t("tooltips.expense.category.color"),
     },
     {
       field: "is_income",
       headerName: t("labels.expense.category.isIncome"),
       width: 150,
       type: "boolean",
+      tooltip: t("tooltips.expense.category.isIncome"),
     },
   ];
 

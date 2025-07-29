@@ -139,7 +139,7 @@ const EntityList = ({
           ...column,
           renderHeader: (v) =>
             column.tooltip ? (
-              <Box minWidth="50px">
+              <Box padding="0 25px">
                 <Tooltip title={column.tooltip}>
                   <StyledBadge badgeContent={"i"} color="primary">
                     <Box component="span">{v.colDef.headerName}</Box>
@@ -153,7 +153,7 @@ const EntityList = ({
     }
 
     return columns.map(setFlexPropertyIfAllowed);
-  }, [filteredRowActions, columns]);
+  }, [filteredRowActions, columns, t]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const processedRows = useMemo<readonly any[]>(

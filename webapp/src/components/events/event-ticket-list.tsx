@@ -1,6 +1,5 @@
 import useEventTicketsQuery from "@/hooks/queries/event/useEventTicketsQuery";
-import { GridColDef } from "@mui/x-data-grid";
-import EntityList, { EntityListRowAction } from "../entity-list";
+import EntityList, { EntityListCol, EntityListRowAction } from "../entity-list";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
@@ -13,20 +12,23 @@ const EventTicketList = ({ eventId }: EventTicketListProps) => {
   const router = useRouter();
   const t = useTranslations();
 
-  const cols: GridColDef[] = [
+  const cols: EntityListCol[] = [
     {
       field: "id",
       headerName: t("generic.id"),
+      tooltip: t("tooltips.id"),
     },
     {
       field: "valid_until",
       headerName: t("labels.events.ticket.validUntil"),
       width: 200,
+      tooltip: t("tooltips.event.ticket.validUntil"),
     },
     {
       field: "invalidated_at",
       headerName: t("labels.events.ticket.invalidatedAt"),
       width: 200,
+      tooltip: t("tooltips.event.ticket.invalidatedAt"),
     },
   ];
 

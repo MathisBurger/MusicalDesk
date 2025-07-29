@@ -304,6 +304,78 @@
       "iban": "Invalid IBAN format"
     }
   },
+  "tooltips": {
+    "member": {
+      "firstName": "The first name of a member",
+      "lastName": "The last name of a member",
+      "membershipFee": "The membership fee a member has to pay every year",
+      "iban": "The IBAN of the bank account that the member has registered for membership fee payments",
+      "email": "The email that the user can be contacted by",
+      "paidAt": "The timestamp at which the membership fee has been paid",
+      "year": "The yeat at which the membership fee has been paid"
+    },
+    "expense": {
+      "transaction": {
+        "amount": "The amount in € that is handled within this transaction",
+        "name": "The name of this transaction.",
+        "fromAccount": "The account the money is being transfered from",
+        "toAccount": "The account the money is being transfered to",
+        "timestamp": "The time at which the transaction took place",
+        "category": "The category that has been assigned to this category. It can be used to flag specific transactions.",
+        "isMoneyTransaction": "This field indicates whether this transaction involves moving money. It can also involve moving materials for example."
+      },
+      "expense": {
+        "name": "The name of this expense",
+        "description": "The description of the expense",
+        "totalAmount": "The total amount of money that is covered in this expense",
+        "status": "The status of this expense. Indicates whether it has been denied, is still a request or has been accepted.",
+        "expenseTransaction": "The transaction that moves the goods / material into our material accounts",
+        "balancingTransaction": "The transaction that pays the money to the foreign account of choice that paid for the material / goods in the first place."
+      },
+      "report": {
+        "name": "The name of the report",
+        "startDate": "The date of which the analysis starts",
+        "endDate": "The date at which the analysis ends"
+      },
+      "category": {
+        "name": "The name of the category",
+        "color": "The color that the category has assigned. It is displayed in different views",
+        "isIncome": "Indicates that the category is a category used to flag money income streams"
+      },
+      "account": {
+        "name": "The name of the account itself.",
+        "ownerName": "The name of the owner of the account",
+        "iban": "The IBAN of the bank account",
+        "balance": "The current balance of the bank account",
+        "type": "The type of the account. It indicates whether it stores material, money or is a foreign account. There are also so called 'Flow'-accounts which are accounts that can be used to load or dump money. If you cash out, the money needs to be sent to a flow account in order to indicate that the money is not in flow anymore."
+      },
+      "budgets": {
+        "name": "The name of the budget",
+        "category": "A category that is assigned to this. All transactions to foreign accounts with this category will be included in the budget calculation",
+        "startDate": "The start date of the time span the budget exists in",
+        "endDate": "The end date of the time span the budget exists in",
+        "budget": "The amount of money that the budget is allowed to",
+        "spent": "The amount of money already spent"
+      }
+    },
+    "event": {
+      "ticket": {
+        "validUntil": "Indicates for how long the event ticket is valid",
+        "invalidatedAt": "The time at which the ticket has been invalidated"
+      },
+      "name": "The name of the event",
+      "price": "The price of a single event ticket",
+      "tax": "The tax in percentage that has to be payed on this ticket",
+      "eventDate": "The date at which the event takes place"
+    },
+    "user": {
+      "username": "The username the user uses to log in",
+      "firstName": "The first name of the user",
+      "surname": "The surname of the user",
+      "roles": "All roles that the user currently has."
+    },
+    "id": "The unique identifier used for this model"
+  },
   "roles": {
     "admin": "Administrator",
     "member_admin": "Member Administrator",

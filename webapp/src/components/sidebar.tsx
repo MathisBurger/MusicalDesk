@@ -16,7 +16,12 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BusinessIcon from "@mui/icons-material/Business";
 import ColorSchemeToggle from "./color-scheme-toggle";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { Event, Money, SupervisedUserCircle } from "@mui/icons-material";
+import {
+  Event,
+  Money,
+  Person,
+  SupervisedUserCircle,
+} from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import RoleWrapper from "./wrapper/role-wrapper";
 import useLogout from "@/hooks/useLogout";
@@ -306,6 +311,14 @@ export default function Sidebar() {
         <Box sx={{ minWidth: 0, flex: 1 }}>
           <Typography level="title-sm">{currentUser?.username}</Typography>
         </Box>
+        <IconButton
+          size="sm"
+          variant="plain"
+          color="neutral"
+          onClick={() => router.push(`/backend/users/${currentUser?.id}`)}
+        >
+          <Person />
+        </IconButton>
         <IconButton size="sm" variant="plain" color="neutral" onClick={logout}>
           <LogoutRoundedIcon />
         </IconButton>

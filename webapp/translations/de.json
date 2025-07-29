@@ -304,6 +304,78 @@
       "iban": "Ungültiges IBAN‑Format"
     }
   },
+  "tooltips": {
+    "member": {
+      "firstName": "Der Vorname eines Mitglieds",
+      "lastName": "Der Nachname eines Mitglieds",
+      "membershipFee": "Der Mitgliedsbeitrag, den ein Mitglied jährlich zu zahlen hat",
+      "iban": "Die IBAN des Bankkontos, das das Mitglied für die Mitgliedsbeitragszahlungen hinterlegt hat",
+      "email": "Die E-Mail-Adresse, unter der das Mitglied kontaktiert werden kann",
+      "paidAt": "Der Zeitpunkt, zu dem der Mitgliedsbeitrag bezahlt wurde",
+      "year": "Das Jahr, in dem der Mitgliedsbeitrag bezahlt wurde"
+    },
+    "expense": {
+      "transaction": {
+        "amount": "Der Betrag in €, der in dieser Transaktion verarbeitet wird",
+        "name": "Der Name dieser Transaktion",
+        "fromAccount": "Das Konto, von dem das Geld überwiesen wird",
+        "toAccount": "Das Konto, auf das das Geld überwiesen wird",
+        "timestamp": "Der Zeitpunkt, zu dem die Transaktion stattgefunden hat",
+        "category": "Die Kategorie, die dieser Transaktion zugeordnet ist. Sie kann verwendet werden, um bestimmte Transaktionen zu kennzeichnen.",
+        "isMoneyTransaction": "Dieses Feld zeigt an, ob es sich um eine Geldtransaktion handelt. Es können auch Materialbewegungen ohne Geldfluss abgebildet werden."
+      },
+      "expense": {
+        "name": "Der Name dieser Ausgabe",
+        "description": "Die Beschreibung der Ausgabe",
+        "totalAmount": "Der Gesamtbetrag, der mit dieser Ausgabe abgedeckt wird",
+        "status": "Der Status dieser Ausgabe. Zeigt an, ob sie abgelehnt wurde, noch offen ist oder bereits genehmigt wurde.",
+        "expenseTransaction": "Die Transaktion, die die Waren/Materialien in unsere Materialkonten überführt",
+        "balancingTransaction": "Die Transaktion, die das Geld an das ausländische Konto zahlt, das ursprünglich die Waren/Materialien bezahlt hat."
+      },
+      "report": {
+        "name": "Der Name des Berichts",
+        "startDate": "Das Startdatum der Analyse",
+        "endDate": "Das Enddatum der Analyse"
+      },
+      "category": {
+        "name": "Der Name der Kategorie",
+        "color": "Die Farbe, die dieser Kategorie zugeordnet ist. Sie wird in verschiedenen Ansichten angezeigt.",
+        "isIncome": "Kennzeichnet, dass diese Kategorie für Einnahmeströme verwendet wird"
+      },
+      "account": {
+        "name": "Der Name des Kontos",
+        "ownerName": "Der Name des Kontoinhabers",
+        "iban": "Die IBAN des Bankkontos",
+        "balance": "Der aktuelle Kontostand",
+        "type": "Der Typ des Kontos. Zeigt an, ob es sich um ein Materialkonto, ein Geldkonto oder ein Fremdkonto handelt. Es gibt auch sogenannte 'Flow'-Konten, die genutzt werden können, um Geld ein- oder auszuzahlen. Wenn Geld ausgezahlt wird, muss es zunächst auf ein Flow-Konto gebucht werden, um anzuzeigen, dass es nicht mehr im Umlauf ist."
+      },
+      "budgets": {
+        "name": "Der Name des Budgets",
+        "category": "Die Kategorie, die diesem Budget zugeordnet ist. Alle Transaktionen zu Fremdkonten mit dieser Kategorie werden in die Budgetberechnung einbezogen.",
+        "startDate": "Das Startdatum des Zeitraums, in dem das Budget gilt",
+        "endDate": "Das Enddatum des Zeitraums, in dem das Budget gilt",
+        "budget": "Der Geldbetrag, der für dieses Budget vorgesehen ist",
+        "spent": "Der bereits ausgegebene Betrag"
+      }
+    },
+    "event": {
+      "ticket": {
+        "validUntil": "Gibt an, wie lange das Veranstaltungsticket gültig ist",
+        "invalidatedAt": "Der Zeitpunkt, an dem das Ticket ungültig gemacht wurde"
+      },
+      "name": "Der Name der Veranstaltung",
+      "price": "Der Preis eines einzelnen Veranstaltungstickets",
+      "tax": "Die Steuer in Prozent, die auf dieses Ticket zu zahlen ist",
+      "eventDate": "Das Datum, an dem die Veranstaltung stattfindet"
+    },
+    "user": {
+      "username": "Der Benutzername, mit dem sich der Nutzer einloggt",
+      "firstName": "Der Vorname des Nutzers",
+      "surname": "Der Nachname des Nutzers",
+      "roles": "Alle Rollen, die dem Nutzer aktuell zugewiesen sind"
+    },
+    "id": "Die eindeutige Kennung, die für dieses Modell verwendet wird"
+  },
   "roles": {
     "admin": "Administrator",
     "member_admin": "Mitglieder-Administrator",

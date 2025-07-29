@@ -1,5 +1,8 @@
 "use client";
-import EntityList, { EntityListRowAction } from "@/components/entity-list";
+import EntityList, {
+  EntityListCol,
+  EntityListRowAction,
+} from "@/components/entity-list";
 import CategoryChip from "@/components/expenses/category-chip";
 import CreateBudgetModal from "@/components/expenses/modal/create-budget";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
@@ -10,7 +13,6 @@ import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Stack, Tab, TabList, Tabs, Typography } from "@mui/joy";
-import { GridColDef } from "@mui/x-data-grid";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -24,14 +26,16 @@ const BudgetsPage = () => {
 
   const { data, isLoading } = useBudgetsQuery(active === 1);
 
-  const cols: GridColDef[] = [
+  const cols: EntityListCol[] = [
     {
       field: "id",
       headerName: t("generic.id"),
+      tooltip: t("tooltips.id"),
     },
     {
       field: "name",
       headerName: t("labels.expense.budget.name"),
+      tooltip: t("tooltips.expense.budget.name"),
     },
     {
       field: "category",
@@ -39,24 +43,29 @@ const BudgetsPage = () => {
       renderCell: ({ row }) => (
         <CategoryChip value={row.category as MinimalCategory} />
       ),
+      tooltip: t("tooltips.expense.budget.category"),
     },
     {
       field: "start_date",
       headerName: t("labels.expense.budget.startDate"),
+      tooltip: t("tooltips.expense.budget.startDate"),
     },
     {
       field: "end_date",
       headerName: t("labels.expense.budget.endDate"),
+      tooltip: t("tooltips.expense.budget.endDate"),
     },
     {
       field: "budget",
       headerName: t("labels.expense.budget.budget"),
       valueFormatter: (value) => `${(value ?? 0) / 100}€`,
+      tooltip: t("tooltips.expense.budget.budget"),
     },
     {
       field: "spent",
       headerName: t("labels.expense.budget.spent"),
       valueFormatter: (value) => `${(value ?? 0) / 100}€`,
+      tooltip: t("tooltips.expense.budget.spent"),
     },
   ];
 

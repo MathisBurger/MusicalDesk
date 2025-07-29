@@ -1,7 +1,7 @@
 "use client";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
-import EntityList, { EntityListRowAction } from "../entity-list";
+import EntityList, { EntityListCol, EntityListRowAction } from "../entity-list";
 import CategoryChip from "./category-chip";
 import {
   MinimalAccount,
@@ -33,19 +33,22 @@ const TransactionsList = ({
   const router = useRouter();
   const t = useTranslations();
 
-  const cols: GridColDef[] = [
+  const cols: EntityListCol[] = [
     {
       field: "id",
       headerName: t("generic.id"),
+      tooltip: t("tooltips.id"),
     },
     {
       field: "amount",
       headerName: t("labels.expense.transaction.amount"),
       valueFormatter: (value) => `${(value ?? 0) / 100}€`,
+      tooltip: t("tooltips.expense.transaction.amount"),
     },
     {
       field: "name",
       headerName: t("labels.expense.transaction.name"),
+      tooltip: t("tooltips.expense.transaction.name"),
     },
     {
       field: "from_account",
@@ -53,6 +56,7 @@ const TransactionsList = ({
       renderCell: ({ value }: GridRenderCellParams) => (
         <AccountChip account={value as MinimalAccount} />
       ),
+      tooltip: t("tooltips.expense.transaction.fromAccount"),
     },
     {
       field: "to_account",
@@ -60,21 +64,25 @@ const TransactionsList = ({
       renderCell: ({ value }: GridRenderCellParams) => (
         <AccountChip account={value as MinimalAccount} />
       ),
+      tooltip: t("tooltips.expense.transaction.toAccount"),
     },
     {
       field: "timestamp",
       headerName: t("labels.expense.transaction.timestamp"),
+      tooltip: t("tooltips.expense.transaction.timestamp"),
     },
     {
       field: "category",
       headerName: t("labels.expense.transaction.category"),
       renderCell: ({ value }: GridRenderCellParams) =>
         value ? <CategoryChip value={value as MinimalCategory} /> : null,
+      tooltip: t("tooltips.expense.transaction.category"),
     },
     {
       field: "is_money_transaction",
       headerName: t("labels.expense.transaction.isMoneyTransaction"),
       type: "boolean",
+      tooltip: t("tooltips.expense.transaction.isMoneyTransaction"),
     },
   ];
 

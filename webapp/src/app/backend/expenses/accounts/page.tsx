@@ -1,5 +1,8 @@
 "use client";
-import EntityList, { EntityListRowAction } from "@/components/entity-list";
+import EntityList, {
+  EntityListCol,
+  EntityListRowAction,
+} from "@/components/entity-list";
 import CreateAccountModal from "@/components/expenses/modal/create-account";
 import RoleWrapper from "@/components/wrapper/role-wrapper";
 import useAccountsQuery from "@/hooks/queries/expense/useAccountsQuery";
@@ -9,7 +12,6 @@ import { UserRole } from "@/types/api/user";
 import { isGranted } from "@/utils/auth";
 import { Add } from "@mui/icons-material";
 import { Button, Grid, Stack, Typography } from "@mui/joy";
-import { GridColDef } from "@mui/x-data-grid";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -23,24 +25,28 @@ const AccountsPage = () => {
 
   const { data, isLoading } = useAccountsQuery();
 
-  const cols: GridColDef[] = [
+  const cols: EntityListCol[] = [
     {
       field: "id",
       headerName: t("generic.id"),
+      tooltip: t("tooltips.id"),
     },
     {
       field: "name",
       headerName: t("labels.expense.account.name"),
       width: 200,
+      tooltip: t("tooltips.expense.account.name"),
     },
     {
       field: "owner_name",
       headerName: t("labels.expense.account.ownerName"),
+      tooltip: t("tooltips.expense.account.ownerName"),
     },
     {
       field: "iban",
       headerName: t("labels.expense.account.iban"),
       width: 200,
+      tooltip: t("tooltips.expense.account.iban"),
     },
     {
       field: "balance",
@@ -50,6 +56,7 @@ const AccountsPage = () => {
         row.account_type === AccountType.FLOW
           ? t("generic.unknown")
           : `${(row.balance ?? 0) / 100}€`,
+      tooltip: t("tooltips.expense.account.balance"),
     },
     {
       field: "account_type",
@@ -57,6 +64,7 @@ const AccountsPage = () => {
       width: 150,
       valueFormatter: (value) =>
         t(`labels.expense.account.types.${value as string}`),
+      tooltip: t("tooltips.expense.account.type"),
     },
   ];
 

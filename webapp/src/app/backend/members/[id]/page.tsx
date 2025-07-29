@@ -1,6 +1,6 @@
 "use client";
 import BackButton from "@/components/back-button";
-import EntityList from "@/components/entity-list";
+import EntityList, { EntityListCol } from "@/components/entity-list";
 import MemberDetails from "@/components/members/member-details";
 import ConfirmLeaveModal from "@/components/members/modal/confirm-leave";
 import EditMemberModal from "@/components/members/modal/edit-member";
@@ -9,7 +9,6 @@ import useMemberQuery from "@/hooks/queries/membership/useMemberQuery";
 import useUserPaidMembershipsQuery from "@/hooks/queries/membership/useUserPaidMemberships";
 import { UserRole } from "@/types/api/user";
 import { Button, Card, Divider, Grid, Stack, Typography } from "@mui/joy";
-import { GridColDef } from "@mui/x-data-grid";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -25,15 +24,17 @@ const MembersDetailsPage = () => {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [leaveModalOpen, setLeaveModalOpen] = useState<boolean>(false);
 
-  const columns: GridColDef[] = [
+  const columns: EntityListCol[] = [
     {
       field: "year",
       headerName: t("labels.member.year"),
+      tooltip: t("tooltips.member.year"),
     },
     {
       field: "paid_at",
       headerName: t("labels.member.paidAt"),
       width: 250,
+      tooltip: t("tooltips.member.paidAt"),
     },
   ];
 

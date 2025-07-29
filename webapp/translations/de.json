@@ -1,1 +1,331 @@
-{}
+{
+  "dashboard": {
+    "expense": "Ausgabe",
+    "events": "Ereignisse",
+    "members": "Mitglieder"
+  },
+  "generic": {
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "add": "Hinzufügen",
+    "update": "Aktualisieren",
+    "cancel": "Abbrechen",
+    "unknown": "Unbekannt",
+    "id": "ID",
+    "details": "Details",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "reset": "Zurücksetzen",
+    "noCategory": "(keine Kategorie)",
+    "never": "(nie)"
+  },
+  "headings": {
+    "accounts": "Konten",
+    "budgets": "Budgets",
+    "categories": "Kategorien",
+    "images": "Bilder",
+    "transactions": "Transaktionen",
+    "expenses": "Ausgaben",
+    "reports": "Berichte",
+    "paidMemberships": "Bezahlte Mitgliedschaften",
+    "members": "Mitglieder",
+    "userDetails": "Benutzerdetails",
+    "backendUsers": "Backend-Benutzer",
+    "shoppingCart": "Einkaufswagen",
+    "myTickets": "Meine Tickets",
+    "oldTickets": "Alte Tickets",
+    "eventTicketShop": "Ticket-Shop",
+    "coreData": "Kerndaten",
+    "additionalData": "Zusätzliche Daten"
+  },
+  "modalTitles": {
+    "events": {
+      "createEvent": "Ereignis erstellen",
+      "createTicket": "Ticket erstellen",
+      "updateEvent": "Ereignis aktualisieren"
+    },
+    "expense": {
+      "acceptExpense": "Ausgabe akzeptieren",
+      "createAccount": "Konto erstellen",
+      "createBudget": "Budget erstellen",
+      "createCategory": "Kategorie erstellen",
+      "createReport": "Bericht erstellen",
+      "createTransaction": "Transaktion erstellen",
+      "denyExpense": "Ausgabe ablehnen",
+      "requestExpense": "Ausgabe anfordern",
+      "updateAccount": "Konto aktualisieren",
+      "updateBudget": "Budget aktualisieren",
+      "updateCategory": "Kategorie aktualisieren",
+      "updateExpense": "Ausgabe aktualisieren",
+      "uploadFile": "Datei hochladen"
+    },
+    "member": {
+      "confirmLeave": "Austritt bestätigen",
+      "createMember": "Mitglied erstellen",
+      "editMember": "Mitglied aktualisieren"
+    },
+    "user": {
+      "createBackendUser": "Backend-Benutzer erstellen",
+      "updateBackendUser": "Backend-Benutzer aktualisieren",
+      "updateUserPassword": "Passwort aktualisieren"
+    }
+  },
+  "labels": {
+    "events": {
+      "events": "Ereignisse",
+      "name": "Name",
+      "price": "Preis",
+      "tax": "Steuer (%)",
+      "image": "Bild",
+      "eventDate": "Datum",
+      "activeFrom": "Aktiv ab",
+      "activeUntil": "Aktiv bis",
+      "ticket": {
+        "validUntil": "Gültig bis",
+        "invalidatedAt": "Ungültig gemacht am",
+        "quantity": "Menge",
+        "boughtAt": "Gekauft am",
+        "owner": "Besitzer"
+      },
+      "dashboard": {
+        "lastThreeEvents": "Letzte 3 Ereignisse",
+        "totalTicketCount": "Gesamtanzahl Tickets"
+      }
+    },
+    "expense": {
+      "account": {
+        "name": "Name",
+        "ownerName": "Name des Inhabers",
+        "balance": "Kontostand",
+        "type": "Kontotyp",
+        "iban": "IBAN",
+        "types": {
+          "FLOW": "Flow",
+          "MATERIAL": "Material",
+          "MONEY": "Geld",
+          "FOREIGN": "Fremdwährung"
+        }
+      },
+      "budget": {
+        "name": "Name",
+        "category": "Kategorie",
+        "startDate": "Startdatum",
+        "endDate": "Enddatum",
+        "budget": "Budget",
+        "spent": "Ausgegeben"
+      },
+      "category": {
+        "name": "Name",
+        "color": "Farbe",
+        "isIncome": "Einnahmekategorie?"
+      },
+      "dashboard": {
+        "budgetStatus": "Budgetstatus",
+        "lastTransactions": "Letzte 100 Transaktionen",
+        "spentOverTime": "Ausgaben über Zeit",
+        "spentOverTimeByCategory": "Ausgaben nach Kategorie",
+        "spent": "Ausgegeben",
+        "remaining": "Verbleibend",
+        "over": "Überzogen",
+        "totalMoneySpent": "Insgesamt ausgegeben",
+        "totalMoneyEarned": "Insgesamt verdient",
+        "moneyBalance": "Geldbilanz",
+        "transactionsCreated": "Erstellte Transaktionen",
+        "transactions": "Transaktionen",
+        "amount": "Betrag (€)"
+      },
+      "expense": {
+        "name": "Name",
+        "status": "Status",
+        "description": "Beschreibung",
+        "totalAmount": "Gesamtbetrag (€)",
+        "fromAccount": "Vom Konto (Fremdkonto)",
+        "toAccount": "An Konto (Materialkonto)",
+        "moneyAccount": "Geldkonto (Zahlungskonto)",
+        "category": "Kategorie",
+        "expenseTransaction": "Transaktion (Ausgabe)",
+        "balancingTransaction": "Ausgleichstransaktion"
+      },
+      "report": {
+        "name": "Name",
+        "startDate": "Startdatum",
+        "endDate": "Enddatum",
+        "pieChart": "Kreisdiagramm",
+        "barChart": "Balkendiagramm",
+        "radarChart": "Radardiagramm"
+      },
+      "transaction": {
+        "name": "Name",
+        "amount": "Betrag (€)",
+        "fromAccount": "Quelle",
+        "toAccount": "Zielkonto",
+        "category": "Kategorie",
+        "timestamp": "Zeitstempel",
+        "isMoneyTransaction": "Geldtransaktion?"
+      }
+    },
+    "member": {
+      "year": "Jahr",
+      "paidAt": "Bezahlt am",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "email": "E‑Mail",
+      "street": "Straße",
+      "houseNr": "Haus-Nr.",
+      "zip": "PLZ",
+      "city": "Stadt",
+      "iban": "IBAN",
+      "membershipFee": "Mitgliedsbeitrag",
+      "address": "Adresse",
+      "leftAt": "Austrittsdatum",
+      "dashboard": {
+        "totalMembers": "Gesamtmitglieder",
+        "expectedFees": "Erwartete Beiträge dieses Jahres"
+      }
+    },
+    "user": {
+      "username": "Benutzername",
+      "firstName": "Vorname",
+      "surname": "Nachname",
+      "function": "Funktion",
+      "roles": "Rollen"
+    },
+    "shop": {
+      "left": "Verfügbar",
+      "soldOut": "Ausverkauft",
+      "total": "Gesamt"
+    },
+    "username": "Benutzername",
+    "password": "Passwort",
+    "customerRegistration": "Kundenregistrierung",
+    "email": "E‑Mail",
+    "back": "Zurück",
+    "actions": "Aktionen"
+  },
+  "tabs": {
+    "events": {
+      "coreData": "Kerndaten",
+      "tickets": "Tickets",
+      "events": "Ereignisse",
+      "invalidateTickets": "Tickets ungültig machen",
+      "checkTickets": "Tickets prüfen"
+    },
+    "member": {
+      "members": "Mitglieder",
+      "leftMembers": "Ehemalige Mitglieder",
+      "memberships": "Mitgliedschaften",
+      "unpaidMemberships": "Unbezahlte Mitgliedschaften",
+      "paidMemberships": "Bezahlte Mitgliedschaften"
+    }
+  },
+  "actions": {
+    "events": {
+      "createTickets": "Tickets erstellen"
+    },
+    "expense": {
+      "deny": "Ablehnen",
+      "accept": "Akzeptieren"
+    },
+    "member": {
+      "leave": "Austreten",
+      "hasPaid": "Hat bezahlt"
+    },
+    "shop": {
+      "shop": "Shop",
+      "shoppingCart": "Einkaufswagen",
+      "myTickets": "Meine Tickets",
+      "loginToBuy": "Zum Kauf einloggen",
+      "buyNow": "Jetzt kaufen",
+      "addToShoppingCart": "In den Warenkorb",
+      "continueCurrentCheckout": "Zum Checkout",
+      "proceedWithCheckout": "Checkout fortsetzen",
+      "backend": "Backend",
+      "cancelReservation": "Reservierung stornieren"
+    },
+    "updatePassword": "Passwort ändern",
+    "signIn": "Anmelden",
+    "signUp": "Registrieren"
+  },
+  "messages": {
+    "events": {
+      "ticketNotFound": "Ticket nicht gefunden",
+      "cannotUploadFile": "Datei konnte nicht hochgeladen werden",
+      "cannotCreateEvent": "Ereignis konnte nicht erstellt werden",
+      "cannotCreateTickets": "Tickets konnten nicht erstellt werden",
+      "cannotUpdateEvent": "Ereignis konnte nicht aktualisiert werden",
+      "ticketHasBeenInvalidated": "Ticket wurde bereits ungültig gemacht"
+    },
+    "shop": {
+      "checkoutCanceled": "Checkout abgebrochen",
+      "checkoutSuccess": "Checkout erfolgreich",
+      "ticketNotFound": "Ticket nicht gefunden",
+      "noCurrentTickets": "Keine aktuellen Tickets",
+      "noCurrentEvents": "Keine aktuellen Ereignisse"
+    },
+    "expense": {
+      "cannotAcceptExpense": "Ausgabe kann nicht akzeptiert werden",
+      "cannotCreateAccount": "Konto kann nicht erstellt werden",
+      "cannotCreateBudget": "Budget kann nicht erstellt werden",
+      "cannotCreateCategory": "Kategorie kann nicht erstellt werden",
+      "cannotCreateReport": "Bericht kann nicht erstellt werden",
+      "cannotCreateTransactions": "Transaktionen können nicht erstellt werden",
+      "cannotDenyExpense": "Ausgabe kann nicht abgelehnt werden",
+      "reallyWantToDeny": "Möchten Sie die Ausgabe wirklich ablehnen?",
+      "cannotRequestExpense": "Ausgabe kann nicht angefordert werden",
+      "cannotUpdateAccount": "Konto kann nicht aktualisiert werden",
+      "cannotUpdateBudget": "Budget kann nicht aktualisiert werden",
+      "cannotUpdateCategory": "Kategorie kann nicht aktualisiert werden",
+      "cannotUpdateExpense": "Ausgabe kann nicht aktualisiert werden",
+      "cannotUploadFiles": "Dateien konnten nicht hochgeladen werden"
+    },
+    "member": {
+      "cannotLeaveUser": "Mitglied kann nicht austreten",
+      "confirmLeave": "Bestätigen Sie den Austritt dieses Mitglieds?",
+      "cannotCreateMember": "Mitglied kann nicht erstellt werden",
+      "cannotUpdateMember": "Mitglied kann nicht aktualisiert werden"
+    },
+    "user": {
+      "cannotCreateBackendUser": "Backend-Benutzer kann nicht erstellt werden",
+      "cannotUpdateBackendUser": "Backend-Benutzer kann nicht aktualisiert werden",
+      "cannotUpdateBackendUserPassword": "Backend-Benutzer-Passwort kann nicht aktualisiert werden"
+    },
+    "invalidCreds": "Ungültiger Benutzername oder Passwort",
+    "noAccess": "Sie haben keinen Zugriff darauf.",
+    "dropHere": "Dateien hier ablegen …",
+    "dragHere": "Dateien hierher ziehen oder klicken, um auszuwählen"
+  },
+  "validation": {
+    "events": {
+      "name": "Bitte einen gültigen Namen wählen",
+      "price": "Bitte einen gültigen Wert wählen"
+    },
+    "member": {
+      "iban": "Ungültiges IBAN‑Format"
+    }
+  },
+  "roles": {
+    "admin": "Administrator",
+    "member_admin": "Mitglieder-Administrator",
+    "event_admin": "Event-Administrator",
+    "shop_customer": "Shop-Kunde",
+    "ticket_invalidator": "Ticket Ungültigmacher",
+    "accountant": "Buchhalter",
+    "expense_requestor": "Ausgabeneinreicher"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "members": "Mitglieder",
+    "events": "Ereignisse",
+    "users": "Benutzer",
+    "expenses": {
+      "title": "Ausgaben",
+      "dashboard": "Finanz-Dashboard",
+      "accounts": "Konten",
+      "categories": "Kategorien",
+      "budgets": "Budgets",
+      "transactions": "Transaktionen",
+      "expenses": "Ausgaben",
+      "reports": "Berichte"
+    }
+  }
+}

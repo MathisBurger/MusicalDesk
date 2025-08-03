@@ -45,7 +45,9 @@ pub async fn add_ticket_to_shopping_cart(
     let already_reserved =
         Ticket::get_reserved_ticket_count_for_user(req.event_id, user.id, &state.database).await;
 
-    if already_reserved + req.quantity > event.upper_reservation_limit.unwrap_or(0) as i64 {
+    if already_reserved + req.quantity > event.upper_reservation_limit.unwrap_or(0) as i64
+        && event.upper_reservation_limit.unwrap_or(0) != 0
+    {
         return Ok(HttpResponse::BadRequest().body("Beyond the limit"));
     }
 

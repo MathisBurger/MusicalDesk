@@ -19,11 +19,13 @@ pub async fn generate_checkout(
     cancel_url: String,
     success_url: String,
 ) -> Result<CheckoutSession, Error> {
-    let customer = get_customer(user).await?;
+    let customer = get_customer(user).await;
     let mut create_checkout = CreateCheckoutSession::new();
     create_checkout.cancel_url = Some(cancel_url.as_str());
     create_checkout.success_url = Some(success_url.as_str());
-    create_checkout.customer = Some(customer.id);
+    if let Some(customer) = customer {
+        create_checkout.customer = Some(customer.id);
+    }
     create_checkout.expires_at = Some(expires_at.timestamp());
     create_checkout.mode = Some(CheckoutSessionMode::Payment);
     create_checkout.line_items = Some(
@@ -83,10 +85,11 @@ pub async fn update_product(event: &Event, image_uri: String) -> Result<Product,
     let client = get_client();
 
     if event.price_id.is_none() {
+        error!(target: "event", "Price ID is missing");
         return Err(Error::BadRequest);
     }
 
-    let product_id = ProductId::from_str(event.price_id.clone().unwrap().as_str())
+    let product_id = ProductId::from_str(event.product_id.clone().unwrap().as_str())
         .expect("product ID has invalid format");
 
     let mut update_product = UpdateProduct::new();
@@ -96,7 +99,10 @@ pub async fn update_product(event: &Event, image_uri: String) -> Result<Product,
 
     let product = Product::update(&client, &product_id, update_product)
         .await
-        .map_err(|_x| Error::BadRequest)?;
+        .map_err(|x| {
+            error!(target: "event", "{}", x.to_string());
+            Error::BadRequest
+        })?;
 
     update_product_price(product, &event).await
 }
@@ -114,20 +120,18 @@ pub async fn create_customer(user: &User) -> Result<Customer, Error> {
         .map_err(|_x| Error::BadRequest)
 }
 
-pub async fn get_customer(user: &User) -> Result<Customer, Error> {
+pub async fn get_customer(user: &User) -> Option<Customer> {
     let client = get_client();
     if user.customer_id.is_none() {
-        error!(target: "shop", "Current user has no customer_id");
-        return Err(Error::BadRequest);
+        return None;
     }
     let customer_id = CustomerId::from_str(user.customer_id.clone().unwrap().as_str())
         .expect("Invalid customer ID");
-    Customer::retrieve(&client, &customer_id, &[])
-        .await
-        .map_err(|e| {
-            error!(target: "shop", "{}", e.to_string());
-            Error::BadRequest
-        })
+    Some(
+        Customer::retrieve(&client, &customer_id, &[])
+            .await
+            .unwrap(),
+    )
 }
 
 async fn update_product_price(mut product: Product, event: &Event) -> Result<Product, Error> {
@@ -158,14 +162,18 @@ async fn create_new_default_price_for_product(
     create_price.unit_amount = Some((event.price * 100_f32) as i64);
     create_price.product = Some(IdOrCreate::Id(&product.id));
 
-    let new_price = Price::create(&client, create_price)
-        .await
-        .map_err(|_x| Error::BadRequest)?;
+    let new_price = Price::create(&client, create_price).await.map_err(|x| {
+        error!(target: "event", "{}", x.to_string());
+        Error::BadRequest
+    })?;
     let mut new_price_update = UpdateProduct::new();
     new_price_update.default_price = Some(new_price.id.as_str());
     product = Product::update(&client, &product.id, new_price_update)
         .await
-        .map_err(|_x| Error::BadRequest)?;
+        .map_err(|x| {
+            error!(target: "event", "{}", x.to_string());
+            Error::BadRequest
+        })?;
 
     // Archive old default price if exists
     if let Some(price_id_unwrap) = price_id {
@@ -173,7 +181,10 @@ async fn create_new_default_price_for_product(
         old_price.active = Some(false);
         Price::update(&client, &price_id_unwrap, old_price)
             .await
-            .map_err(|_x| Error::BadRequest)?;
+            .map_err(|x| {
+                error!(target: "event", "{}", x.to_string());
+                Error::BadRequest
+            })?;
     }
 
     Ok(product)

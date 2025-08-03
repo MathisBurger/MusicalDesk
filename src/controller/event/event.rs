@@ -67,8 +67,8 @@ pub async fn update_event(
     }
     let event = Event::update_event(path.0, &data, &state.database).await?;
     let product = update_product(&event, generate_image_uri(&req, &event)).await?;
-    let with_stripe = Event::update_stripe_references(event.id, &product, &state.database).await;
-    Ok(HttpResponse::Ok().json(with_stripe))
+    //let with_stripe = Event::update_stripe_references(event.id, &product, &state.database).await;
+    Ok(HttpResponse::Ok().json(event))
 }
 
 fn generate_image_uri(req: &HttpRequest, event: &Event) -> String {

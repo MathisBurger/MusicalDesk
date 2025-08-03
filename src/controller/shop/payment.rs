@@ -10,8 +10,11 @@ use stripe::CheckoutSessionStatus;
 
 use crate::{
     models::{
-        event::checkout_session::DbCheckoutSession,
-        event::ticket::{ShoppingCartItem, Ticket},
+        event::{
+            checkout_session::DbCheckoutSession,
+            ticket::{ShoppingCartItem, Ticket},
+        },
+        expense::transaction::{Transaction, TransactionRequest},
         generic::Error,
         user::User,
     },

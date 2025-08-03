@@ -98,6 +98,20 @@ const FormInput = ({
     return defaultValue;
   }, [defaultValue, type]);
 
+  const formattedValue = useMemo(() => {
+    if (value instanceof Date) {
+      if (type === "date") {
+        return `${value.getFullYear()}-${padNum(value.getMonth())}-${padNum(value.getDay())}`;
+      } else {
+        return `${value.getFullYear()}-${padNum(value.getMonth())}-${padNum(value.getDay())}T${padNum(value.getHours())}:${padNum(value.getMinutes())}`;
+      }
+    }
+    if (typeof value === "number") {
+      return value;
+    }
+    return `${value}`;
+  }, [value, type]);
+
   const input = useMemo<ReactNode>(() => {
     switch (type) {
       case "textarea":
@@ -135,7 +149,7 @@ const FormInput = ({
             disabled={disabled}
             slotProps={parseSlotProps(type, slotProps)}
             sx={sx}
-            value={typeof value === "number" ? value : `${value}`}
+            value={formattedValue}
             onChange={setValue ? (e) => setValue(e.target.value) : undefined}
           />
         );

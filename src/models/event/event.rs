@@ -22,11 +22,13 @@ pub struct Event {
     pub product_id: Option<String>,
     #[serde(skip_serializing)]
     pub price_id: Option<String>,
+    pub description: Option<String>,
+    pub upper_reservation_limit: Option<i32>,
 }
 
 impl Event {
     pub async fn create_event(req: &EventRequest, db: &Pool<Postgres>) -> Result<Event, Error> {
-        sqlx::query_as!(Event, "INSERT INTO events (name, price, tax_percentage, image_id, event_date, active_from, active_until) VALUES ($1, $2, $3, $4, $5,  $6, $7) RETURNING *", req.name, req.price, req.tax_percentage, req.image_id, req.event_date, req.active_from, req.active_until)
+        sqlx::query_as!(Event, "INSERT INTO events (name, price, tax_percentage, image_id, event_date, active_from, active_until, description, upper_reservation_limit) VALUES ($1, $2, $3, $4, $5,  $6, $7, $8, $9) RETURNING *", req.name, req.price, req.tax_percentage, req.image_id, req.event_date, req.active_from, req.active_until, req.description, req.upper_reservation_limit)
             .fetch_one(db)
             .await
             .map_err(|_x| Error::BadRequest)
@@ -51,7 +53,7 @@ impl Event {
         req: &EventRequest,
         db: &Pool<Postgres>,
     ) -> Result<Event, Error> {
-        sqlx::query_as!(Event, "UPDATE events SET name = $1, price = $2, tax_percentage = $3, image_id = $4, event_date = $5, active_from = $6, active_until = $7 WHERE id = $8 RETURNING *", req.name, req.price, req.tax_percentage, req.image_id, req.event_date, req.active_from, req.active_until, id)
+        sqlx::query_as!(Event, "UPDATE events SET name = $1, price = $2, tax_percentage = $3, image_id = $4, event_date = $5, active_from = $6, active_until = $7, description = $8, upper_reservation_limit = $9 WHERE id = $10 RETURNING *", req.name, req.price, req.tax_percentage, req.image_id, req.event_date, req.active_from, req.active_until, req.description, req.upper_reservation_limit, id)
             .fetch_one(db)
             .await
             .map_err(|_x| Error::BadRequest)

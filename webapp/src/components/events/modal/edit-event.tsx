@@ -44,7 +44,7 @@ const EditEventModal = ({ onClose, event }: CreateEventModalProps) => {
   const form = useForm<EventRequest>({
     defaultValues: {
       ...event,
-      event_date: new Date(event.event_date),
+      event_date: event.event_date ? new Date(event.event_date) : null,
       active_from: event.active_from ? new Date(event.active_from) : null,
       active_until: event.active_until ? new Date(event.active_until) : null,
     },
@@ -52,6 +52,8 @@ const EditEventModal = ({ onClose, event }: CreateEventModalProps) => {
       name: t("labels.events.name"),
       price: t("labels.events.price"),
       tax_percentage: t("labels.events.tax"),
+      description: t("labels.events.description"),
+      upper_reservation_limit: t("labels.events.upperReservationLimit"),
       image_id: t("labels.events.image"),
       event_date: t("labels.events.eventDate"),
       active_from: t("labels.events.activeFrom"),
@@ -68,6 +70,8 @@ const EditEventModal = ({ onClose, event }: CreateEventModalProps) => {
       event_date: "datetime-iso",
       active_from: "datetime-iso",
       active_until: "datetime-iso",
+      description: "textarea",
+      upper_reservation_limit: "number",
     },
     required: ["name", "price", "tax_percentage", "image_id", "event_date"],
   });
@@ -97,10 +101,9 @@ const EditEventModal = ({ onClose, event }: CreateEventModalProps) => {
                 </Grid>
               </Grid>
               <FormInput {...form.getInputProps("image_id")} disabled />
-              <FormInput
-                {...form.getInputProps("event_date")}
-                type="datetime"
-              />
+              <FormInput {...form.getInputProps("event_date")} />
+              <FormInput {...form.getInputProps("description")} />
+              <FormInput {...form.getInputProps("upper_reservation_limit")} />
               <Grid container direction="row" spacing={2}>
                 <Grid xs={6}>
                   <FormInput

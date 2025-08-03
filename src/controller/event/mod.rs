@@ -15,6 +15,8 @@ pub struct EventRequest {
     pub event_date: DateTime<Utc>,
     pub active_from: Option<DateTime<Utc>>,
     pub active_until: Option<DateTime<Utc>>,
+    pub description: Option<String>,
+    pub upper_reservation_limit: Option<i32>,
 }
 
 pub fn init_controllers(cfg: &mut ServiceConfig) {

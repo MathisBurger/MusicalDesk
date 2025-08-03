@@ -71,6 +71,8 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
       event_date: t("labels.events.eventDate"),
       active_from: t("labels.events.activeFrom"),
       active_until: t("labels.events.activeUntil"),
+      description: t("labels.events.description"),
+      upper_reservation_limit: t("labels.events.upperReservationLimit"),
     },
     validation: {
       name: (v) => (v === "" ? t("validation.events.name") : null),
@@ -83,6 +85,8 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
       event_date: "datetime-iso",
       active_from: "datetime-iso",
       active_until: "datetime-iso",
+      description: "textarea",
+      upper_reservation_limit: "number",
     },
     required: ["name", "price", "tax_percentage", "image_id", "event_date"],
   });
@@ -120,6 +124,8 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
                 {...form.getInputProps("event_date")}
                 type="datetime"
               />
+              <FormInput {...form.getInputProps("description")} />
+              <FormInput {...form.getInputProps("upper_reservation_limit")} />
               <Grid container direction="row" spacing={2}>
                 <Grid xs={6}>
                   <FormInput

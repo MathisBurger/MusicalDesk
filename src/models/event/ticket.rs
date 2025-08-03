@@ -93,6 +93,19 @@ impl Ticket {
             .unwrap()
     }
 
+    pub async fn get_reserved_ticket_count_for_user(
+        event_id: i32,
+        owner_id: i32,
+        db: &Pool<Postgres>,
+    ) -> i64 {
+        sqlx::query!("SELECT COUNT(*) AS count FROM tickets WHERE bought_at IS NULL AND locked_in_checkout_session IS NULL AND reserved_until IS NOT NULL AND reserved_until > NOW() AND event_id = $1 AND owner_id = $2", event_id, owner_id)
+            .fetch_one(db)
+            .await
+            .expect("Cannot load reserved tickets")
+            .count
+            .unwrap()
+    }
+
     pub async fn reserve_for_event(
         event_id: i32,
         user_id: i32,

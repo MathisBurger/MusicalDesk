@@ -80,6 +80,8 @@
       "eventDate": "Date",
       "activeFrom": "Active from",
       "activeUntil": "Active until",
+      "description": "Description",
+      "upperReservationLimit": "Upper reservation limit",
       "ticket": {
         "validUntil": "Valid until",
         "invalidatedAt": "Invalidated at",

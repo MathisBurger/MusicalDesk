@@ -26,6 +26,14 @@ const CoreDataTab = ({ event }: CoreDataTabProps) => {
         value: event.event_date.toLocaleString(),
       },
       {
+        title: t("labels.events.description"),
+        value: event.description,
+      },
+      {
+        title: t("labels.events.upperReservationLimit"),
+        value: event.upper_reservation_limit,
+      },
+      {
         title: t("labels.events.activeFrom"),
         value: event.active_from?.toLocaleString(),
       },

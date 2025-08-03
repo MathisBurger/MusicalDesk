@@ -85,6 +85,7 @@ const ShopEventDetailsPage = () => {
           <Card variant="outlined">
             <Typography level="h2">{data?.event.name}</Typography>
             <Divider />
+            {data?.event.description}
             <Typography level="h3">
               {data?.event.price}€ &nbsp;{" "}
               <Typography fontSize="0.5em">
@@ -106,13 +107,16 @@ const ShopEventDetailsPage = () => {
                   value={numSelected}
                   onChange={(e) => changeNum(parseInt(e.target.value, 10))}
                 />
-                <Button
-                  color="neutral"
-                  variant="outlined"
-                  onClick={() => changeNum(numSelected + 1)}
-                >
-                  <Add />
-                </Button>
+                {numSelected <
+                  (data?.event.upper_reservation_limit ?? ticketsLeft) && (
+                  <Button
+                    color="neutral"
+                    variant="outlined"
+                    onClick={() => changeNum(numSelected + 1)}
+                  >
+                    <Add />
+                  </Button>
+                )}
               </Stack>
             )}
             <Typography fontWeight={ticketsLeft === 0 ? "bold" : undefined}>

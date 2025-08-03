@@ -80,6 +80,8 @@
       "eventDate": "Datum",
       "activeFrom": "Aktiv ab",
       "activeUntil": "Aktiv bis",
+      "description": "Beschreibung",
+      "upperReservationLimit": "Obergrenze für Reservierungen",
       "ticket": {
         "validUntil": "Gültig bis",
         "invalidatedAt": "Ungültig gemacht am",

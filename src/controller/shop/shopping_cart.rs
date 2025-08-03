@@ -7,7 +7,10 @@ use serde::Deserialize;
 
 use crate::{
     models::{
-        event::ticket::{ShoppingCartItem, Ticket},
+        event::{
+            event::Event,
+            ticket::{ShoppingCartItem, Ticket},
+        },
         generic::Error,
         user::User,
     },
@@ -30,9 +33,20 @@ pub async fn add_ticket_to_shopping_cart(
         return Err(Error::Forbidden);
     }
 
+    let event = Event::get_event(req.event_id, &state.database)
+        .await
+        .ok_or(Error::NotFound)?;
+
     let tickets_left = Ticket::get_left_over_ticket_count(req.event_id, &state.database).await;
     if tickets_left < req.quantity {
         return Ok(HttpResponse::BadRequest().body("Not enough tickets left"));
+    }
+
+    let already_reserved =
+        Ticket::get_reserved_ticket_count_for_user(req.event_id, user.id, &state.database).await;
+
+    if already_reserved + req.quantity > event.upper_reservation_limit.unwrap_or(0) as i64 {
+        return Ok(HttpResponse::BadRequest().body("Beyond the limit"));
     }
 
     let tickets =

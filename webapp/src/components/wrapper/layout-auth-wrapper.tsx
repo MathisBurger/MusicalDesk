@@ -6,6 +6,7 @@ import LoadingComponent from "../loading";
 import BackendLayout from "../layout/backend";
 import ShopLayout from "../layout/shop";
 import { User } from "@/types/api/user";
+import TranslationWrapper from "./translation-wrapper";
 
 const LayoutAuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
   const pathname = usePathname();
@@ -39,7 +40,7 @@ const LayoutAuthWrapper = ({ children }: PropsWithChildren<unknown>) => {
   }
 
   if (pathname === "/login" || pathname == "register") {
-    return <>{children}</>;
+    return <TranslationWrapper>{children}</TranslationWrapper>;
   }
 
   // Define shop layout

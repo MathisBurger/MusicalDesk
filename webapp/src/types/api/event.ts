@@ -8,6 +8,8 @@ export interface EventRequest {
   event_date: string | null;
   active_from: string | null;
   active_until: string | null;
+  description: string | null;
+  upper_reservation_limit: number | null;
 }
 
 export interface Event {
@@ -19,6 +21,8 @@ export interface Event {
   event_date: Date | string;
   active_from: Date | null;
   active_until: Date | null;
+  description: string | null;
+  upper_reservation_limit: number | null;
 }
 
 export interface ShopEvent {

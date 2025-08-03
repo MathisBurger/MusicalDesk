@@ -132,12 +132,12 @@ const ShopHeader = () => {
             <MenuRounded />
           </IconButton>
           <Drawer
-            sx={{ display: { xs: "inline-flex", sm: "none" } }}
+            sx={{ display: { xs: "inline-flex", sm: "none", zIndex: 9999 } }}
             open={drawerOpen}
             onClose={() => setDrawerOpen(false)}
           >
             <ModalClose />
-            <DialogTitle>Acme Co.</DialogTitle>
+            <DialogTitle>Navigation</DialogTitle>
             <Box sx={{ px: 1 }}>
               <List
                 size="sm"
